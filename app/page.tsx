@@ -4,6 +4,8 @@ import { createClient } from "@/utils/supabase/server";
 import ConnectSupabaseSteps from "@/components/tutorial/ConnectSupabaseSteps";
 import SignUpUserSteps from "@/components/tutorial/SignUpUserSteps";
 import Header from "@/components/Header";
+import Button from "@mui/material/Button";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 export default async function Index() {
   const canInitSupabaseClient = () => {
@@ -34,6 +36,12 @@ export default async function Index() {
           <h2 className="font-bold text-4xl mb-4">Next steps</h2>
           {isSupabaseConnected ? <SignUpUserSteps /> : <ConnectSupabaseSteps />}
         </main>
+        <Button variant="contained">
+          <AddCircleIcon />
+          <p style={{ marginLeft: "10px" }}>
+            Test Material Button that does nth
+          </p>
+        </Button>
       </div>
 
       <footer className="w-full border-t border-t-foreground/10 p-8 flex justify-center text-center text-xs">
