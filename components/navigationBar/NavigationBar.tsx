@@ -7,24 +7,28 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import Link from "next/link";
 
-const pages = ["Home", "Movies", "TV Shows", "Books", "Games"];
+const pages = ["Home", "Movies", "TV Series", "Books", "Games"];
 const NavigationBar = () => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6">Omniflix</Typography>
+        <Link href="/">
+          <Typography variant="h6">Omniflix</Typography>
+        </Link>
         <ButtonGroup>
           {pages.map((page) => (
-            <Button
-              key={page}
-              href={`/${
-                page === "Home" ? "" : page.toLowerCase().replace(/\s/g, "-")
-              }`}
-            >
-              <Typography textAlign="center" color="white">
-                {page}
-              </Typography>
+            <Button key={page}>
+              <Link
+                href={`/${
+                  page === "Home" ? "" : page.toLowerCase().replace(/\s/g, "-")
+                }`}
+              >
+                <Typography textAlign="center" color="white">
+                  {page}
+                </Typography>
+              </Link>
             </Button>
           ))}
         </ButtonGroup>
