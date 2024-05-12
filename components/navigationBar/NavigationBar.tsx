@@ -14,7 +14,9 @@ const NavigationBar = () => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Typography variant="h6">Omniflix</Typography>
+        <Link href="/">
+          <Typography variant="h6">Omniflix</Typography>
+        </Link>
         <ButtonGroup>
           {pages.map((page) => (
             <Button key={page}>
