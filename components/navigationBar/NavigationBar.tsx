@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 
-const pages = ["Home", "Movies", "TV Shows", "Books", "Games"];
+const pages = ["Home", "Movies", "TV Series", "Books", "Games"];
 const NavigationBar = () => {
   return (
     <AppBar position="sticky">
