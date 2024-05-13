@@ -12,14 +12,16 @@ import Link from "next/link";
 const pages = ["Home", "Movies", "TV Series", "Books", "Games"];
 const NavigationBar = () => {
   return (
-    <AppBar position="sticky">
+    <AppBar position="sticky" color="secondary">
       <Toolbar>
         <Link href="/">
-          <Typography variant="h6">Omniflix</Typography>
+          <Typography variant="h6" sx={{ paddingRight: "10px" }}>
+            Omniflix
+          </Typography>
         </Link>
         <ButtonGroup>
           {pages.map((page) => (
-            <Button key={page}>
+            <Button key={page} variant="text" sx={{ padding: "0 20px" }}>
               <Link
                 href={`/${
                   page === "Home" ? "" : page.toLowerCase().replace(/\s/g, "-")
