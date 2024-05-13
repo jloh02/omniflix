@@ -3,7 +3,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "prepare": "husky install",
+    "lint": "prettier --check ."
+  },
+  "lint-staged": {
+    "**/*.{ts,tsx}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -25,6 +30,9 @@
     "@types/node": "20.11.5",
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
-    "encoding": "^0.1.13"
+    "encoding": "^0.1.13",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "^3.2.5"
   }
 }
