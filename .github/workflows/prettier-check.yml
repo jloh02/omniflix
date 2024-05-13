@@ -4,11 +4,9 @@ on:
   pull_request:
     branches:
       - main
-      - dev/prettier
 
 jobs:
   run:
-    name: Prettier Check
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
