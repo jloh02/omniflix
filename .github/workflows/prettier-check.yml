@@ -1,0 +1,26 @@
+name: Run Prettier Check
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev/prettier
+
+jobs:
+  run:
+    name: Prettier Check
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Run install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+      - name: Prettier check
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: lint

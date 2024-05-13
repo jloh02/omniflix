@@ -4,7 +4,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "prettier --check ."
   },
   "lint-staged": {
     "**/*.{ts,tsx}": "prettier --write --ignore-unknown"
