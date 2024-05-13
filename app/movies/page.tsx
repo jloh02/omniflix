@@ -5,6 +5,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
 import React, { useState } from "react";
+import MovieCard from "./moviesCard";
 
 const Movies: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -44,6 +45,10 @@ const Movies: React.FC = () => {
 
       <Typography variant="body1">{searchResult}</Typography>
       <Typography sx={{ fontStyle: "italic" }}>Page in development.</Typography>
+      <MovieCard
+        title="Pokémon: Lucario and the Mystery of Mew"
+        posterUrl="https://m.media-amazon.com/images/M/MV5BMTUxOTcwNjAwMl5BMl5BanBnXkFtZTgwMjc2MzQ2NjE@._V1_.jpg"
+      />
     </Box>
   );
 };
