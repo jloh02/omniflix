@@ -6,7 +6,11 @@ import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
 import MovieCard from "./moviesCard";
-import useDebounce from "@/utils/useDebounce";
+import useDebounce from "@/utils/hooks/useDebounce";
+import {
+  DEBOUNCE_DURATION_IN_MS,
+  MINIMUM_SEARCH_LENGTH,
+} from "@/utils/constants";
 
 const Movies: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
