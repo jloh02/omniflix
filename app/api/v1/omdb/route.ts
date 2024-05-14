@@ -1,3 +1,4 @@
+import { MINIMUM_OMDB_SEARCH_LENGTH } from "@/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
@@ -28,6 +29,16 @@ export async function GET(request: NextRequest) {
       },
       { status: 400 },
     );
+  }
+
+  // Use title query for 2 character searches as tracked here: https://github.com/omdbapi/OMDb-API/issues/190
+  const useTitleQuery = (query ?? "").length < MINIMUM_OMDB_SEARCH_LENGTH;
+
+  if (useTitleQuery) {
+    const res = await fetch(
+      `http://www.omdbapi.com/?apikey=${process.env.NEXT_OMDB_API_KEY}&t=${query}&page=${page}&type=${mediaType}`,
+    );
+    return NextResponse.json({ Search: [await res.json()] });
   }
 
   const res = await fetch(
