@@ -14,24 +14,24 @@ export async function GET(request: NextRequest) {
   if (errorStr.length > 0) {
     return NextResponse.json(
       { error: "Missing params: " + errorStr.map((x) => `'${x}'`).join(", ") },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const mediaType = ALLOWED_OMDB_TYPES.find(
-    (validType) => validType === mediaTypeInput
+    (validType) => validType === mediaTypeInput,
   ) as OMDBType;
   if (!mediaType) {
     return NextResponse.json(
       {
         error: "Invalid type. Allowed types: " + ALLOWED_OMDB_TYPES.join(", "),
       },
-      { status: 400 }
+      { status: 400 },
     );
   }
 
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${process.env.NEXT_OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`
+    `http://www.omdbapi.com/?apikey=${process.env.NEXT_OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
   );
   return NextResponse.json(await res.json());
 }
