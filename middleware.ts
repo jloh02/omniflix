@@ -5,17 +5,22 @@ import { createClient } from "@/utils/supabase/server";
 export async function middleware(request: NextRequest) {
   const res: NextResponse = await updateSession(request);
 
-  if (request.nextUrl.pathname === "/login") return res;
+  // Allow only login page if user is not authenticated
+  if (request.nextUrl.pathname === "/login") {
+    return res;
+  }
 
   const supabase = createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (user) return res;
+  // Redirect to login page if no user session found
+  if (!user) {
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
 
-  return NextResponse.redirect(new URL("/login", request.url));
+  return res;
 }
 
 export const config = {
