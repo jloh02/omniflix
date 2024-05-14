@@ -34,7 +34,7 @@ const Movies: React.FC = () => {
           variant="outlined"
           onClick={async () => {
             const result = await fetch(
-              `/api/v1/omdb?query=${searchInput}&type=movie`
+              `/api/v1/omdb?query=${searchInput}&type=movie`,
             );
             setSearchResult(JSON.stringify(await result.json()));
           }}
