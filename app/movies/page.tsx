@@ -4,12 +4,23 @@ import { Box, Button, Typography } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MovieCard from "./moviesCard";
+import useDebounce from "@/utils/useDebounce";
 
 const Movies: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchResult, setSearchResult] = useState("");
+
+  const searchInputDebounced = useDebounce(searchInput, 500);
+
+  useEffect(() => {
+    fetch(`/api/v1/omdb?query=${searchInput}&type=movie`).then(
+      async (response) =>
+        setSearchResult(JSON.stringify(await response.json())),
+    );
+  }, [searchInputDebounced]);
+
   return (
     <Box sx={{ width: "90%", padding: "10px" }}>
       <Typography align="left" variant="h4">
@@ -29,19 +40,6 @@ const Movies: React.FC = () => {
           setSearchInput(event.target.value);
         }}
       />
-      <Box>
-        <Button
-          variant="outlined"
-          onClick={async () => {
-            const result = await fetch(
-              `/api/v1/omdb?query=${searchInput}&type=movie`
-            );
-            setSearchResult(JSON.stringify(await result.json()));
-          }}
-        >
-          Search
-        </Button>
-      </Box>
 
       <Typography variant="body1">{searchResult}</Typography>
       <Typography sx={{ fontStyle: "italic" }}>Page in development.</Typography>
