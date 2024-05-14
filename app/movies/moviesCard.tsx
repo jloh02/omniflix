@@ -1,19 +1,18 @@
 import React from "react";
 import { Card, CardMedia, CardContent, Typography } from "@mui/material";
+import IMovie from "@/utils/types/IMovie";
 
 interface MovieCardProps {
-  posterUrl: string;
-  title: string;
-  year: string;
+  movie: IMovie;
 }
 
-const MovieCard: React.FC<MovieCardProps> = ({ posterUrl, title, year }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <Card className="h-full w-full" sx={{ maxWidth: 200, maxHeight: 500 }}>
-      <CardMedia component="img" image={posterUrl} />
+      <CardMedia component="img" image={movie.poster} />
       <CardContent>
-        <Typography variant="h6">{title}</Typography>
-        <Typography variant="body1">{year}</Typography>
+        <Typography variant="h6">{movie.title}</Typography>
+        <Typography variant="body1">{movie.year}</Typography>
       </CardContent>
     </Card>
   );

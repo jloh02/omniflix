@@ -103,11 +103,7 @@ const Movies: React.FC = () => {
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie) => (
             <Grid item>
-              <MovieCard
-                title={movie.title}
-                posterUrl={movie.poster}
-                year={movie.year}
-              />
+              <MovieCard movie={movie} />
             </Grid>
           ))}
         </Grid>
