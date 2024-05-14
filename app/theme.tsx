@@ -6,10 +6,12 @@ const themeOptions: ThemeOptions = {
   palette: {
     mode: "dark",
     primary: {
-      main: "#1976d2",
+      main: "#223bc9",
+      light: "#067fd0",
+      dark: "#151a7b",
     },
     secondary: {
-      main: "#9c27b0",
+      main: "#e63b60",
     },
   },
 };
