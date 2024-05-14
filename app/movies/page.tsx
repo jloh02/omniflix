@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Grid, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  LinearProgress,
+  Typography,
+} from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
@@ -92,7 +98,7 @@ const Movies: React.FC = () => {
       />
 
       {isLoading ? (
-        <Typography>Loading...</Typography>
+        <LinearProgress />
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie) => (
