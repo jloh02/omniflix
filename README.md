@@ -18,7 +18,9 @@ Omniflix (<https://omniflix.jloh02.dev/>) is an app to help users search, organi
 6. Point your browser to `http://localhost:3000` to see your local deployment.
 
 ### Setting up your environment
+
 The project requires a few accounts to be set to work properly:
+
 1. Supabase (<https://supabase.com/>)
 2. OMDB API (<https://www.omdbapi.com/apikey.aspx>)
 
