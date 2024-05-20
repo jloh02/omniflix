@@ -5,11 +5,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "prettier --check .",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
-    "*.{ts,tsx,js,css,md}": "prettier --write --ignore-unknown",
-    "*.{js,css,md}": "prettier --write"
+    "*.{ts,tsx,js,css,md}": "prettier --write --ignore-unknown"
   },
   "dependencies": {
     "@emotion/react": "^11.11.4",
@@ -33,7 +32,9 @@
     "@types/react": "18.2.48",
     "@types/react-dom": "18.2.18",
     "encoding": "^0.1.13",
-    "mrm": "^4.1.22",
+    "husky": "^9.0.11",
+    "jest": "^29.7.0",
+    "lint-staged": "15.2.2",
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2"
   }
