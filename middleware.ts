@@ -16,7 +16,7 @@ export async function middleware(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   // Redirect to login page if no user session found
-  if (!user) {
+  if (!user && request.nextUrl.pathname !== "/") {
     return NextResponse.redirect(new URL("/login", request.url));
   }
 
