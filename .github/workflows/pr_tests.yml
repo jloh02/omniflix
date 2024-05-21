@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  run:
+  prettier:
     name: Prettier lint
     runs-on: ubuntu-22.04
     steps:
@@ -15,7 +15,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: Run install
+      - name: yarn install
         uses: borales/actions-yarn@v4
         with:
           cmd: install
@@ -23,3 +23,20 @@ jobs:
         uses: borales/actions-yarn@v4
         with:
           cmd: lint
+  jest:
+    name: Jest Test
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Node.js 20
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: yarn install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
+      - name: Jest test
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: test
