@@ -26,6 +26,8 @@ jobs:
   jest:
     name: Jest Test
     runs-on: ubuntu-22.04
+    env:
+      NEXT_OMDB_API_KEY: ${{ secrets.NEXT_OMDB_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - name: Set Node.js 20
