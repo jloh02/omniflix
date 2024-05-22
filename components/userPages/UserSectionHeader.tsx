@@ -1,4 +1,4 @@
-import { Avatar, Box, Container, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 
 export default async function UserSectionHeader() {
   return (
