@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Use searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
+  // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
   const res = await fetch(
     `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
   );
