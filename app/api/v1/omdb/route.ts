@@ -48,5 +48,10 @@ export async function GET(request: NextRequest) {
   const titleRes = await fetch(
     `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
   );
-  return NextResponse.json({ Search: [await titleRes.json()] });
+  const titleResBody = await titleRes.json();
+  console.log(titleResBody);
+
+  if (titleResBody.Error)
+    return NextResponse.json(titleResBody, { status: 404 });
+  return NextResponse.json({ Search: [titleResBody] });
 }
