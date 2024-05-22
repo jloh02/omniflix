@@ -1,9 +1,11 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 import { createClient } from "@/utils/supabase/server";
-
-// const publicRoutes = ["/", "/login"];
-const protectedRoutes = ["/api", "/books", "/games", "/movies", "/tv-series"];
+import {
+  loginPageRoute,
+  publicRoutes,
+  protectedRoutes,
+} from "@/utils/constants";
 
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -18,12 +20,12 @@ export default async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect to /login if user is not unauthenticated
+  // Redirect to login page if user is not unauthenticated
   if (!user && isProtectedRoute) {
-    return NextResponse.redirect(new URL("/login", request.nextUrl));
+    return NextResponse.redirect(new URL(loginPageRoute, request.nextUrl));
   }
 
-  if (user && path === "/login") {
+  if (user && path === loginPageRoute) {
     return NextResponse.redirect(new URL("/", request.nextUrl));
   }
 
