@@ -7,7 +7,7 @@ on:
 
 jobs:
   prettier:
-    name: Prettier lint
+    name: Prettier Lint
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -15,14 +15,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: yarn install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-      - name: Prettier check
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: lint
+          cache: yarn
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Prettier lint
+        run: yarn lint
   jest:
     name: Jest Test
     runs-on: ubuntu-22.04
@@ -34,11 +31,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: yarn install
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: install
-      - name: Jest test
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: test
+          cache: yarn
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - name: unit test
+        run: yarn test
