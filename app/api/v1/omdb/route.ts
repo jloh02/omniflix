@@ -50,8 +50,10 @@ export async function GET(request: NextRequest) {
   );
   const titleResBody = await titleRes.json();
 
+  // Return 404 when error returned by title API
   if (titleResBody.Error)
     return NextResponse.json(titleResBody, { status: 404 });
 
+  // Format data so it matches the search API
   return NextResponse.json({ Search: [titleResBody] });
 }
