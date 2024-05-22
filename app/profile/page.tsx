@@ -1,6 +1,33 @@
 import UserSectionHeader from "@/components/userPages/UserSectionHeader";
 import UserSectionsNavMenu from "@/components/userPages/UserSectionsNavMenu";
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
+import UserProfileRow from "@/components/userProfile/UserProfileRow";
+import React from "react";
+
+const PasswordRow: React.FC = () => {
+  return (
+    <>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 1,
+        }}
+      >
+        <Box sx={{ width: 110 }}>
+          <Typography>Password</Typography>
+        </Box>
+        <Box
+          sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
+        >
+          <Button>Change Password</Button>
+        </Box>
+      </Box>
+      <Divider />
+    </>
+  );
+};
 
 export default async function UserProfile() {
   return (
@@ -18,7 +45,11 @@ export default async function UserProfile() {
           }}
         >
           <Typography variant="h5">Basic Info</Typography>
-          <Typography>In development</Typography>
+          <Typography>*In development</Typography>
+          <UserProfileRow name="Name" value="John Smith" />
+          <UserProfileRow name="Username" value="@johnsmith" />
+          <UserProfileRow name="Email" value="johnsmith@gmail.com" />
+          <PasswordRow />
         </Box>
       </Box>
     </>
