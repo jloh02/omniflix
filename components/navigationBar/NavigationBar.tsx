@@ -1,4 +1,5 @@
-import AuthButton from "./AuthButton";
+import { HOME_PAGE_ROUTE } from "@/utils/constants";
+import AuthButton from "../AuthButton";
 import {
   AppBar,
   Box,
@@ -14,7 +15,7 @@ const NavigationBar = () => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Link href="/">
+        <Link href={HOME_PAGE_ROUTE}>
           <Typography variant="h6" sx={{ paddingRight: "10px" }}>
             Omniflix
           </Typography>
