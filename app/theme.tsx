@@ -50,8 +50,6 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
-  },
-  components: {
     MuiLinearProgress: {
       styleOverrides: {
         root: {
