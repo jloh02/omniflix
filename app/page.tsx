@@ -6,6 +6,7 @@ import {
   Typography,
 } from "@mui/material";
 import coverImage from "./homepage-cover.jpg";
+import { LOGIN_PAGE_ROUTE } from "@/utils/constants";
 
 export default async function Index() {
   return (
@@ -56,9 +57,9 @@ export default async function Index() {
             className="my-4"
             variant="contained"
             color="primary"
-            href="/login"
+            href={LOGIN_PAGE_ROUTE}
           >
-            Create An Account
+            Get Started
           </Button>
         </CardContent>
       </Card>

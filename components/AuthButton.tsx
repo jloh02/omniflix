@@ -1,3 +1,4 @@
+import { LOGIN_PAGE_ROUTE } from "@/utils/constants";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -14,7 +15,7 @@ export default async function AuthButton() {
 
     const supabase = createClient();
     await supabase.auth.signOut();
-    return redirect("/login");
+    return redirect(LOGIN_PAGE_ROUTE);
   };
 
   return user ? (
@@ -28,7 +29,7 @@ export default async function AuthButton() {
     </div>
   ) : (
     <Link
-      href="/login"
+      href={LOGIN_PAGE_ROUTE}
       className="py-2 px-3 flex rounded-md no-underline bg-btn-background hover:bg-btn-background-hover"
     >
       Login
