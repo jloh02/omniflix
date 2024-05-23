@@ -5,6 +5,7 @@ import Link from "next/link";
 import LogoutMenuItem from "./LogoutMenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Person from "@mui/icons-material/Person";
+import { PROFILE_PAGE_ROUTE } from "@/utils/constants";
 
 export default function UserMenu() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -30,7 +31,7 @@ export default function UserMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link href="/profile">
+        <Link href={PROFILE_PAGE_ROUTE}>
           <MenuItem>
             <ListItemIcon>
               <Person fontSize="small" />
