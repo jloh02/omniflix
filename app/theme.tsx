@@ -14,6 +14,15 @@ const themeOptions: ThemeOptions = {
       main: "#e63b60",
     },
   },
+  components: {
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          borderRadius: "5px",
+        },
+      },
+    },
+  },
 };
 const theme = createTheme(themeOptions);
 
