@@ -1,4 +1,4 @@
-import { PROFILE_PAGE_ROUTE } from "@/utils/constants";
+import { FRIENDS_ROUTE, PROFILE_PAGE_ROUTE } from "@/utils/constants";
 import { ListItemText, MenuItem, MenuList, Typography } from "@mui/material";
 import Link from "next/link";
 
@@ -7,11 +7,16 @@ export default async function UserSectionsNavMenu() {
     <MenuList
       sx={{ margin: 2, backgroundColor: "grey", borderRadius: 2, width: 200 }}
     >
-      <MenuItem>
-        <Link href={PROFILE_PAGE_ROUTE}>
+      <Link href={PROFILE_PAGE_ROUTE}>
+        <MenuItem>
           <ListItemText>Basic Info</ListItemText>
-        </Link>
-      </MenuItem>
+        </MenuItem>
+      </Link>
+      <Link href={FRIENDS_ROUTE}>
+        <MenuItem>
+          <ListItemText>Friends</ListItemText>
+        </MenuItem>
+      </Link>
     </MenuList>
   );
 }
