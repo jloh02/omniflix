@@ -51,6 +51,15 @@ const themeOptions: ThemeOptions = {
       },
     },
   },
+  components: {
+    MuiLinearProgress: {
+      styleOverrides: {
+        root: {
+          borderRadius: "5px",
+        },
+      },
+    },
+  },
 };
 const theme = createTheme(themeOptions);
 

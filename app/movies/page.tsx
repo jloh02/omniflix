@@ -36,7 +36,10 @@ const Movies: React.FC = () => {
     setSearchResult([]);
     setError("");
 
-    if (searchInput.length < MINIMUM_SEARCH_LENGTH) return;
+    if (searchInput.length < MINIMUM_SEARCH_LENGTH) {
+      setIsLoading(false);
+      return;
+    }
 
     setIsLoading(true);
   }, [searchInput]);
