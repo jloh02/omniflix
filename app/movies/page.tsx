@@ -98,7 +98,7 @@ const Movies: React.FC = () => {
       />
 
       {isLoading ? (
-        <LinearProgress />
+        <LinearProgress color="secondary" />
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie) => (
