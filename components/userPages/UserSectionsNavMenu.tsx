@@ -1,19 +1,29 @@
-import { FRIENDS_ROUTE, PROFILE_PAGE_ROUTE } from "@/utils/constants";
-import { ListItemText, MenuItem, MenuList, Typography } from "@mui/material";
+"use client";
+import { usePathname } from "next/navigation";
+import { ListItemText, MenuItem, MenuList } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
+import { FRIENDS_ROUTE, PROFILE_PAGE_ROUTE } from "@/utils/constants";
 
-export default async function UserSectionsNavMenu() {
+export default function UserSectionsNavMenu() {
+  const pathname = usePathname();
+  const theme = useTheme();
+
   return (
     <MenuList
-      sx={{ margin: 2, backgroundColor: "grey", borderRadius: 2, width: 200 }}
+      sx={{
+        margin: 2,
+        borderRadius: 2,
+        width: 200,
+      }}
     >
       <Link href={PROFILE_PAGE_ROUTE}>
-        <MenuItem>
+        <MenuItem selected={pathname === PROFILE_PAGE_ROUTE}>
           <ListItemText>Basic Info</ListItemText>
         </MenuItem>
       </Link>
       <Link href={FRIENDS_ROUTE}>
-        <MenuItem>
+        <MenuItem selected={pathname === FRIENDS_ROUTE}>
           <ListItemText>Friends</ListItemText>
         </MenuItem>
       </Link>
