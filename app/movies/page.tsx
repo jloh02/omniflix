@@ -36,7 +36,10 @@ const Movies: React.FC = () => {
     setSearchResult([]);
     setError("");
 
-    if (searchInput.length < MINIMUM_SEARCH_LENGTH) return;
+    if (searchInput.length < MINIMUM_SEARCH_LENGTH) {
+      setIsLoading(false);
+      return;
+    }
 
     setIsLoading(true);
   }, [searchInput]);
@@ -98,7 +101,7 @@ const Movies: React.FC = () => {
       />
 
       {isLoading ? (
-        <LinearProgress />
+        <LinearProgress color="secondary" />
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie) => (

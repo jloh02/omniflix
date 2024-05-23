@@ -12,7 +12,7 @@ import Link from "next/link";
 const pages = ["Home", "Movies", "TV Series", "Books", "Games"];
 const NavigationBar = () => {
   return (
-    <AppBar position="sticky" color="secondary">
+    <AppBar position="sticky">
       <Toolbar>
         <Link href="/">
           <Typography variant="h6" sx={{ paddingRight: "10px" }}>

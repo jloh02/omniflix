@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  run:
-    name: Prettier lint
+  prettier:
+    name: Prettier Lint
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
@@ -15,11 +15,24 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-      - name: Run install
-        uses: borales/actions-yarn@v4
+          cache: yarn
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - name: Prettier lint
+        run: yarn lint
+  jest:
+    name: Jest Test
+    runs-on: ubuntu-22.04
+    env:
+      NEXT_OMDB_API_KEY: ${{ secrets.NEXT_OMDB_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set Node.js 20
+        uses: actions/setup-node@v3
         with:
-          cmd: install
-      - name: Prettier check
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: lint
+          node-version: 20
+          cache: yarn
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - name: unit test
+        run: yarn test

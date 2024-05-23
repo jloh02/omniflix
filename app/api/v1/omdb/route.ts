@@ -1,4 +1,3 @@
-import { MINIMUM_OMDB_SEARCH_LENGTH } from "@/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
@@ -8,6 +7,14 @@ export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("query");
   const page = request.nextUrl.searchParams.get("page") ?? 1;
   const mediaTypeInput = request.nextUrl.searchParams.get("type");
+
+  const OMDB_API_KEY = process.env.NEXT_OMDB_API_KEY;
+
+  if (!OMDB_API_KEY)
+    return NextResponse.json(
+      { error: "Internal error occurred: Unknown API key" },
+      { status: 500 },
+    );
 
   const errorStr: string[] = [];
   if (!query) errorStr.push("query");
@@ -31,18 +38,22 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  // Use title query for 2 character searches as tracked here: https://github.com/omdbapi/OMDb-API/issues/190
-  const useTitleQuery = (query ?? "").length < MINIMUM_OMDB_SEARCH_LENGTH;
-
-  if (useTitleQuery) {
-    const res = await fetch(
-      `http://www.omdbapi.com/?apikey=${process.env.NEXT_OMDB_API_KEY}&t=${query}&page=${page}&type=${mediaType}`,
-    );
-    return NextResponse.json({ Search: [await res.json()] });
-  }
-
+  // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${process.env.NEXT_OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
   );
-  return NextResponse.json(await res.json());
+  const resBody = await res.json();
+  if (!resBody.Error) return NextResponse.json(resBody);
+
+  const titleRes = await fetch(
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
+  );
+  const titleResBody = await titleRes.json();
+
+  // Return 404 when error returned by title API
+  if (titleResBody.Error)
+    return NextResponse.json(titleResBody, { status: 404 });
+
+  // Format data so it matches the search API
+  return NextResponse.json({ Search: [titleResBody] });
 }
