@@ -2,17 +2,14 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 import { createClient } from "@/utils/supabase/server";
 import {
-  loginPageRoute,
-  publicRoutes,
-  protectedRoutes,
+  HOME_PAGE_ROUTE,
+  LOGIN_PAGE_ROUTE,
+  PUBLIC_ROUTES,
 } from "@/utils/constants";
 
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
-  // const isPublicRoute = publicRoutes.includes(path);
-  const isProtectedRoute = protectedRoutes.some((route) =>
-    path.startsWith(route),
-  );
+  const isPublicRoute = PUBLIC_ROUTES.includes(path);
 
   const res: NextResponse = await updateSession(request);
   const supabase = createClient();
@@ -20,13 +17,14 @@ export default async function middleware(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // Redirect to login page if user is not unauthenticated
-  if (!user && isProtectedRoute) {
-    return NextResponse.redirect(new URL(loginPageRoute, request.nextUrl));
+  // Redirect to login page if user is unauthenticated
+  if (!user && !isPublicRoute) {
+    return NextResponse.redirect(new URL(LOGIN_PAGE_ROUTE, request.nextUrl));
   }
 
-  if (user && path === loginPageRoute) {
-    return NextResponse.redirect(new URL("/", request.nextUrl));
+  // Redirect logged in users to home page
+  if (user && path === LOGIN_PAGE_ROUTE) {
+    return NextResponse.redirect(new URL(HOME_PAGE_ROUTE, request.nextUrl));
   }
 
   return res;

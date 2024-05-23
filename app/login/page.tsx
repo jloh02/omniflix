@@ -1,8 +1,8 @@
-import Link from "next/link";
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
+import { HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from "@/utils/constants";
 
 export default function Login({
   searchParams,
@@ -22,10 +22,12 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect(
+        LOGIN_PAGE_ROUTE + "?message=Could not authenticate user",
+      );
     }
 
-    return redirect("/");
+    return redirect(HOME_PAGE_ROUTE);
   };
 
   const signUp = async (formData: FormData) => {
@@ -45,10 +47,14 @@ export default function Login({
     });
 
     if (error) {
-      return redirect("/login?message=Could not authenticate user");
+      return redirect(
+        LOGIN_PAGE_ROUTE + "?message=Could not authenticate user",
+      );
     }
 
-    return redirect("/login?message=Check email to continue sign in process");
+    return redirect(
+      LOGIN_PAGE_ROUTE + "?message=Check email to continue sign in process",
+    );
   };
 
   return (
