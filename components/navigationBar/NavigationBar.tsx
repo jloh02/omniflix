@@ -16,13 +16,14 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 
-const pages = [
+const PAGES = [
   ["Dashboard", DASHBOARD_PAGE_ROUTE],
   ["Movies", MOVIES_PAGE_ROUTE],
   ["TV Series", TV_SERIES_PAGE_ROUTE],
   ["Books", BOOKS_PAGE_ROUTE],
   ["Games", GAMES_PAGE_ROUTE],
 ];
+
 const NavigationBar = () => {
   return (
     <AppBar position="sticky">
@@ -33,7 +34,7 @@ const NavigationBar = () => {
           </Typography>
         </Link>
         <ButtonGroup>
-          {pages.map(([pageLabel, path]) => (
+          {PAGES.map(([pageLabel, path]) => (
             <Button key={path} variant="text" sx={{ padding: "0 20px" }}>
               <Link href={path}>
                 <Typography textAlign="center" color="white">
