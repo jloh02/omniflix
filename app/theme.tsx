@@ -28,6 +28,13 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          background: "transparent",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
