@@ -1,6 +1,5 @@
 import { GeistSans } from "geist/font/sans";
 import "./globals.css";
-import NavigationBar from "@/components/navigationBar/NavigationBar";
 import { ThemeProvider } from "@mui/material";
 import { theme } from "./theme";
 
@@ -27,10 +26,7 @@ export default function RootLayout({
     <html lang="en" className={GeistSans.className}>
       <body className="bg-background text-foreground">
         <main className="min-h-screen flex flex-col items-center">
-          <ThemeProvider theme={theme}>
-            <NavigationBar />
-            {children}
-          </ThemeProvider>
+          <ThemeProvider theme={theme}>{children}</ThemeProvider>
         </main>
       </body>
     </html>

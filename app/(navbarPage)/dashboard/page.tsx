@@ -1,6 +1,7 @@
 import { Box, Typography } from "@mui/material";
+import React from "react";
 
-export default async function Index() {
+const Index: React.FC = async () => {
   return (
     <Box sx={{ width: "90%", padding: "10px" }}>
       <Typography align="left" variant="h4">
@@ -9,4 +10,6 @@ export default async function Index() {
       <Typography sx={{ fontStyle: "italic" }}>Page in development.</Typography>
     </Box>
   );
-}
+};
+
+export default Index;
