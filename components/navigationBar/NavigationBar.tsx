@@ -1,4 +1,10 @@
-import { HOME_PAGE_ROUTE } from "@/utils/constants";
+import {
+  BOOKS_PAGE_ROUTE,
+  DASHBOARD_PAGE_ROUTE,
+  GAMES_PAGE_ROUTE,
+  MOVIES_PAGE_ROUTE,
+  TV_SERIES_PAGE_ROUTE,
+} from "@/utils/constants";
 import AuthButton from "../AuthButton";
 import {
   AppBar,
@@ -10,26 +16,28 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 
-const pages = ["Home", "Movies", "TV Series", "Books", "Games"];
+const pages = [
+  ["Dashboard", DASHBOARD_PAGE_ROUTE],
+  ["Movies", MOVIES_PAGE_ROUTE],
+  ["TV Series", TV_SERIES_PAGE_ROUTE],
+  ["Books", BOOKS_PAGE_ROUTE],
+  ["Games", GAMES_PAGE_ROUTE],
+];
 const NavigationBar = () => {
   return (
     <AppBar position="sticky">
       <Toolbar>
-        <Link href={HOME_PAGE_ROUTE}>
+        <Link href={DASHBOARD_PAGE_ROUTE}>
           <Typography variant="h6" sx={{ paddingRight: "10px" }}>
             Omniflix
           </Typography>
         </Link>
         <ButtonGroup>
-          {pages.map((page) => (
-            <Button key={page} variant="text" sx={{ padding: "0 20px" }}>
-              <Link
-                href={`/${
-                  page === "Home" ? "" : page.toLowerCase().replace(/\s/g, "-")
-                }`}
-              >
+          {pages.map(([pageLabel, path]) => (
+            <Button key={path} variant="text" sx={{ padding: "0 20px" }}>
+              <Link href={path}>
                 <Typography textAlign="center" color="white">
-                  {page}
+                  {pageLabel}
                 </Typography>
               </Link>
             </Button>
