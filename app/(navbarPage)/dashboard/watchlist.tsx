@@ -4,22 +4,23 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CATEGORIES } from "@/utils/constants";
+import KanbanBoard from "@/components/kanban/KanbanBoard";
+import { Box } from "@mui/material";
 
 const Watchlist: React.FC = () => {
   return (
-    <div>
+    <Box>
       {CATEGORIES.map((category, index) => (
-        <Accordion defaultExpanded={!index}>
+        <Accordion key={index} defaultExpanded={!index}>
           <AccordionSummary expandIcon={<ExpandMoreIcon />}>
             {category}
           </AccordionSummary>
           <AccordionDetails>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
+            {category === CATEGORIES[0] ? <KanbanBoard /> : <></>}
           </AccordionDetails>
         </Accordion>
       ))}
-    </div>
+    </Box>
   );
 };
 
