@@ -57,6 +57,14 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: "none",
+          borderRadius: "10px",
+        },
+      },
+    },
   },
 };
 const theme = createTheme(themeOptions);
