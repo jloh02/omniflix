@@ -21,6 +21,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         display="flex"
         flexDirection="column"
         gap={1}
+        height="100%"
       >
         {children}
       </Box>
