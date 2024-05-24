@@ -1,5 +1,6 @@
-import { Box, Typography } from "@mui/material";
-import React from "react";
+import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { Box, Typography, alpha, colors, useTheme } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 
 interface KanbanColumnProps {
   title: string;
@@ -10,8 +11,24 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   title,
   children,
 }: KanbanColumnProps) => {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false);
+  const theme = useTheme();
+
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+
+    return dropTargetForElements({
+      element,
+      onDragEnter: () => setIsDraggedOver(true),
+      onDragLeave: () => setIsDraggedOver(false),
+      onDrop: () => setIsDraggedOver(false),
+    });
+  }, [ref]);
+
   return (
-    <Box width="100%">
+    <Box width="100%" ref={ref}>
       <Typography pl={1}>{title}</Typography>
       <Box
         border="2px solid"
@@ -22,6 +39,11 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         flexDirection="column"
         gap={1}
         height="100%"
+        sx={{
+          backgroundColor: isDraggedOver
+            ? alpha(theme.palette.primary.light, 0.35)
+            : null,
+        }}
       >
         {children}
       </Box>
