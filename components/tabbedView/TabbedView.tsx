@@ -16,8 +16,11 @@ const TabView: React.FC<TabViewProps> = ({
 
   if (!children) throw new Error("TabView requires children");
 
-  if (React.Children.count(children) !== tabLabels.length)
-    throw new Error(`TabView requires ${tabLabels.length} children`);
+  const numChild = React.Children.count(children);
+  if (numChild !== tabLabels.length)
+    throw new Error(
+      `TabView requires ${tabLabels.length} children. Found ${numChild}`,
+    );
 
   const childView = useMemo(
     () => React.Children.toArray(children)[tab],
