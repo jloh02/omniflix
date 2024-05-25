@@ -3,7 +3,7 @@ import { Box, Card } from "@mui/material";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 interface KanbanItemProps {
-  image: string;
+  item: any; //TODO type the item object
   instanceId: symbol;
   children?: React.ReactNode;
 }
@@ -11,7 +11,7 @@ interface KanbanItemProps {
 const IMAGE_SIZE = 100;
 
 const KanbanItem: React.FC<KanbanItemProps> = ({
-  image,
+  item,
   instanceId,
   children,
 }: KanbanItemProps) => {
@@ -24,11 +24,12 @@ const KanbanItem: React.FC<KanbanItemProps> = ({
 
     return draggable({
       element,
-      getInitialData: () => ({ instanceId }),
+      getInitialData: () => ({ instanceId, item }),
       onDragStart: () => setIsDragging(true),
       onDrop: () => setIsDragging(false),
     });
-  }, [ref]);
+  }, [ref, item]);
+
   return (
     <Card
       ref={ref}
@@ -39,7 +40,7 @@ const KanbanItem: React.FC<KanbanItemProps> = ({
           width={IMAGE_SIZE}
           height={IMAGE_SIZE}
           component="img"
-          src={image}
+          src={item.image}
           sx={{ pointerEvents: "none" }}
         ></Box>
         <Box display="flex" flexDirection="column" justifyContent="center">

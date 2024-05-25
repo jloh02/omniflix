@@ -23,12 +23,13 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
     return dropTargetForElements({
       element,
+      getData: () => ({ instanceId, title }),
       canDrop: ({ source }) => source.data.instanceId === instanceId,
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),
     });
-  }, [ref]);
+  }, [ref, title]);
 
   return (
     <Box display="flex" flexDirection="column" width="100%" ref={ref}>

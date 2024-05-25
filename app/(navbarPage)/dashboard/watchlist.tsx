@@ -16,7 +16,7 @@ const Watchlist: React.FC = () => {
             {category}
           </AccordionSummary>
           <AccordionDetails>
-            {category === CATEGORIES[0] ? <KanbanBoard /> : <></>}
+            <Box>{category === CATEGORIES[0] ? <KanbanBoard /> : <></>}</Box>
           </AccordionDetails>
         </Accordion>
       ))}
