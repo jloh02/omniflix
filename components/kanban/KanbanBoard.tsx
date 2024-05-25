@@ -81,13 +81,12 @@ const KanbanBoard: React.FC = () => {
 
         if (!destination) return;
 
-        console.log(source, location);
-
-        //TODO error handling
-
-        const sourceColumn = (source.data.item as ItemWithKey).columnTitle;
+        const sourceColumn = (source.data?.item as ItemWithKey)?.columnTitle;
         const item = source.data.item as ItemWithKey;
-        const desColumn = destination.data.title as string;
+        const desColumn = destination.data?.title as string;
+
+        if (!destination || !sourceColumn || !desColumn || !item || !item.id)
+          return;
 
         // TODO reposition item in the same column
         // No point dropping item to the same column
