@@ -1,10 +1,19 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Card } from "@mui/material";
-import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { KanbanItemWithKey } from "./kanbanTypes";
+import {
+  draggable,
+  dropTargetForElements,
+} from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import {
+  attachClosestEdge,
+  Edge,
+  extractClosestEdge,
+} from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
+import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
 
 interface KanbanCardProps {
-  item: KanbanItemWithKey;
+  item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
 }
@@ -19,16 +28,34 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
+  //TODO display closest edge
+  const [edge, setEdge] = useState<Edge | null>(null);
+
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
 
-    return draggable({
-      element,
-      getInitialData: () => ({ instanceId, item }),
-      onDragStart: () => setIsDragging(true),
-      onDrop: () => setIsDragging(false),
-    });
+    return combine(
+      draggable({
+        element,
+        getInitialData: () => ({
+          type: "card" as KanbanDropType,
+          instanceId,
+          item,
+        }),
+        onDragStart: () => setIsDragging(true),
+        onDrop: () => setIsDragging(false),
+      }),
+      dropTargetForElements({
+        element,
+        canDrop: ({ source }) => source.data.instanceId === instanceId,
+        getData: ({ input, element }) =>
+          attachClosestEdge(
+            { type: "card" as KanbanDropType, item },
+            { input, element, allowedEdges: ["top", "bottom"] },
+          ),
+      }),
+    );
   }, [ref, item]);
 
   return (

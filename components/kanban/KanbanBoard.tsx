@@ -5,7 +5,12 @@ import KanbanColumn from "./KanbanColumn";
 import { Box, CardContent, Typography } from "@mui/material";
 import KanbanCard from "./KanbanCard";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { KanbanItem, KanbanItemWithKey } from "./kanbanTypes";
+import {
+  KanbanDropType,
+  KanbanItem,
+  KanbanItemWithKeyIndex,
+} from "./kanbanTypes";
+import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 
 const example = {
   TODO: [
@@ -46,14 +51,18 @@ const KanbanBoard: React.FC = () => {
     example,
   );
 
-  const dataWithKey = useMemo<{
-    [columnId: string]: KanbanItemWithKey[];
+  const dataWithKeyAndIdx = useMemo<{
+    [columnId: string]: KanbanItemWithKeyIndex[];
   }>(
     () =>
       Object.fromEntries(
         Object.entries(data).map(([columnTitle, items]) => [
           columnTitle,
-          (items as any[]).map((item: any) => ({ ...item, columnTitle })),
+          items.map((item, index) => ({
+            ...item,
+            columnTitle,
+            index,
+          })),
         ]),
       ),
     [data],
@@ -64,43 +73,78 @@ const KanbanBoard: React.FC = () => {
       onDrop({ source, location }) {
         const destination = location.current.dropTargets[0];
 
-        if (
-          !destination ||
-          !source.data ||
-          !destination.data ||
-          !source.data.item ||
-          !destination.data.title
-        )
+        // Handle null values
+        if (!destination || !source.data || !destination.data) return;
+
+        const sourceData = source.data;
+        const desData = destination.data;
+
+        // Source must always be a card (kanban item)
+        if (sourceData.type !== "card" || !sourceData.item) return;
+
+        // Disallow non card or column type drops
+        if (!(desData.type as KanbanDropType)) return;
+
+        // Make sure we have a card to move
+        const itemToMove = sourceData.item as KanbanItemWithKeyIndex;
+        if (!itemToMove) return;
+
+        const sourceItem = sourceData.item as KanbanItemWithKeyIndex;
+
+        let sourceColumn = "";
+        let desColumn = "";
+        let insertIdx = -1;
+
+        switch (desData.type as KanbanDropType) {
+          case "column":
+            sourceColumn = sourceItem.columnTitle;
+            desColumn = desData.title as string;
+            break;
+          case "card":
+            sourceColumn = sourceItem.columnTitle;
+            const desItem = desData.item as KanbanItemWithKeyIndex;
+            desColumn = desItem.columnTitle;
+            const edge = extractClosestEdge(desData);
+            insertIdx = desItem.index + (edge === "bottom" ? 1 : 0);
+            break;
+          default:
+            throw new Error("Unhandled KanbanDropType in KanbanBoard");
+        }
+
+        if (!sourceColumn || !desColumn || !itemToMove || !itemToMove.id)
           return;
 
-        const sourceColumn = (source.data.item as KanbanItemWithKey)
-          .columnTitle;
-        const item = source.data.item as KanbanItemWithKey;
-        const desColumn = destination.data.title as string;
+        // Do not move if the item is dropped in the same column and the same index
+        if (sourceColumn === desColumn && insertIdx === sourceItem.index)
+          return;
 
-        if (!sourceColumn || !desColumn || !item || !item.id) return;
-
-        // TODO reposition item in the same column
-        // No point dropping item to the same column
-        if (sourceColumn === desColumn) return;
+        console.log(sourceItem);
 
         setData((prevData) => {
           const updatedData = structuredClone(prevData);
-          // Add new item to list
-          updatedData[desColumn] = [...updatedData[desColumn], item];
+
           // Remove old item from list
-          updatedData[sourceColumn] = updatedData[sourceColumn].filter(
-            (oldItem: KanbanItem) => oldItem.id !== item.id,
-          );
+          updatedData[sourceColumn].splice(sourceItem.index, 1);
+          // Add new item to list
+          if (insertIdx !== -1) {
+            // If the item is moved within the same column, we need to adjust the index
+            if (sourceColumn === desColumn && insertIdx > sourceItem.index)
+              insertIdx--;
+
+            updatedData[desColumn].splice(insertIdx, 0, itemToMove);
+          } else {
+            updatedData[desColumn].push(itemToMove);
+          }
+
           return updatedData;
         });
       },
     });
-  }, [dataWithKey]);
+  }, [dataWithKeyAndIdx]);
 
   return (
     <Box display="flex" flexDirection="row" width="100%" gap={3} mb={2}>
-      {Object.entries(dataWithKey).map(([title, items], colIdx) => (
+      {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
         <KanbanColumn key={colIdx} title={title} instanceId={instanceId}>
           {items.map((item, idx) => (
             <KanbanCard key={idx} instanceId={instanceId} item={item}>

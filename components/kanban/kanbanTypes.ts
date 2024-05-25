@@ -5,8 +5,11 @@ type KanbanItem = {
   image: string;
 };
 
-type KanbanItemWithKey = KanbanItem & {
+type KanbanItemWithKeyIndex = KanbanItem & {
   columnTitle: string;
+  index: number;
 };
 
-export type { KanbanItem, KanbanItemWithKey };
+type KanbanDropType = "column" | "card";
+
+export type { KanbanItem, KanbanItemWithKeyIndex, KanbanDropType };
