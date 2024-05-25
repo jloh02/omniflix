@@ -42,7 +42,7 @@ const KanbanBoard: React.FC = () => {
   const [data, setData] = useState(example);
 
   return (
-    <Box display="flex" flexDirection="row" width="100%" gap={3}>
+    <Box display="flex" flexDirection="row" width="100%" gap={3} mb={2}>
       {Object.entries(data).map(([title, items], colIdx) => (
         <KanbanColumn key={colIdx} title={title} instanceId={instanceId}>
           {items.map((item, idx) => (

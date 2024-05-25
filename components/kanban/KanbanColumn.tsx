@@ -31,7 +31,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   }, [ref]);
 
   return (
-    <Box width="100%" ref={ref}>
+    <Box display="flex" flexDirection="column" width="100%" ref={ref}>
       <Typography pl={1}>{title}</Typography>
       <Box
         border="2px solid"
