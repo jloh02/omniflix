@@ -1,5 +1,5 @@
 import { HOME_PAGE_ROUTE } from "@/utils/constants";
-import AuthButton from "../AuthButton";
+import AuthButton from "./AuthButton";
 import {
   AppBar,
   Box,

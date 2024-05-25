@@ -57,6 +57,21 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "#fd7702",
+            "&:hover": {
+              backgroundColor: "#ff8e00",
+            },
+          },
+          "&:hover": {
+            backgroundColor: "#ff8e00",
+          },
+        },
+      },
+    },
   },
 };
 const theme = createTheme(themeOptions);
