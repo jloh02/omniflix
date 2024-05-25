@@ -46,6 +46,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
   useEffect(() => {
     return monitorForElements({
+      canMonitor: ({ source }) => source.data.instanceId === instanceId,
       onDrop({ source, location }) {
         const destination = location.current.dropTargets[0];
 
