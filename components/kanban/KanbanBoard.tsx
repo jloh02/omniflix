@@ -3,8 +3,9 @@
 import React, { useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
 import { Box, CardContent, Typography } from "@mui/material";
-import KanbanItem from "./KanbanItem";
+import KanbanCard from "./KanbanCard";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { KanbanItem, KanbanItemWithKey } from "./kanban-types";
 
 const example = {
   TODO: [
@@ -39,54 +40,45 @@ const example = {
   ],
 };
 
-type Item = {
-  id: number;
-  title: string;
-  year: string;
-  image: string;
-};
-
-type ItemWithKey = Item & {
-  columnTitle: string;
-};
-
-type ExampleType = {
-  [columnTitle: string]: Item[];
-};
-
-type ExampleTypeWithKey = ExampleType & {
-  [columnTitle: string]: ItemWithKey[];
-};
-
 const KanbanBoard: React.FC = () => {
   const [instanceId] = useState(() => Symbol("instanceId"));
-  const [data, setData] = useState<ExampleType>(example);
+  const [data, setData] = useState<{ [columnId: string]: KanbanItem[] }>(
+    example,
+  );
 
-  // TODO typing
-  const dataWithKey = useMemo(() => {
-    const dataWithKey: ExampleTypeWithKey = {};
-    Object.entries(data).forEach(([columnTitle, items]) => {
-      dataWithKey[columnTitle] = (items as any[]).map((item: any) => ({
-        ...item,
-        columnTitle,
-      }));
-    });
-    return dataWithKey;
-  }, [data]);
+  const dataWithKey = useMemo<{
+    [columnId: string]: KanbanItemWithKey[];
+  }>(
+    () =>
+      Object.fromEntries(
+        Object.entries(data).map(([columnTitle, items]) => [
+          columnTitle,
+          (items as any[]).map((item: any) => ({ ...item, columnTitle })),
+        ]),
+      ),
+    [data],
+  );
 
   useEffect(() => {
     return monitorForElements({
       onDrop({ source, location }) {
         const destination = location.current.dropTargets[0];
 
-        if (!destination) return;
-
-        const sourceColumn = (source.data?.item as ItemWithKey)?.columnTitle;
-        const item = source.data.item as ItemWithKey;
-        const desColumn = destination.data?.title as string;
-
-        if (!destination || !sourceColumn || !desColumn || !item || !item.id)
+        if (
+          !destination ||
+          !source.data ||
+          !destination.data ||
+          !source.data.item ||
+          !destination.data.title
+        )
           return;
+
+        const sourceColumn = (source.data.item as KanbanItemWithKey)
+          .columnTitle;
+        const item = source.data.item as KanbanItemWithKey;
+        const desColumn = destination.data.title as string;
+
+        if (!sourceColumn || !desColumn || !item || !item.id) return;
 
         // TODO reposition item in the same column
         // No point dropping item to the same column
@@ -98,7 +90,7 @@ const KanbanBoard: React.FC = () => {
           updatedData[desColumn] = [...updatedData[desColumn], item];
           // Remove old item from list
           updatedData[sourceColumn] = updatedData[sourceColumn].filter(
-            (oldItem: Item) => oldItem.id !== item.id,
+            (oldItem: KanbanItem) => oldItem.id !== item.id,
           );
           return updatedData;
         });
@@ -111,12 +103,12 @@ const KanbanBoard: React.FC = () => {
       {Object.entries(dataWithKey).map(([title, items], colIdx) => (
         <KanbanColumn key={colIdx} title={title} instanceId={instanceId}>
           {items.map((item, idx) => (
-            <KanbanItem key={idx} instanceId={instanceId} item={item}>
+            <KanbanCard key={idx} instanceId={instanceId} item={item}>
               <CardContent>
                 <Typography variant="h6">{item.title}</Typography>
                 <Typography variant="body1">{item.year}</Typography>
               </CardContent>
-            </KanbanItem>
+            </KanbanCard>
           ))}
         </KanbanColumn>
       ))}

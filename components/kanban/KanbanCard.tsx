@@ -1,20 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Card } from "@mui/material";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
+import { KanbanItemWithKey } from "./kanban-types";
 
-interface KanbanItemProps {
-  item: any; //TODO type the item object
+interface KanbanCardProps {
+  item: KanbanItemWithKey;
   instanceId: symbol;
   children?: React.ReactNode;
 }
 
 const IMAGE_SIZE = 100;
 
-const KanbanItem: React.FC<KanbanItemProps> = ({
+const KanbanCard: React.FC<KanbanCardProps> = ({
   item,
   instanceId,
   children,
-}: KanbanItemProps) => {
+}: KanbanCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
@@ -51,4 +52,4 @@ const KanbanItem: React.FC<KanbanItemProps> = ({
   );
 };
 
-export default KanbanItem;
+export default KanbanCard;
