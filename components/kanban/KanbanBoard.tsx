@@ -5,7 +5,7 @@ import KanbanColumn from "./KanbanColumn";
 import { Box, CardContent, Typography } from "@mui/material";
 import KanbanCard from "./KanbanCard";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { KanbanItem, KanbanItemWithKey } from "./kanban-types";
+import { KanbanItem, KanbanItemWithKey } from "./kanbanTypes";
 
 const example = {
   TODO: [

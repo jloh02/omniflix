@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Card } from "@mui/material";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { KanbanItemWithKey } from "./kanban-types";
+import { KanbanItemWithKey } from "./kanbanTypes";
 
 interface KanbanCardProps {
   item: KanbanItemWithKey;
