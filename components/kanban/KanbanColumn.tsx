@@ -2,6 +2,7 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { Box, Typography, alpha, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { KanbanDropType } from "./kanbanTypes";
+import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 
 interface KanbanColumnProps {
   title: string;
@@ -24,7 +25,11 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
     return dropTargetForElements({
       element,
-      getData: () => ({ instanceId, title, type: "column" as KanbanDropType }),
+      getData: ({ input, element }) =>
+        attachClosestEdge(
+          { instanceId, title, type: "column" as KanbanDropType },
+          { input, element, allowedEdges: ["top", "bottom"] },
+        ),
       canDrop: ({ source }) => source.data.instanceId === instanceId,
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),

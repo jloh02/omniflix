@@ -90,6 +90,7 @@ const KanbanBoard: React.FC = () => {
         if (!itemToMove) return;
 
         const sourceItem = sourceData.item as KanbanItemWithKeyIndex;
+        const edge = extractClosestEdge(desData);
 
         let sourceColumn = "";
         let desColumn = "";
@@ -99,12 +100,12 @@ const KanbanBoard: React.FC = () => {
           case "column":
             sourceColumn = sourceItem.columnTitle;
             desColumn = desData.title as string;
+            if (edge === "top") insertIdx = 0;
             break;
           case "card":
             sourceColumn = sourceItem.columnTitle;
             const desItem = desData.item as KanbanItemWithKeyIndex;
             desColumn = desItem.columnTitle;
-            const edge = extractClosestEdge(desData);
             insertIdx = desItem.index + (edge === "bottom" ? 1 : 0);
             break;
           default:
@@ -117,8 +118,6 @@ const KanbanBoard: React.FC = () => {
         // Do not move if the item is dropped in the same column and the same index
         if (sourceColumn === desColumn && insertIdx === sourceItem.index)
           return;
-
-        console.log(sourceItem);
 
         setData((prevData) => {
           const updatedData = structuredClone(prevData);
