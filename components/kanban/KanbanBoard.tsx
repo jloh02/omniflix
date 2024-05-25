@@ -89,25 +89,18 @@ const KanbanBoard: React.FC = () => {
         const item = source.data.item as ItemWithKey;
         const desColumn = destination.data.title as string;
 
+        // TODO reposition item in the same column
+        // No point dropping item to the same column
+        if (sourceColumn === desColumn) return;
+
         setData((prevData) => {
           const updatedData = structuredClone(prevData);
-
-          // console.log(updatedData, desColumn, sourceColumn, item);
-
           // Add new item to list
           updatedData[desColumn] = [...updatedData[desColumn], item];
           // Remove old item from list
-          console.log(
-            "TMP ",
-            updatedData[sourceColumn],
-            updatedData[sourceColumn].filter(
-              (oldItem: Item) => oldItem.id !== item.id,
-            ),
-          );
           updatedData[sourceColumn] = updatedData[sourceColumn].filter(
             (oldItem: Item) => oldItem.id !== item.id,
           );
-          // console.log("UPDATED DATA ", updatedData);
           return updatedData;
         });
       },
