@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
-import { Box } from "@mui/material";
+import { Box, CardContent, Typography } from "@mui/material";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
 const example = {
@@ -48,6 +48,12 @@ const MovieWatchlist: React.FC = () => {
       <KanbanBoard
         kanbanData={movieWatchlist}
         setKanbanData={setMovieWatchlist}
+        renderKanbanCard={(item) => (
+          <CardContent>
+            <Typography variant="h6">{item.title}</Typography>
+            <Typography variant="body1">{item.year}</Typography>
+          </CardContent>
+        )}
       />
     </Box>
   );

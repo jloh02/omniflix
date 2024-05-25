@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Card } from "@mui/material";
+import { Box, Card, Divider, useTheme } from "@mui/material";
 import {
   draggable,
   dropTargetForElements,
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import {
   attachClosestEdge,
-  Edge,
   extractClosestEdge,
+  Edge,
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
@@ -26,10 +26,9 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
   children,
 }: KanbanCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
+  const theme = useTheme();
   const [isDragging, setIsDragging] = useState<boolean>(false);
-
-  //TODO display closest edge
-  const [edge, setEdge] = useState<Edge | null>(null);
+  const [dragEdge, setDragEdge] = useState<Edge | null>(null);
 
   useEffect(() => {
     const element = ref.current;
@@ -49,33 +48,54 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
       dropTargetForElements({
         element,
         canDrop: ({ source }) => source.data.instanceId === instanceId,
+        getIsSticky: () => true,
         getData: ({ input, element }) =>
           attachClosestEdge(
             { type: "card" as KanbanDropType, item },
             { input, element, allowedEdges: ["top", "bottom"] },
           ),
+        onDrag: ({ self }) => setDragEdge(extractClosestEdge(self.data)),
+        onDragEnter: ({ self }) => setDragEdge(extractClosestEdge(self.data)),
+        onDragLeave: () => setDragEdge(null),
+        onDrop: () => setDragEdge(null),
       }),
     );
   }, [ref, item]);
 
+  const Indicator = (
+    <Divider
+      key="indicator"
+      color={theme.palette.secondary.light}
+      sx={{ borderBottomWidth: 1.5, borderRadius: 2 }}
+    />
+  );
+
   return (
-    <Card
-      ref={ref}
-      sx={{ cursor: "pointer", opacity: isDragging ? "50%" : "100%" }}
-    >
-      <Box display="flex" flexDirection="row">
-        <Box
-          width={IMAGE_SIZE}
-          height={IMAGE_SIZE}
-          component="img"
-          src={item.image}
-          sx={{ pointerEvents: "none" }}
-        ></Box>
-        <Box display="flex" flexDirection="column" justifyContent="center">
-          {children}
+    <>
+      {dragEdge === "top" && Indicator}
+      <Card
+        ref={ref}
+        sx={{
+          cursor: "pointer",
+          opacity: isDragging ? "50%" : "100%",
+          display: "absolute",
+        }}
+      >
+        <Box display="flex" flexDirection="row">
+          <Box
+            width={IMAGE_SIZE}
+            height={IMAGE_SIZE}
+            component="img"
+            src={item.image}
+            sx={{ pointerEvents: "none" }}
+          ></Box>
+          <Box display="flex" flexDirection="column" justifyContent="center">
+            {children}
+          </Box>
         </Box>
-      </Box>
-    </Card>
+      </Card>
+      {dragEdge === "bottom" && Indicator}
+    </>
   );
 };
 

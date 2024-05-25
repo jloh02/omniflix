@@ -2,8 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
-import { Box, CardContent, Typography } from "@mui/material";
-import KanbanCard from "./KanbanCard";
+import { Box } from "@mui/material";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import {
   KanbanDropType,
@@ -19,11 +18,13 @@ interface KanbanBoardProps {
       [columnId: string]: KanbanItem[];
     }>
   >;
+  renderKanbanCard: (item: KanbanItem) => React.ReactNode;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
   kanbanData,
   setKanbanData,
+  renderKanbanCard,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
 
@@ -121,16 +122,13 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   return (
     <Box display="flex" flexDirection="row" width="100%" gap={3} mb={2}>
       {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
-        <KanbanColumn key={colIdx} title={title} instanceId={instanceId}>
-          {items.map((item, idx) => (
-            <KanbanCard key={idx} instanceId={instanceId} item={item}>
-              <CardContent>
-                <Typography variant="h6">{item.title}</Typography>
-                <Typography variant="body1">{item.year}</Typography>
-              </CardContent>
-            </KanbanCard>
-          ))}
-        </KanbanColumn>
+        <KanbanColumn
+          key={colIdx}
+          title={title}
+          instanceId={instanceId}
+          items={items}
+          renderKanbanCard={renderKanbanCard}
+        />
       ))}
     </Box>
   );

@@ -16,7 +16,7 @@ const Watchlist: React.FC = () => {
             {category}
           </AccordionSummary>
           <AccordionDetails>
-            <Box>{category === CATEGORIES[0] ? <MovieWatchlist /> : <></>}</Box>
+            <MovieWatchlist />
           </AccordionDetails>
         </Accordion>
       ))}

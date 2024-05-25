@@ -1,23 +1,30 @@
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { Box, Typography, alpha, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
-import { KanbanDropType } from "./kanbanTypes";
+import {
+  KanbanDropType,
+  KanbanItem,
+  KanbanItemWithKeyIndex,
+} from "./kanbanTypes";
+import KanbanCard from "./KanbanCard";
 import { attachClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 
 interface KanbanColumnProps {
   title: string;
   instanceId: symbol;
-  children?: React.ReactNode;
+  items: KanbanItemWithKeyIndex[];
+  renderKanbanCard: (item: KanbanItem) => React.ReactNode;
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
   title,
   instanceId,
-  children,
+  items,
+  renderKanbanCard,
 }: KanbanColumnProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false);
   const theme = useTheme();
+  const [isDraggedOver, setIsDraggedOver] = useState<boolean>(false);
 
   useEffect(() => {
     const element = ref.current;
@@ -57,7 +64,13 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
             : null,
         }}
       >
-        {children}
+        {...items.map((item, idx) => (
+          <>
+            <KanbanCard key={idx} instanceId={instanceId} item={item}>
+              {renderKanbanCard(item)}
+            </KanbanCard>
+          </>
+        ))}
       </Box>
     </Box>
   );
