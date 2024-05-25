@@ -1,14 +1,16 @@
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { Box, Typography, alpha, colors, useTheme } from "@mui/material";
+import { Box, Typography, alpha, useTheme } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 
 interface KanbanColumnProps {
   title: string;
+  instanceId: symbol;
   children?: React.ReactNode;
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
   title,
+  instanceId,
   children,
 }: KanbanColumnProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -21,6 +23,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
     return dropTargetForElements({
       element,
+      canDrop: ({ source }) => source.data.instanceId === instanceId,
       onDragEnter: () => setIsDraggedOver(true),
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),

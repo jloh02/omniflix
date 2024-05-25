@@ -1,33 +1,52 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import KanbanColumn from "./KanbanColumn";
 import { Box, CardContent, Typography } from "@mui/material";
 import KanbanItem from "./KanbanItem";
-import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 const example = {
   TODO: [
-    { title: "Title", year: "1980", image: "https://picsum.photos/200/300" },
+    {
+      id: 1,
+      title: "Title",
+      year: "1980",
+      image: "https://picsum.photos/200/300",
+    },
   ],
   Ongoing: [
-    { title: "Title", year: "1980", image: "https://picsum.photos/200/300" },
-    { title: "Title", year: "1980", image: "https://picsum.photos/200/300" },
+    {
+      id: 2,
+      title: "Title",
+      year: "1980",
+      image: "https://picsum.photos/200/300",
+    },
+    {
+      id: 3,
+      title: "Title",
+      year: "1980",
+      image: "https://picsum.photos/200/300",
+    },
   ],
   Completed: [
-    { title: "Title", year: "1980", image: "https://picsum.photos/200/300" },
+    {
+      id: 4,
+      title: "Title",
+      year: "1980",
+      image: "https://picsum.photos/200/300",
+    },
   ],
 };
 const KanbanBoard: React.FC = () => {
-  const [instanceId] = useState(() => Symbol("instance-id"));
+  const [instanceId] = useState(() => Symbol("instanceId"));
   const [data, setData] = useState(example);
 
   return (
     <Box display="flex" flexDirection="row" width="100%" gap={3}>
       {Object.entries(data).map(([title, items], colIdx) => (
-        <KanbanColumn key={colIdx} title={title}>
+        <KanbanColumn key={colIdx} title={title} instanceId={instanceId}>
           {items.map((item, idx) => (
-            <KanbanItem key={idx} image={item.image}>
+            <KanbanItem key={idx} image={item.image} instanceId={instanceId}>
               <CardContent>
                 <Typography variant="h6">{item.title}</Typography>
                 <Typography variant="body1">{item.year}</Typography>

@@ -4,6 +4,7 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 
 interface KanbanItemProps {
   image: string;
+  instanceId: symbol;
   children?: React.ReactNode;
 }
 
@@ -11,6 +12,7 @@ const IMAGE_SIZE = 100;
 
 const KanbanItem: React.FC<KanbanItemProps> = ({
   image,
+  instanceId,
   children,
 }: KanbanItemProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -22,6 +24,7 @@ const KanbanItem: React.FC<KanbanItemProps> = ({
 
     return draggable({
       element,
+      getInitialData: () => ({ instanceId }),
       onDragStart: () => setIsDragging(true),
       onDrop: () => setIsDragging(false),
     });
