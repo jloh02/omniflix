@@ -1,13 +1,11 @@
 "use client";
 import { usePathname } from "next/navigation";
 import { ListItemText, MenuItem, MenuList } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import Link from "next/link";
 import { FRIENDS_ROUTE, PROFILE_PAGE_ROUTE } from "@/utils/constants";
 
 export default function UserSectionsNavMenu() {
   const pathname = usePathname();
-  const theme = useTheme();
 
   return (
     <MenuList

@@ -20,7 +20,13 @@ const PasswordRow: React.FC = () => {
         <Box
           sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
         >
-          <Button>Change Password</Button>
+          <Button
+            sx={{
+              color: "#0088cc !important",
+            }}
+          >
+            Change Password
+          </Button>
         </Box>
       </Box>
       <Divider />
