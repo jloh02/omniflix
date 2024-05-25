@@ -64,12 +64,10 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
             : null,
         }}
       >
-        {...items.map((item, idx) => (
-          <>
-            <KanbanCard key={idx} instanceId={instanceId} item={item}>
-              {renderKanbanCard(item)}
-            </KanbanCard>
-          </>
+        {items.map((item, idx) => (
+          <KanbanCard key={idx} instanceId={instanceId} item={item}>
+            {renderKanbanCard(item)}
+          </KanbanCard>
         ))}
       </Box>
     </Box>
