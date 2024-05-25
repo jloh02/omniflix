@@ -33,7 +33,9 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
 
   return (
     <Box display="flex" flexDirection="column" width="100%" ref={ref}>
-      <Typography pl={1}>{title}</Typography>
+      <Typography pl={1} sx={{ userSelect: "none" }}>
+        {title}
+      </Typography>
       <Box
         border="2px solid"
         borderColor="secondary.main"
