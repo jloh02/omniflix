@@ -12,51 +12,27 @@ import {
 } from "./kanbanTypes";
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 
-const example = {
-  TODO: [
-    {
-      id: 1,
-      title: "1",
-      year: "1980",
-      image: "https://picsum.photos/200/300",
-    },
-  ],
-  Ongoing: [
-    {
-      id: 2,
-      title: "2",
-      year: "1980",
-      image: "https://picsum.photos/200/300",
-    },
-    {
-      id: 3,
-      title: "3",
-      year: "1980",
-      image: "https://picsum.photos/200/300",
-    },
-  ],
-  Completed: [
-    {
-      id: 4,
-      title: "4",
-      year: "1980",
-      image: "https://picsum.photos/200/300",
-    },
-  ],
-};
+interface KanbanBoardProps {
+  kanbanData: { [columnId: string]: KanbanItem[] };
+  setKanbanData: React.Dispatch<
+    React.SetStateAction<{
+      [columnId: string]: KanbanItem[];
+    }>
+  >;
+}
 
-const KanbanBoard: React.FC = () => {
+const KanbanBoard: React.FC<KanbanBoardProps> = ({
+  kanbanData,
+  setKanbanData,
+}) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
-  const [data, setData] = useState<{ [columnId: string]: KanbanItem[] }>(
-    example,
-  );
 
   const dataWithKeyAndIdx = useMemo<{
     [columnId: string]: KanbanItemWithKeyIndex[];
   }>(
     () =>
       Object.fromEntries(
-        Object.entries(data).map(([columnTitle, items]) => [
+        Object.entries(kanbanData).map(([columnTitle, items]) => [
           columnTitle,
           items.map((item, index) => ({
             ...item,
@@ -65,7 +41,7 @@ const KanbanBoard: React.FC = () => {
           })),
         ]),
       ),
-    [data],
+    [kanbanData],
   );
 
   useEffect(() => {
@@ -119,7 +95,7 @@ const KanbanBoard: React.FC = () => {
         if (sourceColumn === desColumn && insertIdx === sourceItem.index)
           return;
 
-        setData((prevData) => {
+        setKanbanData((prevData) => {
           const updatedData = structuredClone(prevData);
 
           // Remove old item from list

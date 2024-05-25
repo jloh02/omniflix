@@ -4,8 +4,8 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CATEGORIES } from "@/utils/constants";
-import KanbanBoard from "@/components/kanban/KanbanBoard";
 import { Box } from "@mui/material";
+import MovieWatchlist from "./movieWatchlist";
 
 const Watchlist: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ const Watchlist: React.FC = () => {
             {category}
           </AccordionSummary>
           <AccordionDetails>
-            <Box>{category === CATEGORIES[0] ? <KanbanBoard /> : <></>}</Box>
+            <Box>{category === CATEGORIES[0] ? <MovieWatchlist /> : <></>}</Box>
           </AccordionDetails>
         </Accordion>
       ))}
