@@ -25,8 +25,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: prettier lint
         run: |
-        yarn install --frozen-lockfile
-        yarn lint
+          yarn install --frozen-lockfile
+          yarn lint
   jest:
     name: Jest Test
     runs-on: ubuntu-22.04
@@ -42,5 +42,5 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - name: unit test
         run: |
-        yarn install --frozen-lockfile
-        yarn test
+          yarn install --frozen-lockfile
+          yarn test
