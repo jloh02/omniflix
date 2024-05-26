@@ -1,3 +1,5 @@
+export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
+
 // Web URL paths
 export const HOME_PAGE_ROUTE = "/";
 export const LOGIN_PAGE_ROUTE = "/login";
@@ -20,4 +22,5 @@ export const PUBLIC_ROUTES = [HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE];
 export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
 
-export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
+// Database table names
+export const FAVORITES_TABLE = "favorites_entries";

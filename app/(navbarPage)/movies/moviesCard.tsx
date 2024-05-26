@@ -9,9 +9,9 @@ import {
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import IMovie from "@/utils/types/IMovie";
-import addToFavorites from "@/utils/addToFavorites";
-import isFavorited from "@/utils/isFavorited";
-import removeFromFavorites from "@/utils/removeFromFavorites";
+import addToFavorites from "@/utils/database/addToFavorites";
+import isFavorited from "@/utils/database/isFavorited";
+import removeFromFavorites from "@/utils/database/removeFromFavorites";
 
 interface MovieCardProps {
   movie: IMovie;
