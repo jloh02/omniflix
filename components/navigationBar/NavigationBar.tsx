@@ -26,16 +26,16 @@ const PAGES = [
 
 const NavigationBar = () => {
   return (
-    <AppBar position="sticky">
+    <AppBar className="sticky">
       <Toolbar>
         <Link href={DASHBOARD_PAGE_ROUTE}>
-          <Typography variant="h6" sx={{ paddingRight: "10px" }}>
+          <Typography variant="h6" className="pr-2.5">
             Omniflix
           </Typography>
         </Link>
         <ButtonGroup>
           {PAGES.map(([pageLabel, path]) => (
-            <Button key={path} variant="text" sx={{ padding: "0 20px" }}>
+            <Button key={path} variant="text" className="px-5">
               <Link href={path}>
                 <Typography textAlign="center" color="white">
                   {pageLabel}
@@ -44,7 +44,7 @@ const NavigationBar = () => {
             </Button>
           ))}
         </ButtonGroup>
-        <Box sx={{ flexGrow: 1 }} />
+        <Box className="grow" />
         <AuthButton />
       </Toolbar>
     </AppBar>

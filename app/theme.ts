@@ -24,7 +24,7 @@ const themeOptions: ThemeOptions = {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          background: "transparent",
+          background: "#000000",
         },
       },
     },
