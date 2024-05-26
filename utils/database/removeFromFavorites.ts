@@ -22,10 +22,8 @@ export default async function removeFromFavorites(
     .eq("media_id", mediaId);
 
   if (error) {
-    console.error(error);
     return;
   }
 
-  console.log(data);
   return data;
 }

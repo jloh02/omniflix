@@ -21,10 +21,8 @@ export default async function addToFavorites(
     .select();
 
   if (error) {
-    console.error(error);
     return;
   }
 
-  console.log(data);
   return data;
 }
