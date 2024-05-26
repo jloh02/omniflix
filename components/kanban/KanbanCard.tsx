@@ -79,6 +79,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
           cursor: "pointer",
           opacity: isDragging ? "50%" : "100%",
           display: "absolute",
+          "&:hover": { backgroundColor: theme.palette.primary.main },
         }}
       >
         <Box display="flex" flexDirection="row">

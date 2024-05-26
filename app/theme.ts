@@ -47,6 +47,7 @@ const themeOptions: ThemeOptions = {
       styleOverrides: {
         root: {
           borderRadius: "10px",
+          transition: "background-color 0.2s",
         },
       },
     },
