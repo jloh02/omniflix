@@ -22,9 +22,11 @@ jobs:
           version: 1.167.4
       - run: supabase start
       - name: Verify generated types are checked in
+        env:
+          TYPES_PATH: ../frontend/utils/supabase/types.gen.ts
         run: |
-          supabase gen types typescript --local > ../frontend/utils/supabase/types.gen.ts
-          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
+          supabase gen types typescript --local > $TYPES_PATH
+          if ! git diff --ignore-space-at-eol --exit-code --quiet $TYPES_PATH; then
             echo "Detected uncommitted changes after build. Run genTypes.sh and commit the result. See status below:"
             git diff
             exit 1
