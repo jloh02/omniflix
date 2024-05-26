@@ -16,8 +16,6 @@ export const OMDB_ROUTE = API_PREFIX + "/omdb";
 // Assume all paths are protected
 export const PUBLIC_ROUTES = [HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE];
 
-export const NO_NAVBAR_ROUTES = [HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE];
-
 // Constants for OMDB API
 export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
