@@ -4,7 +4,7 @@ import Watchlist from "./watchlist";
 
 const Dashboard: React.FC = () => {
   return (
-    <TabbedView tabLabels={["Watchlist", "Favorites", "Feed", "Watched"]}>
+    <TabbedView tabLabels={["In Progress", "Favorites", "Feed", "Done"]}>
       <Watchlist />
       <div>Favorites Page WIP</div>
       <div>Feed Page WIP</div>
