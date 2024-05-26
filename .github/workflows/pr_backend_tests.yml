@@ -14,6 +14,7 @@ defaults:
 
 jobs:
   test-type-generation:
+    name: Supabase Type Generation
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -32,6 +33,7 @@ jobs:
             exit 1
           fi
   test-migrations-functions:
+    name: Supabase Migrations and Functions Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
