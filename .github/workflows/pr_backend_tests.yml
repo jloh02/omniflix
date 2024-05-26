@@ -1,0 +1,50 @@
+name: PR Backend Checks
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - backend/**
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: ./backend
+
+jobs:
+  test-database-migration-setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.167.4
+      - run: supabase start
+      - run: supabase db reset
+  test-type-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.167.4
+      - run: supabase start
+      - name: Verify generated types are checked in
+        run: |
+          supabase gen types typescript --local > ../frontend/utils/supabase/types.gen.ts
+          if ! git diff --ignore-space-at-eol --exit-code --quiet types.gen.ts; then
+            echo "Detected uncommitted changes after build. Run genTypes.sh and commit the result. See status below:"
+            git diff
+            exit 1
+          fi
+  test-functions:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 1.167.4
+      - run: supabase start
+      - run: supabase functions serve
+      - run: deno test --allow-all deno-test.ts --env-file .env.local
