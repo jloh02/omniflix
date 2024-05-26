@@ -9,6 +9,10 @@ on:
       - backend/**
   workflow_dispatch:
 
+defaults:
+  run:
+    working-directory: ./backend
+
 jobs:
   deploy:
     runs-on: ubuntu-latest

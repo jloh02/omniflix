@@ -13,15 +13,6 @@ defaults:
     working-directory: ./backend
 
 jobs:
-  test-database-migration-setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: supabase/setup-cli@v1
-        with:
-          version: 1.167.4
-      - run: supabase start
-      - run: supabase db reset
   test-type-generation:
     runs-on: ubuntu-latest
     steps:
@@ -38,7 +29,7 @@ jobs:
             git diff
             exit 1
           fi
-  test-functions:
+  test-migrations-functions:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -46,5 +37,6 @@ jobs:
         with:
           version: 1.167.4
       - run: supabase start
-      - run: supabase functions serve
+      - run: supabase db reset
+      # - run: supabase functions serve
       - run: deno test --allow-all deno-test.ts --env-file .env.local
