@@ -22,7 +22,7 @@ jobs:
         with:
           node-version: 20
           cache: yarn
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: frontend/yarn.lock
       - name: prettier lint
         run: |
           yarn install --frozen-lockfile
@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: 20
           cache: yarn
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: frontend/yarn.lock
       - name: unit test
         run: |
           yarn install --frozen-lockfile
