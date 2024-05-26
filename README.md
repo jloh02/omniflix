@@ -41,8 +41,7 @@ cd omniflix
 1. Navigate to `/backend`.
 2. Run `yarn` to install dependencies
 3. Run `yarn db:start` to spin up local DB (This step will take a couple of minutes for your first run)
-   - Take note of the `API URL` and `anon key` to be updated in environment variables later
-   - If you lost these values, run `yarn db:status` to retrieve the values again
+   - Use `yarn db:reset` to reset the database according to [seed.sql](./backend/supabase/seed.sql)
 4. Run `yarn serve`. Functions will update as you save code.
 5. To test locally, you can use `curl` or the `javascript` client library (refer below for more information)
    - To create a new function, run `yarn supabase functions new <function_name>`
