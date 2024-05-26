@@ -5,6 +5,7 @@ import {
   CardContent,
   IconButton,
   Typography,
+  Tooltip,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -35,22 +36,26 @@ const FavoriteButton: React.FC<{ mediaType: string; mediaId: string }> = ({
   }, [mediaType, mediaId]);
 
   return (
-    <IconButton
-      onClick={async () => {
-        if (isFavoritedState) {
-          await removeFromFavorites(mediaType, mediaId);
-          setIsFavoritedState(false);
-        } else {
-          await addToFavorites(mediaType, mediaId);
-          setIsFavoritedState(true);
-        }
-      }}
-      onMouseEnter={() => setHover(true)}
-      onMouseLeave={() => setHover(false)}
-      sx={{ color: "yellow" }}
+    <Tooltip
+      title={isFavoritedState ? "Remove from Favorites" : "Add to Favorites"}
     >
-      {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
-    </IconButton>
+      <IconButton
+        onClick={async () => {
+          if (isFavoritedState) {
+            await removeFromFavorites(mediaType, mediaId);
+            setIsFavoritedState(false);
+          } else {
+            await addToFavorites(mediaType, mediaId);
+            setIsFavoritedState(true);
+          }
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        sx={{ color: "yellow" }}
+      >
+        {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
+      </IconButton>
+    </Tooltip>
   );
 };
 
