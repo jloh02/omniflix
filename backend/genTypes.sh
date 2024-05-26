@@ -1,0 +1,1 @@
+yarn -s supabase gen types typescript --local > ../frontend/utils/supabase/types.gen.ts
