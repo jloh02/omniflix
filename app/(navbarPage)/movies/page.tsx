@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
-import MovieCard from "./moviesCard";
+import MovieCard from "./movieCard";
 import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
