@@ -4,7 +4,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { CATEGORIES } from "@/utils/constants";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import MovieWatchlist from "./movieWatchlist";
 
 const Watchlist: React.FC = () => {
@@ -16,7 +16,11 @@ const Watchlist: React.FC = () => {
             {category}
           </AccordionSummary>
           <AccordionDetails>
-            <MovieWatchlist />
+            {category === "Movies" ? (
+              <MovieWatchlist />
+            ) : (
+              <Typography>WIP</Typography>
+            )}
           </AccordionDetails>
         </Accordion>
       ))}

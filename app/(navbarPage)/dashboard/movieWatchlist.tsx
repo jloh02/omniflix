@@ -6,32 +6,30 @@ import { Box, CardContent, Typography } from "@mui/material";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
 const example = {
-  TODO: [
+  "To Watch": [
     {
       id: 1,
-      title: "1",
+      title: "Title1",
       year: "1980",
       image: "https://picsum.photos/200/300",
     },
-  ],
-  Ongoing: [
     {
       id: 2,
-      title: "2",
+      title: "Title2",
       year: "1980",
       image: "https://picsum.photos/200/300",
     },
     {
       id: 3,
-      title: "3",
+      title: "Title3",
       year: "1980",
       image: "https://picsum.photos/200/300",
     },
   ],
-  Completed: [
+  Watched: [
     {
       id: 4,
-      title: "4",
+      title: "Title4",
       year: "1980",
       image: "https://picsum.photos/200/300",
     },
