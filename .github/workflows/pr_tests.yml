@@ -9,7 +9,7 @@ on:
 
 defaults:
   run:
-    working-directory: frontend
+    working-directory: ./frontend
 
 jobs:
   prettier:
@@ -22,10 +22,11 @@ jobs:
         with:
           node-version: 20
           cache: yarn
-      - name: install dependencies
-        run: yarn install --frozen-lockfile
-      - name: Prettier lint
-        run: yarn lint
+          cache-dependency-path: frontend/package-lock.json
+      - name: prettier lint
+        run: |
+        yarn install --frozen-lockfile
+        yarn lint
   jest:
     name: Jest Test
     runs-on: ubuntu-22.04
@@ -38,7 +39,8 @@ jobs:
         with:
           node-version: 20
           cache: yarn
-      - name: install dependencies
-        run: yarn install --frozen-lockfile
+          cache-dependency-path: frontend/package-lock.json
       - name: unit test
-        run: yarn test
+        run: |
+        yarn install --frozen-lockfile
+        yarn test
