@@ -34,6 +34,67 @@ export type Database = {
   }
   public: {
     Tables: {
+      favorites_entries: {
+        Row: {
+          created_at: string
+          id: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          media_id?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_entries_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users_info: {
+        Row: {
+          bio: string | null
+          name: string | null
+          user_id: string
+          username: string
+        }
+        Insert: {
+          bio?: string | null
+          name?: string | null
+          user_id: string
+          username: string
+        }
+        Update: {
+          bio?: string | null
+          name?: string | null
+          user_id?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "users_info_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       watchlist_entries: {
         Row: {
           created_at: string | null
