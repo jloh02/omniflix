@@ -1,4 +1,4 @@
-name: PR Checks
+name: PR Frontend Checks
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - frontend/**
+  workflow_dispatch:
 
 defaults:
   run:
