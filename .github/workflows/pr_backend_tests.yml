@@ -41,4 +41,5 @@ jobs:
           deno-version: 1.43.6
       - run: supabase start
       - run: supabase db reset
-      - run: deno test --allow-all deno-test.ts --env-file .env.local
+      - run: supabase serve &
+      - run: deno test --allow-all ./supabase/functions/tests/
