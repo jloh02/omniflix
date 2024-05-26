@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "@/utils/supabase/middleware";
 import { createClient } from "@/utils/supabase/server";
 import {
+  DASHBOARD_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
   PUBLIC_ROUTES,
@@ -22,9 +23,11 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_PAGE_ROUTE, request.nextUrl));
   }
 
-  // Redirect logged in users to home page
-  if (user && path === LOGIN_PAGE_ROUTE) {
-    return NextResponse.redirect(new URL(HOME_PAGE_ROUTE, request.nextUrl));
+  // Redirect logged in users to dashboard
+  if (user && (path === LOGIN_PAGE_ROUTE || path === HOME_PAGE_ROUTE)) {
+    return NextResponse.redirect(
+      new URL(DASHBOARD_PAGE_ROUTE, request.nextUrl),
+    );
   }
 
   return res;
