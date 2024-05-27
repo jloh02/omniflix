@@ -2,7 +2,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { FAVORITES_TABLE } from "../constants";
 
-async function addToFavorites(mediaType: string, mediaId: string) {
+async function isFavorited(mediaType: string, mediaId: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -14,14 +14,16 @@ async function addToFavorites(mediaType: string, mediaId: string) {
 
   const { data, error } = await supabase
     .from(FAVORITES_TABLE)
-    .insert({ media_type: mediaType, media_id: mediaId })
-    .select();
+    .select("*")
+    .eq("media_type", mediaType)
+    .eq("media_id", mediaId)
+    .limit(1);
 
   if (error) {
     return;
   }
 
-  return Boolean(data);
+  return data && data.length > 0;
 }
 
-export default addToFavorites;
+export default isFavorited;
