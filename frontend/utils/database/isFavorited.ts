@@ -21,7 +21,7 @@ async function addToFavorites(mediaType: string, mediaId: string) {
     return;
   }
 
-  return data;
+  return Boolean(data);
 }
 
 export default addToFavorites;
