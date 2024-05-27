@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardMedia,
@@ -22,11 +22,10 @@ const FavoriteButton: React.FC<{ mediaType: string; mediaId: string }> = ({
   mediaType,
   mediaId,
 }) => {
-  const [hover, setHover] = React.useState(false);
-  const [isFavoritedState, setIsFavoritedState] =
-    React.useState<boolean>(false);
+  const [hover, setHover] = useState(false);
+  const [isFavoritedState, setIsFavoritedState] = useState<boolean>(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const checkIsFavorited = async () => {
       const favorited = await isFavorited(mediaType, mediaId);
       setIsFavoritedState(favorited ?? false);

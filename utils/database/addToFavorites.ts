@@ -2,10 +2,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { FAVORITES_TABLE } from "../constants";
 
-export default async function addToFavorites(
-  mediaType: string,
-  mediaId: string,
-) {
+async function addToFavorites(mediaType: string, mediaId: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -26,3 +23,5 @@ export default async function addToFavorites(
 
   return data;
 }
+
+export default addToFavorites;
