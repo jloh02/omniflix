@@ -1,0 +1,14 @@
+{
+  "license": "MIT",
+  "scripts": {
+    "serve": "supabase functions serve",
+    "db:start": "supabase start",
+    "db:status": "supabase status",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:migrate": "supabase db diff --use-migra -f output"
+  },
+  "devDependencies": {
+    "supabase": "^1.167.4"
+  }
+}
