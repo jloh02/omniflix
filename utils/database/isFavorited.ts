@@ -16,7 +16,8 @@ export default async function isFavorited(mediaType: string, mediaId: string) {
     .from(FAVORITES_TABLE)
     .select("*")
     .eq("media_type", mediaType)
-    .eq("media_id", mediaId);
+    .eq("media_id", mediaId)
+    .limit(1);
 
   if (error) {
     return;
