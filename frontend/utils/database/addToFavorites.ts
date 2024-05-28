@@ -12,16 +12,13 @@ async function addToFavorites(mediaType: string, mediaId: string) {
     return;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from(FAVORITES_TABLE)
-    .insert({ media_type: mediaType, media_id: mediaId })
-    .select();
+    .insert({ user_id: user.id, media_type: mediaType, media_id: mediaId });
 
   if (error) {
     return;
-  }
-
-  return data;
+  }  return;
 }
 
 export default addToFavorites;
