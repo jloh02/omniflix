@@ -34,7 +34,7 @@ jobs:
           fi
       - name: Verify generated types are checked in (Backend)
         env:
-          TYPES_PATH: ./supabase/functions/utils/types.gen.ts
+          TYPES_PATH: ./supabase/functions/_shared/types.gen.ts
         run: |
           supabase gen types typescript --local > $TYPES_PATH
           if ! git diff --ignore-space-at-eol --exit-code --quiet $TYPES_PATH; then
