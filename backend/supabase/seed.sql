@@ -68,31 +68,3 @@ INSERT INTO
     from
       auth.users
   );
-
--- create watchlist entries
-insert into
-  < < < < < < < HEAD watchlist_entries (
-    user_id,
-    media_type,
-    media_id,
-    status_column,
-    column_order
-  )
-values
-  (
-    '00000000-0000-0000-0000-000000000002',
-    'movie',
-    'tt0111161',
-    0,
-    'aaa' == == == = watchlist_entries (user_id, media_type, media_id)
-    values
-      (
-        '00000000-0000-0000-0000-000000000001',
-        'movie',
-        'tt0111161'
-      ),
-      (
-        '00000000-0000-0000-0000-000000000002',
-        'movie',
-        'tt0111161' > > > > > > > main
-      );
