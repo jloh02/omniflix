@@ -73,7 +73,8 @@ Deno.serve(async (req: Request) => {
         media_id,
         column_order,
         status_column: status_column ?? 0,
-      });
+      })
+      .returns<TablesInsert<"watchlist_entries">>();
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -105,11 +106,11 @@ Deno.serve(async (req: Request) => {
     let { column_order_before, column_order_after } = body;
 
     if (!column_order_before) {
-      column_order_before = genFirstLexoRank(column_order_after.length);
+      column_order_before = genFirstLexoRank(column_order_after?.length);
     }
 
     if (!column_order_after) {
-      column_order_after = genLastLexoRank(column_order_before.length);
+      column_order_after = genLastLexoRank(column_order_before?.length);
     }
 
     if (column_order_before > column_order_after) {
