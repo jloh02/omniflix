@@ -12,7 +12,7 @@ import { Tables } from "../_shared/types.gen.ts";
 import { getLexorankDiff } from "../_shared/lexorank.ts";
 
 const NUMBER_OF_MOVIES = 10;
-const NUMBER_OF_INSERT_UPDATES = 500;
+const NUMBER_OF_INSERT_UPDATES = 100;
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
