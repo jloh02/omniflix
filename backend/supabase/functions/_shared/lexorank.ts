@@ -45,18 +45,18 @@ const getLexorankDiff = (a: string, b: string) => {
   return totalDiff;
 };
 
-const getLexorank = (a: string, b: string) => {
+const getLexorank = (a: string, b: string, totalDiff?: number) => {
   [a, b] = balanceStrings(a, b);
 
-  let totalDiff = getLexorankDiff(a, b);
+  if (!totalDiff) totalDiff = getLexorankDiff(a, b);
 
-  if (totalDiff < 0) {
+  if (totalDiff <= 0) {
     throw new Error(
-      `Lexorank difference between ${a} and ${b} is negative: ${totalDiff}`,
+      `Lexorank difference between ${a} and ${b} is non-positive: ${totalDiff}`,
     );
   }
 
-  if (totalDiff <= 1) {
+  if (totalDiff === 1) {
     return a + CHARSET[Math.floor(CHARSET.length / 2)];
   }
 
@@ -74,4 +74,15 @@ const getLexorank = (a: string, b: string) => {
   return result;
 };
 
-export { genFirstLexoRank, genLastLexoRank, getLexorank, getLexorankDiff };
+const extendLexorank = (a: string, last: boolean) => {
+  return a + (last ? CHARSET[CHARSET.length - 1] : CHARSET[0]);
+};
+
+export {
+  balanceStrings,
+  extendLexorank,
+  genFirstLexoRank,
+  genLastLexoRank,
+  getLexorank,
+  getLexorankDiff,
+};
