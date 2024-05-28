@@ -1,7 +1,5 @@
+import { ALLOWED_OMDB_TYPES, OMDBType } from "@/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
-
-const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
-type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("query");
