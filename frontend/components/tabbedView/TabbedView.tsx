@@ -28,7 +28,7 @@ const TabView: React.FC<TabViewProps> = ({
   );
 
   return (
-    <Box sx={{ width: "90%", padding: "10px" }}>
+    <Box className="w-11/12 p-2.5">
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={tab}
