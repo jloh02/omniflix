@@ -7,12 +7,12 @@ import {
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
-import { WatchlistAction } from "../utils/constants.ts";
-import { Tables } from "../utils/types.gen.ts";
-import { getLexorankDiff } from "../utils/lexorank.ts";
+import { WatchlistAction } from "../_shared/constants.ts";
+import { Tables } from "../_shared/types.gen.ts";
+import { getLexorankDiff } from "../_shared/lexorank.ts";
 
-const NUMBER_OF_MOVIES = 3;
-const NUMBER_OF_INSERT_UPDATES = 5;
+const NUMBER_OF_MOVIES = 10;
+const NUMBER_OF_INSERT_UPDATES = 500;
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
@@ -76,8 +76,9 @@ async function testInsertionUpdates(
   const fromIdx = Math.floor(Math.random() * movie_ids.length);
   const toIdx = Math.floor(Math.random() * movie_ids.length);
 
-  const media_id = entries[fromIdx][0];
+  const debugMsg = `${fromIdx} ${toIdx} ${JSON.stringify(entries)}`;
 
+  const media_id = entries[fromIdx][0];
   entries.splice(toIdx, 0, entries.splice(fromIdx, 1)[0]);
 
   const column_order_before = toIdx > 0 ? entries[toIdx - 1][1] : null;
@@ -114,10 +115,13 @@ async function testInsertionUpdates(
 
   // Ensure simulation matches
   const updatedState = await getWatchlistEntryPairs(client);
-  assertEquals(updatedState, entries);
+  assertEquals(updatedState, entries, debugMsg);
 
   // Ensure data integrity
-  console.log(updatedState?.sort((a, b) => getLexorankDiff(a[1], b[1])));
+  assertEquals(
+    updatedState,
+    updatedState?.sort((a, b) => getLexorankDiff(b[1], a[1])),
+  );
 }
 
 const testWatchlist = async () => {
@@ -142,7 +146,6 @@ const testWatchlist = async () => {
   );
 
   for (const movie_id in movie_ids) {
-    console.log(movie_id);
     await testInsertWatchlist(client, WatchlistAction.ADD, movie_id);
   }
 
