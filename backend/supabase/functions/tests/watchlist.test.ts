@@ -11,7 +11,8 @@ import { WatchlistAction } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
 import { getLexorankDiff } from "../_shared/lexorank.ts";
 
-const NUMBER_OF_MOVIES = 10;
+const NUMBER_COLUMNS = 3;
+const NUMBER_OF_MOVIES = 15;
 const NUMBER_OF_INSERT_UPDATES = 100;
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
@@ -31,6 +32,7 @@ const options = {
 async function testInsertWatchlist(
   client: SupabaseClient,
   action: WatchlistAction,
+  status_column: number,
   media_id: string,
 ) {
   const { data: func_data, error: func_error } = await client.functions.invoke(
@@ -40,6 +42,7 @@ async function testInsertWatchlist(
         type: action,
         media_type: "movie",
         media_id,
+        status_column,
       },
     },
   );
@@ -58,32 +61,48 @@ async function testInsertWatchlist(
   return funcBody.column_order;
 }
 
-async function getWatchlistEntryPairs(client: SupabaseClient) {
-  return (await client.from("watchlist_entries")
-    .select("*")
-    .match({ media_type: "movie" })
-    .order("column_order", { ascending: true })
-    .returns<Tables<"watchlist_entries">[]>())
-    .data
-    ?.map((entry) => [entry.media_id, entry.column_order]);
+async function getWatchlistEntries(
+  client: SupabaseClient,
+): Promise<([string, string][])[]> {
+  return await Promise.all(
+    Array.from<unknown, Promise<[string, string][]>>(
+      { length: NUMBER_COLUMNS },
+      async (_, status_column) => {
+        return (await client.from("watchlist_entries")
+          .select("*")
+          .match({ media_type: "movie", status_column })
+          .order("column_order", { ascending: true })
+          .returns<Tables<"watchlist_entries">[]>())
+          .data
+          ?.map<[string, string]>((
+            entry,
+          ) => [entry.media_id, entry.column_order]) ?? [];
+      },
+    ),
+  );
 }
 
 async function testInsertionUpdates(
-  entries: string[][],
-  movie_ids: string[],
   client: SupabaseClient,
+  entries: [string, string][][],
 ) {
-  const fromIdx = Math.floor(Math.random() * movie_ids.length);
-  const toIdx = Math.floor(Math.random() * movie_ids.length);
+  let fromCol;
+  do {
+    fromCol = Math.floor(Math.random() * entries.length);
+  } while (entries[fromCol].length === 0);
+  const toCol = Math.floor(Math.random() * entries.length);
 
-  const debugMsg = `${fromIdx} ${toIdx} ${JSON.stringify(entries)}`;
+  const fromIdx = Math.floor(Math.random() * entries[fromCol].length);
+  const toIdx = Math.floor(Math.random() * entries[toCol].length);
 
-  const media_id = entries[fromIdx][0];
-  entries.splice(toIdx, 0, entries.splice(fromIdx, 1)[0]);
+  const debugMsg = `${fromCol},${fromIdx} to ${toCol},${toIdx}:\n${entries}`;
 
-  const column_order_before = toIdx > 0 ? entries[toIdx - 1][1] : null;
-  const column_order_after = toIdx < entries.length - 1
-    ? entries[toIdx + 1][1]
+  const media_id = entries[fromCol][fromIdx][0];
+  entries[toCol].splice(toIdx, 0, entries[fromCol].splice(fromIdx, 1)[0]);
+
+  const column_order_before = toIdx > 0 ? entries[toCol][toIdx - 1][1] : null;
+  const column_order_after = toIdx < entries[toCol].length - 1
+    ? entries[toCol][toIdx + 1][1]
     : null;
 
   const { data, error } = await client.functions.invoke("watchlist", {
@@ -91,6 +110,7 @@ async function testInsertionUpdates(
       type: WatchlistAction.UPDATE,
       media_type: "movie",
       media_id,
+      status_column: toCol,
       ...({ column_order_before } ?? {}),
       ...({ column_order_after } ?? {}),
     },
@@ -107,20 +127,17 @@ async function testInsertionUpdates(
   assertEquals(body.success, true);
   assertExists(body.column_order);
 
-  entries[(toIdx < movie_ids.length) ? toIdx : (toIdx - 1)].splice(
-    1,
-    1,
-    body.column_order,
-  );
+  entries[toCol][(toIdx < entries[toCol].length) ? toIdx : (toIdx - 1)]
+    .splice(1, 1, body.column_order);
 
   // Ensure simulation matches
-  const updatedState = await getWatchlistEntryPairs(client);
+  const updatedState = await getWatchlistEntries(client);
   assertEquals(updatedState, entries, debugMsg);
 
   // Ensure data integrity
   assertEquals(
     updatedState,
-    updatedState?.sort((a, b) => getLexorankDiff(b[1], a[1])),
+    updatedState.map((col) => col?.sort((a, b) => getLexorankDiff(b[1], a[1]))),
   );
 }
 
@@ -140,29 +157,41 @@ const testWatchlist = async () => {
     throw authRes.error;
   }
 
-  const movie_ids = Array.from(
+  const movieIds = Array.from(
     { length: NUMBER_OF_MOVIES },
     (_, index) => `tt${index.toString().padStart(7, "0")}`,
   );
 
-  for (const movie_id in movie_ids) {
-    await testInsertWatchlist(client, WatchlistAction.ADD, movie_id);
+  for (const [idx, movie_id] of movieIds.entries()) {
+    await testInsertWatchlist(
+      client,
+      WatchlistAction.ADD,
+      idx % NUMBER_COLUMNS,
+      movie_id,
+    );
   }
 
-  const entries = await getWatchlistEntryPairs(client);
+  const entries = await getWatchlistEntries(client);
 
   if (!entries) {
     throw new Error("Failed to retrieve entries");
   }
 
   for (let i = 0; i < NUMBER_OF_INSERT_UPDATES; i++) {
-    await testInsertionUpdates(entries, movie_ids, client);
+    await testInsertionUpdates(client, entries);
   }
 
-  for (const movie_id in movie_ids) {
-    await testInsertWatchlist(client, WatchlistAction.REMOVE, movie_id);
-  }
+  const finalEntries = await getWatchlistEntries(client);
+  await Promise.all(finalEntries.flatMap((col, status_column) => {
+    return (col.map(async (entry) => {
+      await testInsertWatchlist(
+        client,
+        WatchlistAction.REMOVE,
+        status_column,
+        entry[0],
+      );
+    }));
+  }));
 };
 
-// Register and run the tests
-Deno.test("Watchlist Insertion Function Test", testWatchlist);
+Deno.test("Watchlist Function Test", testWatchlist);
