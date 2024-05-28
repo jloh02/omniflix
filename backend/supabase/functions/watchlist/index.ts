@@ -104,16 +104,6 @@ Deno.serve(async (req: Request) => {
   if (body.type === WatchlistAction.UPDATE) {
     let { column_order_before, column_order_after } = body;
 
-    if (!column_order_before && !column_order_after) {
-      return new Response(
-        JSON.stringify({
-          error:
-            "Missing required fields: column_order_before, column_order_after",
-        }),
-        { status: 400 },
-      );
-    }
-
     if (!column_order_before) {
       column_order_before = genFirstLexoRank(column_order_after.length);
     }
