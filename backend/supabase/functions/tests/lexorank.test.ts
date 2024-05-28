@@ -3,13 +3,16 @@ import {
   assertAlmostEquals,
   assertEquals,
 } from "https://deno.land/std@0.192.0/testing/asserts.ts";
-import { getLexorankDiff } from "../_shared/lexorank.ts";
-import { getLexorank } from "../_shared/lexorank.ts";
-import { genFirstLexoRank } from "../_shared/lexorank.ts";
-import { genLastLexoRank } from "../_shared/lexorank.ts";
+import {
+  balanceStrings,
+  genFirstLexoRank,
+  genLastLexoRank,
+  getLexorank,
+  getLexorankDiff,
+} from "../_shared/lexorank.ts";
 
-const NUM_MID_TEST = 100;
 const MAX_LEN_STR = 5;
+const NUM_MID_TEST = 1000;
 
 const testGetLexorankDiff = () => {
   // Single digit updates
@@ -44,10 +47,13 @@ function genStr() {
 }
 
 function getLexoOrderedStringPair() {
-  const a = genStr();
-  const b = genStr();
-  const diff = getLexorankDiff(a, b);
-  return diff > 0 ? [a, b] : [b, a];
+  let a, b;
+  do {
+    a = genStr();
+    b = genStr();
+  } while (balanceStrings(a, b)[0] === balanceStrings(b, a)[0]);
+
+  return getLexorankDiff(a, b) > 0 ? [a, b] : [b, a];
 }
 
 const testLexorankMiddleRandom = () => {
@@ -56,29 +62,40 @@ const testLexorankMiddleRandom = () => {
     const middle = getLexorank(a, b);
     const diffA = getLexorankDiff(a, middle);
     const diffB = getLexorankDiff(middle, b);
-    assertAlmostEquals(diffA, diffB, 1);
+    assertAlmostEquals(
+      diffA,
+      diffB,
+      1,
+      `a: ${a}, b: ${b}, middle: ${middle}`,
+    );
   }
 };
 
 const testLexorankMissingBeforeAfter = () => {
   //Test missing before
   for (let i = 0; i < NUM_MID_TEST; i++) {
-    const b = genStr();
-    const a = genFirstLexoRank(b.length);
+    let a, b;
+    do {
+      b = genStr();
+      a = genFirstLexoRank(b.length);
+    } while (balanceStrings(a, b)[0] === balanceStrings(b, a)[0]);
     const middle = getLexorank(a, b);
     const diffA = getLexorankDiff(a, middle);
     const diffB = getLexorankDiff(middle, b);
-    assertAlmostEquals(diffA, diffB, 1);
+    assertAlmostEquals(diffA, diffB, 1, `a: ${a}, b: ${b},  middle: ${middle}`);
   }
 
   //Test missing after
   for (let i = 0; i < NUM_MID_TEST; i++) {
-    const a = genStr();
-    const b = genLastLexoRank(a.length);
+    let a, b;
+    do {
+      a = genStr();
+      b = genLastLexoRank(a.length);
+    } while (balanceStrings(a, b)[0] === balanceStrings(b, a)[0]);
     const middle = getLexorank(a, b);
     const diffA = getLexorankDiff(a, middle);
     const diffB = getLexorankDiff(middle, b);
-    assertAlmostEquals(diffA, diffB, 1);
+    assertAlmostEquals(diffA, diffB, 1, `a: ${a}, b: ${b}, middle: ${middle}`);
   }
 
   //Test missing both
@@ -88,12 +105,12 @@ const testLexorankMissingBeforeAfter = () => {
     const middle = getLexorank(a, b);
     const diffA = getLexorankDiff(a, middle);
     const diffB = getLexorankDiff(middle, b);
-    assertAlmostEquals(diffA, diffB, 1);
+    assertAlmostEquals(diffA, diffB, 1, `a: ${a}, b: ${b}, middle: ${middle}`);
   }
 };
 
 Deno.test("getLexorankDiff", testGetLexorankDiff);
-Deno.test("getLexorank", testLexorankMiddleRandom);
+Deno.test("getLexorank with random", testLexorankMiddleRandom);
 Deno.test(
   "getLexorank with missing parameters",
   testLexorankMissingBeforeAfter,

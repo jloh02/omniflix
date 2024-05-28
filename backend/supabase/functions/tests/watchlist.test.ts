@@ -9,11 +9,12 @@ import {
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
 import { WatchlistAction } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
-import { getLexorankDiff } from "../_shared/lexorank.ts";
 
 const NUMBER_COLUMNS = 3;
 const NUMBER_OF_MOVIES = 15;
 const NUMBER_OF_INSERT_UPDATES = 100;
+
+const INSERT_SPAM_NUM = 20;
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
@@ -137,8 +138,22 @@ async function testInsertionUpdates(
   // Ensure data integrity
   assertEquals(
     updatedState,
-    updatedState.map((col) => col?.sort((a, b) => getLexorankDiff(b[1], a[1]))),
+    updatedState.map((col) => col?.sort((a, b) => b[1].localeCompare(a[1]))),
   );
+}
+
+async function removeAllEntries(client: SupabaseClient) {
+  const finalEntries = await getWatchlistEntries(client);
+  await Promise.all(finalEntries.flatMap((col, status_column) => {
+    return (col.map(async (entry) => {
+      await testInsertWatchlist(
+        client,
+        WatchlistAction.REMOVE,
+        status_column,
+        entry[0],
+      );
+    }));
+  }));
 }
 
 const testWatchlist = async () => {
@@ -181,17 +196,67 @@ const testWatchlist = async () => {
     await testInsertionUpdates(client, entries);
   }
 
-  const finalEntries = await getWatchlistEntries(client);
-  await Promise.all(finalEntries.flatMap((col, status_column) => {
-    return (col.map(async (entry) => {
-      await testInsertWatchlist(
-        client,
-        WatchlistAction.REMOVE,
-        status_column,
-        entry[0],
-      );
-    }));
-  }));
+  await removeAllEntries(client);
+};
+
+const testWatchlistInserts = async () => {
+  const client: SupabaseClient = createClient(
+    supabaseUrl,
+    supabaseKey,
+    options,
+  );
+
+  const authRes = await client.auth.signInWithPassword({
+    email: "user2@email.com",
+    password: "test_password",
+  });
+
+  if (authRes.error) {
+    throw authRes.error;
+  }
+
+  const movieIds = Array.from(
+    { length: INSERT_SPAM_NUM },
+    (_, index) => `tt${index.toString().padStart(7, "0")}`,
+  );
+
+  for (const movie_id of movieIds) {
+    await testInsertWatchlist(
+      client,
+      WatchlistAction.ADD,
+      0,
+      movie_id,
+    );
+  }
+
+  let column_order_after = null;
+  for (const movie_id of movieIds) {
+    const { data, error } = await client.functions.invoke("watchlist", {
+      body: {
+        type: WatchlistAction.UPDATE,
+        media_type: "movie",
+        media_id: movie_id,
+        status_column: 1,
+        ...({ column_order_after } ?? {}),
+      },
+    });
+
+    if (error) {
+      console.error(await error.context.json());
+      throw new Error(error.message);
+    }
+
+    const body = JSON.parse(data);
+
+    assertExists(body);
+    assertEquals(body.success, true);
+    assertExists(body.column_order);
+
+    column_order_after = body.column_order;
+  }
+
+  await removeAllEntries(client);
 };
 
 Deno.test("Watchlist Function Test", testWatchlist);
+Deno.test("Watchlist Insert Spam Last then First", testWatchlistInserts);
