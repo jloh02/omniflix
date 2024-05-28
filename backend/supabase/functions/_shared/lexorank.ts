@@ -2,7 +2,7 @@ const MIN_KEY_LENGTH = 2;
 const WORDLIST =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
-const genString = (length: number, char: string) => {
+const genString = (char: string, length?: number) => {
   if (!length || length < MIN_KEY_LENGTH) {
     length = MIN_KEY_LENGTH;
   }
@@ -14,12 +14,12 @@ const genString = (length: number, char: string) => {
   return result;
 };
 
-const genFirstLexoRank = (length: number) => {
-  return genString(length, WORDLIST[0]);
+const genFirstLexoRank = (length?: number) => {
+  return genString(WORDLIST[0], length);
 };
 
-const genLastLexoRank = (length: number) => {
-  return genString(length, WORDLIST[WORDLIST.length - 1]);
+const genLastLexoRank = (length?: number) => {
+  return genString(WORDLIST[WORDLIST.length - 1], length);
 };
 
 const getLexorankDiff = (a: string, b: string) => {
@@ -43,20 +43,21 @@ const getLexorankDiff = (a: string, b: string) => {
 };
 
 const getLexorank = (a: string, b: string) => {
+  console.log(a, b);
   let totalDiff = getLexorankDiff(a, b);
   if (totalDiff <= 1) {
     return a + WORDLIST[Math.floor(WORDLIST.length / 2)];
   }
 
+  console.log(totalDiff);
+
   totalDiff = Math.floor(totalDiff / 2);
   let result = "";
   let carry = totalDiff;
-  while (carry > 0) {
-    for (let i = a.length - 1; i >= 0; i--) {
-      const sum = WORDLIST.indexOf(a[i]) + carry;
-      carry = Math.floor(sum / WORDLIST.length);
-      result = WORDLIST[sum % WORDLIST.length] + result;
-    }
+  for (let i = a.length - 1; i >= 0; i--) {
+    const sum = WORDLIST.indexOf(a[i]) + carry;
+    carry = Math.floor(sum / WORDLIST.length);
+    result = WORDLIST[sum % WORDLIST.length] + result;
   }
   return result;
 };
