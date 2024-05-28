@@ -1,5 +1,5 @@
 const MIN_KEY_LENGTH = 2;
-const WORDLIST =
+const CHARSET =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
 const genString = (char: string, length?: number) => {
@@ -15,16 +15,16 @@ const genString = (char: string, length?: number) => {
 };
 
 const genFirstLexoRank = (length?: number) => {
-  return genString(WORDLIST[0], length);
+  return genString(CHARSET[0], length);
 };
 
 const genLastLexoRank = (length?: number) => {
-  return genString(WORDLIST[WORDLIST.length - 1], length);
+  return genString(CHARSET[CHARSET.length - 1], length);
 };
 
 const balanceStrings = (a: string, b: string) => {
-  while (a.length < b.length) a += WORDLIST[0];
-  while (b.length < a.length) b += WORDLIST[0];
+  while (a.length < b.length) a += CHARSET[0];
+  while (b.length < a.length) b += CHARSET[0];
   return [a, b];
 };
 
@@ -36,11 +36,11 @@ const getLexorankDiff = (a: string, b: string) => {
 
   for (let i = a.length - 1; i >= 0; i--) {
     if (a[i] !== b[i]) {
-      const aIdx = WORDLIST.indexOf(a[i]);
-      const bIdx = WORDLIST.indexOf(b[i]);
+      const aIdx = CHARSET.indexOf(a[i]);
+      const bIdx = CHARSET.indexOf(b[i]);
       totalDiff += (bIdx - aIdx) * powerMult;
     }
-    powerMult *= WORDLIST.length;
+    powerMult *= CHARSET.length;
   }
   return totalDiff;
 };
@@ -57,16 +57,16 @@ const getLexorank = (a: string, b: string) => {
   }
 
   if (totalDiff <= 1) {
-    return a + WORDLIST[Math.floor(WORDLIST.length / 2)];
+    return a + CHARSET[Math.floor(CHARSET.length / 2)];
   }
 
   totalDiff = Math.floor(totalDiff / 2);
   let result = "";
   let carry = totalDiff;
   for (let i = a.length - 1; i >= 0; i--) {
-    const sum = WORDLIST.indexOf(a[i]) + carry;
-    carry = Math.floor(sum / WORDLIST.length);
-    result = WORDLIST[sum % WORDLIST.length] + result;
+    const sum = CHARSET.indexOf(a[i]) + carry;
+    carry = Math.floor(sum / CHARSET.length);
+    result = CHARSET[sum % CHARSET.length] + result;
   }
   if (carry !== 0) {
     throw new Error("Lexorank reduction error: carry is not 0, found " + carry);
