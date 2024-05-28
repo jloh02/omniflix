@@ -2,13 +2,13 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
-import { WatchlistAction } from "../utils/constants.ts";
+import { WatchlistAction } from "../_shared/constants.ts";
 import {
   genFirstLexoRank,
   genLastLexoRank,
   getLexorank,
-} from "../utils/lexorank.ts";
-import { Tables, TablesInsert, TablesUpdate } from "../utils/types.gen.ts";
+} from "../_shared/lexorank.ts";
+import { Tables, TablesInsert, TablesUpdate } from "../_shared/types.gen.ts";
 
 async function getLastColumnOrder(
   client: SupabaseClient,
@@ -24,8 +24,7 @@ async function getLastColumnOrder(
     .returns<Tables<"watchlist_entries">[]>()
     .single();
 
-  const columnOrder = data ? data.column_order : "";
-
+  const columnOrder = data ? (data.column_order) : genFirstLexoRank();
   return getLexorank(columnOrder, genLastLexoRank(columnOrder.length));
 }
 
