@@ -1,7 +1,7 @@
 {
   "license": "MIT",
   "scripts": {
-    "serve": "supabase functions serve",
+    "serve": "supabase functions serve --env-file=.env",
     "db:start": "supabase start",
     "db:status": "supabase status",
     "db:stop": "supabase stop",

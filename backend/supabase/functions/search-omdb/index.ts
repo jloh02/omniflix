@@ -2,7 +2,6 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
-import "https://deno.land/std@0.224.0/dotenv/load.ts";
 import {
   ALLOWED_OMDB_TYPES,
   OMDBType,
