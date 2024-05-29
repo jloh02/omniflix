@@ -27,6 +27,10 @@ export const WATCHLIST_TABLE = "watchlist_entries";
 export const FAVORITES_TABLE = "favorites_entries";
 export const MOVIES_CACHE_TABLE = "movies";
 
+export enum MediaType {
+  MOVIE = "movie",
+}
+
 // Supabase edge function names
 export const WATCHLIST_FUNCTION = "watchlist";
 export enum WatchlistFunctionAction {

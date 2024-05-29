@@ -5,6 +5,7 @@ import KanbanBoard from "@/components/kanban/KanbanBoard";
 import { Box, CardContent, Typography } from "@mui/material";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 import getWatchlist from "@/utils/database/watchlist/getWatchlist";
+import { MediaType } from "@/utils/constants";
 
 const WATCHLIST_COLUMNS = ["To Watch", "Watched"];
 
@@ -17,7 +18,7 @@ const MovieWatchlist: React.FC = () => {
   >();
 
   useEffect(() => {
-    getWatchlist("movie", WATCHLIST_COLUMNS).then((watchlist) =>
+    getWatchlist(MediaType.MOVIE, WATCHLIST_COLUMNS).then((watchlist) =>
       setMovieWatchlist(watchlist),
     );
   }, []);
