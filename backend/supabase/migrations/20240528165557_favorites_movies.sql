@@ -15,12 +15,6 @@ create table "public"."movies" (
 
 alter table "public"."movies" enable row level security;
 
-alter table "public"."favorites_entries" alter column "id" set default gen_random_uuid();
-
-alter table "public"."favorites_entries" alter column "id" drop identity;
-
-alter table "public"."favorites_entries" alter column "id" set data type uuid using "id"::uuid;
-
 CREATE UNIQUE INDEX movies_pkey ON public.movies USING btree (imdb_id);
 
 alter table "public"."movies" add constraint "movies_pkey" PRIMARY KEY using index "movies_pkey";
