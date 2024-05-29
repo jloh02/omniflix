@@ -1,4 +1,9 @@
-import { ALLOWED_OMDB_TYPES, OMDBType, OMDB_API_KEY, OMDB_API_URL } from "@/utils/constants";
+import {
+  ALLOWED_OMDB_TYPES,
+  OMDBType,
+  OMDB_API_KEY,
+  OMDB_API_URL,
+} from "@/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {

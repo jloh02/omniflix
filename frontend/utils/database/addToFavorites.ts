@@ -18,7 +18,8 @@ async function addToFavorites(mediaType: string, mediaId: string) {
 
   if (error) {
     return;
-  }  return;
+  }
+  return;
 }
 
 export default addToFavorites;
