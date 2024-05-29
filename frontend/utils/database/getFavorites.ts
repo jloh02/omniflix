@@ -2,7 +2,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { FAVORITES_TABLE } from "../constants";
 
-async function removeFromFavorites(mediaType: string, mediaId: string) {
+async function getFavorites(mediaType: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -14,16 +14,15 @@ async function removeFromFavorites(mediaType: string, mediaId: string) {
 
   const { data, error } = await supabase
     .from(FAVORITES_TABLE)
-    .delete()
+    .select("media_id")
     .eq("user_id", user.id)
-    .eq("media_type", mediaType)
-    .eq("media_id", mediaId);
+    .eq("media_type", mediaType);
 
   if (error) {
     return;
   }
 
-  return data;
+  return data ? data.map((item: any) => item.media_id) : [];
 }
 
-export default removeFromFavorites;
+export default getFavorites;

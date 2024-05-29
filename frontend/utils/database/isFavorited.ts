@@ -15,6 +15,7 @@ async function isFavorited(mediaType: string, mediaId: string) {
   const { data, error } = await supabase
     .from(FAVORITES_TABLE)
     .select("*")
+    .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .limit(1);
