@@ -8,31 +8,40 @@ import IMovieDetails from "@/utils/types/IMovieDetails";
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<IMovieDetails[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
-      const data = await getFavorites("movie");
-      setFavorites(data ?? ([] as IMovieDetails[]));
+      try {
+        const data = await getFavorites("movie");
+        setFavorites(data ?? ([] as IMovieDetails[]));
+      } catch (err) {
+        setError((err as Error).message);
+      }
     };
     fetchFavorites();
   }, []);
 
-  return (
-    <>
-      {favorites.length > 0 ? (
-        <Grid container spacing={3} className="mt-0 items-stretch">
-          {favorites.map((movie: IMovie) => (
-            <Grid item>
-              <MovieCard movie={movie} />
-            </Grid>
-          ))}
+  if (error) {
+    return (
+      <Typography variant="body1" className="mt-4">
+        {error}
+      </Typography>
+    );
+  }
+
+  return favorites.length > 0 ? (
+    <Grid container spacing={3} className="mt-0 items-stretch">
+      {favorites.map((movie: IMovie) => (
+        <Grid item>
+          <MovieCard movie={movie} />
         </Grid>
-      ) : (
-        <Typography variant="body1" className="mt-4">
-          No Favorites found.
-        </Typography>
-      )}
-    </>
+      ))}
+    </Grid>
+  ) : (
+    <Typography variant="body1" className="mt-4">
+      No Favorites found.
+    </Typography>
   );
 };
 

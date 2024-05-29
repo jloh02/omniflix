@@ -13,7 +13,7 @@ async function getFavorites(
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return;
+    throw new Error("Please login again.");
   }
 
   const { data, error } = await supabase
@@ -23,8 +23,9 @@ async function getFavorites(
     .eq("media_type", mediaType);
 
   if (error) {
-    console.log("Error retrieving favorites");
-    return;
+    throw new Error(
+      "Error encountered when getting Favorites. Please try again later.",
+    );
   }
   const movieIds: string[] = data ? data.map((item: any) => item.media_id) : [];
 
