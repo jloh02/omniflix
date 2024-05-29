@@ -1,10 +1,14 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { WATCHLIST_FUNCTION, WatchlistFunctionAction } from "../../constants";
+import {
+  MediaType,
+  WATCHLIST_FUNCTION,
+  WatchlistFunctionAction,
+} from "../../constants";
 
 async function updateWatchlist(
-  mediaType: string,
+  mediaType: MediaType,
   mediaId: string,
   statusColumn: number,
   columnOrderBefore?: string,

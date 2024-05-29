@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { WATCHLIST_TABLE } from "../../constants";
+import { MediaType, WATCHLIST_TABLE } from "../../constants";
 
-async function isWatchlisted(mediaType: string, mediaId: string) {
+async function isWatchlisted(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
   const {
     data: { user },

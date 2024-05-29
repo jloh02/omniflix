@@ -16,6 +16,7 @@ import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
   MINIMUM_SEARCH_LENGTH,
+  MediaType,
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovie from "@/utils/types/IMovie";

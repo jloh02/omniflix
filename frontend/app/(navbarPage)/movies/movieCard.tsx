@@ -23,7 +23,7 @@ interface MovieCardProps {
   movie: IMovie;
 }
 
-const FavoriteButton: React.FC<{ mediaType: string; mediaId: string }> = ({
+const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
   mediaType,
   mediaId,
 }) => {
@@ -64,7 +64,7 @@ const FavoriteButton: React.FC<{ mediaType: string; mediaId: string }> = ({
 };
 
 const AddToWatchlistButton: React.FC<{
-  mediaType: string;
+  mediaType: MediaType;
   mediaId: string;
 }> = ({ mediaType, mediaId }) => {
   const [isAddedToWatchlist, setIsAddedToWatchlist] = useState<boolean>(false);
