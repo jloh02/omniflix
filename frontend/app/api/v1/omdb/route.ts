@@ -1,14 +1,15 @@
+import {
+  ALLOWED_OMDB_TYPES,
+  OMDBType,
+  OMDB_API_KEY,
+  OMDB_API_URL,
+} from "@/utils/constants";
 import { NextRequest, NextResponse } from "next/server";
-
-const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
-type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
 export async function GET(request: NextRequest) {
   const query = request.nextUrl.searchParams.get("query");
   const page = request.nextUrl.searchParams.get("page") ?? 1;
   const mediaTypeInput = request.nextUrl.searchParams.get("type");
-
-  const OMDB_API_KEY = process.env.NEXT_OMDB_API_KEY;
 
   if (!OMDB_API_KEY)
     return NextResponse.json(
@@ -40,13 +41,13 @@ export async function GET(request: NextRequest) {
 
   // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
+    `${OMDB_API_URL}?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
   );
   const resBody = await res.json();
   if (!resBody.Error) return NextResponse.json(resBody);
 
   const titleRes = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
+    `${OMDB_API_URL}?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
   );
   const titleResBody = await titleRes.json();
 

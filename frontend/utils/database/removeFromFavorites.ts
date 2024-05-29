@@ -15,6 +15,7 @@ async function removeFromFavorites(mediaType: string, mediaId: string) {
   const { data, error } = await supabase
     .from(FAVORITES_TABLE)
     .delete()
+    .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId);
 

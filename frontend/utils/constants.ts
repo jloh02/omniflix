@@ -19,8 +19,12 @@ export const OMDB_ROUTE = API_PREFIX + "/omdb";
 export const PUBLIC_ROUTES = [HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE];
 
 // Constants for OMDB API
+export const OMDB_API_URL = "http://www.omdbapi.com/";
+export const OMDB_API_KEY = process.env.NEXT_OMDB_API_KEY;
 export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
+export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
+export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
 // Database table names
 export const FAVORITES_TABLE = "favorites_entries";
