@@ -55,5 +55,5 @@ jobs:
           deno-version: 1.43.6
       - run: echo "OMDB_API_KEY=${{ secrets.NEXT_OMDB_API_KEY }}" > .env.local
       - run: supabase start
-      - run: supabase db reset
+      - run: cat .env.local
       - run: deno test --allow-all ./supabase/functions/tests/ --env=.env.local
