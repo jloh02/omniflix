@@ -25,8 +25,6 @@ async function addToWatchlist(mediaType: string, mediaId: string) {
     return;
   }
 
-  console.log(data);
-
   return data && JSON.parse(data).success === true;
 }
 
