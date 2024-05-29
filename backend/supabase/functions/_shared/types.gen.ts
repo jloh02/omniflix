@@ -66,6 +66,48 @@ export type Database = {
           },
         ]
       }
+      movies: {
+        Row: {
+          created_at: string
+          genre: string[] | null
+          imdb_id: string
+          imdb_rating: number | null
+          plot: string | null
+          poster_url: string | null
+          rated: string | null
+          released: string | null
+          runtime: number | null
+          title: string | null
+          year: number | null
+        }
+        Insert: {
+          created_at?: string
+          genre?: string[] | null
+          imdb_id: string
+          imdb_rating?: number | null
+          plot?: string | null
+          poster_url?: string | null
+          rated?: string | null
+          released?: string | null
+          runtime?: number | null
+          title?: string | null
+          year?: number | null
+        }
+        Update: {
+          created_at?: string
+          genre?: string[] | null
+          imdb_id?: string
+          imdb_rating?: number | null
+          plot?: string | null
+          poster_url?: string | null
+          rated?: string | null
+          released?: string | null
+          runtime?: number | null
+          title?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
       users_info: {
         Row: {
           bio: string | null
