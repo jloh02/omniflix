@@ -52,6 +52,15 @@ Deno.serve(async (req: Request) => {
 
   const { media_type, media_id, status_column } = body;
 
+  if (status_column && status_column < 0) {
+    return new Response(
+      JSON.stringify({
+        error: "Invalid negative status column",
+      }),
+      { status: 400 },
+    );
+  }
+
   if (!media_type || !media_id) {
     return new Response(
       JSON.stringify({
