@@ -9,18 +9,30 @@ import IMovieDetails from "@/utils/types/IMovieDetails";
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<IMovieDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
+        setIsLoading(true);
         const data = await getFavorites("movie");
         setFavorites(data ?? ([] as IMovieDetails[]));
       } catch (err) {
         setError((err as Error).message);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchFavorites();
   }, []);
+
+  if (isLoading) {
+    return (
+      <Typography variant="body1" className="mt-4">
+        Loading...
+      </Typography>
+    );
+  }
 
   if (error) {
     return (
