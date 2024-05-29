@@ -74,6 +74,12 @@ const { data, error } = await supabase.functions.invoke("function_name", {
 });
 ```
 
+#### Deno Tests
+
+```
+deno test --allow-all .\supabase\functions\tests --env=.env.local
+```
+
 ### Frontend Setup
 
 1. Navigate to `/frontend`
