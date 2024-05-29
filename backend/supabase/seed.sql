@@ -21,16 +21,14 @@ INSERT INTO
     recovery_token
   ) (
     select
-      (
-        '00000000-0000-0000-0000-' || RIGHT('000000000000' || (ROW_NUMBER() OVER()), 12)
-      ) :: uuid,
+      '00000000-0000-0000-0000-000000000000',
       (
         '00000000-0000-0000-0000-' || RIGHT('000000000000' || (ROW_NUMBER() OVER()), 12)
       ) :: uuid,
       'authenticated',
       'authenticated',
       'user' ||(ROW_NUMBER() OVER()) || '@email.com',
-      crypt('test_password_gen', gen_salt('bf')),
+      crypt('test_password', gen_salt('bf')),
       current_timestamp,
       current_timestamp,
       current_timestamp,
@@ -69,19 +67,4 @@ INSERT INTO
       current_timestamp
     from
       auth.users
-  );
-
--- create watchlist entries
-insert into
-  watchlist_entries (user_id, media_type, media_id)
-values
-  (
-    '00000000-0000-0000-0000-000000000001',
-    'movie',
-    'tt0111161'
-  ),
-  (
-    '00000000-0000-0000-0000-000000000002',
-    'movie',
-    'tt0111161'
   );
