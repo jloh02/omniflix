@@ -104,8 +104,8 @@ const Movies: React.FC = () => {
         <LinearProgress color="secondary" />
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
-          {searchResult.map((movie) => (
-            <Grid item>
+          {searchResult.map((movie, idx) => (
+            <Grid key={idx} item>
               <MovieCard movie={movie} />
             </Grid>
           ))}
