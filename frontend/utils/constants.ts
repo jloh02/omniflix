@@ -23,4 +23,14 @@ export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
 
 // Database table names
+export const WATCHLIST_TABLE = "watchlist_entries";
 export const FAVORITES_TABLE = "favorites_entries";
+export const MOVIES_CACHE_TABLE = "movies";
+
+// Supabase edge function names
+export const WATCHLIST_FUNCTION = "watchlist";
+export enum WatchlistFunctionAction {
+  ADD = "add",
+  REMOVE = "remove",
+  UPDATE = "update",
+}

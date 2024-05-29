@@ -1,5 +1,6 @@
 type KanbanItem = {
-  id: number;
+  id: string;
+  columnOrder: string;
   title: string;
   year: string;
   image: string;
@@ -12,4 +13,4 @@ type KanbanItemWithKeyIndex = KanbanItem & {
 
 type KanbanDropType = "column" | "card";
 
-export type { KanbanItem, KanbanItemWithKeyIndex, KanbanDropType };
+export type { KanbanDropType, KanbanItem, KanbanItemWithKeyIndex };

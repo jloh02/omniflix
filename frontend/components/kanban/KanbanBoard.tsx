@@ -12,28 +12,43 @@ import {
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 
 interface KanbanBoardProps {
-  kanbanData: { [columnId: string]: KanbanItem[] };
+  kanbanData?: { [columnId: string]: KanbanItem[] };
+  columnNames: string[];
   setKanbanData: React.Dispatch<
-    React.SetStateAction<{
-      [columnId: string]: KanbanItem[];
-    }>
+    React.SetStateAction<{ [columnId: string]: KanbanItem[] } | undefined>
   >;
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
   kanbanData,
+  columnNames,
   setKanbanData,
   renderKanbanCard,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
+
+  if (!kanbanData)
+    kanbanData = columnNames.reduce(
+      (acc, colName) => {
+        acc[colName] = [];
+        return acc;
+      },
+      {} as { [columnName: string]: KanbanItem[] },
+    );
+
+  if (columnNames.length !== Object.keys(kanbanData).length)
+    throw new Error("Column names length does not match kanban data length");
+
+  if (columnNames.some((colName) => kanbanData && !kanbanData[colName]))
+    throw new Error("Column names do not match kanban data keys");
 
   const dataWithKeyAndIdx = useMemo<{
     [columnId: string]: KanbanItemWithKeyIndex[];
   }>(
     () =>
       Object.fromEntries(
-        Object.entries(kanbanData).map(([columnTitle, items]) => [
+        Object.entries(kanbanData ?? {}).map(([columnTitle, items]) => [
           columnTitle,
           items.map((item, index) => ({
             ...item,
@@ -90,7 +105,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
             throw new Error("Unhandled KanbanDropType in KanbanBoard");
         }
 
-        if (!sourceColumn || !desColumn || !itemToMove || !itemToMove.id)
+        if (
+          !sourceColumn ||
+          !desColumn ||
+          !itemToMove ||
+          !itemToMove.columnOrder
+        )
           return;
 
         // Do not move if the item is dropped in the same column and the same index
@@ -98,6 +118,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           return;
 
         setKanbanData((prevData) => {
+          if (!prevData) return;
+
           const updatedData = structuredClone(prevData);
 
           // Remove old item from list
