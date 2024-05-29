@@ -3,11 +3,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { MediaType, SEARCH_OMDB_FUNCTION } from "../../constants";
 
-async function searchOmdb(
-  mediaType: MediaType,
-  query: string,
-  page?: number,
-) {
+async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
   const supabase = createClient();
   const {
     data: { user },
@@ -31,8 +27,6 @@ async function searchOmdb(
   if (error) {
     return await error.context.json();
   }
-
-  console.log(data);
 
   return JSON.parse(data);
 }

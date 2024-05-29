@@ -49,10 +49,13 @@ async function getWatchlist(
   }, new Map<string, Tables<"movies">>());
 
   // Group by columnNames
-  let result = columnNames.reduce((acc, colName) => {
-    acc[colName] = [];
-    return acc;
-  }, {} as { [columnName: string]: KanbanItem[] });
+  let result = columnNames.reduce(
+    (acc, colName) => {
+      acc[colName] = [];
+      return acc;
+    },
+    {} as { [columnName: string]: KanbanItem[] },
+  );
 
   result = watchlistData.reduce((acc, item) => {
     if (item.status_column > columnNames.length) {
