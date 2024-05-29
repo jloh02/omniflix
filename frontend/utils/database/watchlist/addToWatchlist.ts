@@ -1,4 +1,5 @@
 "use server";
+
 import { createClient } from "@/utils/supabase/server";
 import { WATCHLIST_FUNCTION, WatchlistFunctionAction } from "../../constants";
 

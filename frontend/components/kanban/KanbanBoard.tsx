@@ -10,6 +10,8 @@ import {
   KanbanItemWithKeyIndex,
 } from "./kanbanTypes";
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import updateWatchlist from "@/utils/database/watchlist/updateWatchlist";
+import { MediaType } from "@/utils/constants";
 
 interface KanbanBoardProps {
   kanbanData?: { [columnId: string]: KanbanItem[] };
@@ -134,6 +136,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           } else {
             updatedData[desColumn].push(itemToMove);
           }
+
+          updateWatchlist(
+            MediaType.MOVIE,
+            itemToMove.id,
+            columnNames.indexOf(desColumn),
+            updatedData[desColumn][insertIdx - 1]?.columnOrder,
+            updatedData[desColumn][insertIdx + 1]?.columnOrder,
+          );
 
           return updatedData;
         });

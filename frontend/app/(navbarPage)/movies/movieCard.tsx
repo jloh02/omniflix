@@ -17,6 +17,7 @@ import removeFromFavorites from "@/utils/database/favorites/removeFromFavorites"
 import isWatchlisted from "@/utils/database/watchlist/isWatchlisted";
 import { Add, Check } from "@mui/icons-material";
 import addToWatchlist from "@/utils/database/watchlist/addToWatchlist";
+import { MediaType } from "@/utils/constants";
 
 interface MovieCardProps {
   movie: IMovie;
@@ -111,8 +112,11 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <Card className="relative w-48 h-full">
       <CardMedia component="img" image={movie.poster} className="h-72" />
-      <FavoriteButton mediaType="movie" mediaId={movie.imdbID} />
-      <AddToWatchlistButton mediaType="movie" mediaId={movie.imdbID} />
+      <FavoriteButton mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
+      <AddToWatchlistButton
+        mediaType={MediaType.MOVIE}
+        mediaId={movie.imdbID}
+      />
       <CardContent className="p-2.5 pb-2.5">
         <Typography variant="body1">{movie.title}</Typography>
         <Typography variant="body2">{movie.year}</Typography>
