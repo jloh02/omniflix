@@ -46,7 +46,7 @@ cd omniflix
 5. To test locally, you can use `curl` or the `javascript` client library (refer below for more information)
    - To create a new function, run `yarn supabase functions new <function_name>`
 6. After developing, run `yarn db:stop` to stop local database container
-7. Update the environment variables in `backend/.env` with your OMDB API key
+7. Update the environment variables in `backend/.env.local` with your OMDB API key
    ```
    OMDB_API_KEY=[INSERT OMDB API KEY]
    ```
