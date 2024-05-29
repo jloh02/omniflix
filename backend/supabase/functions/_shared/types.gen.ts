@@ -78,7 +78,7 @@ export type Database = {
           released: string | null
           runtime: number | null
           title: string | null
-          year: number | null
+          year: string | null
         }
         Insert: {
           created_at?: string
@@ -91,7 +91,7 @@ export type Database = {
           released?: string | null
           runtime?: number | null
           title?: string | null
-          year?: number | null
+          year?: string | null
         }
         Update: {
           created_at?: string
@@ -104,7 +104,7 @@ export type Database = {
           released?: string | null
           runtime?: number | null
           title?: string | null
-          year?: number | null
+          year?: string | null
         }
         Relationships: []
       }
