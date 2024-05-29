@@ -83,14 +83,19 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
         }}
       >
         <Box display="flex" flexDirection="row">
+          <Box flexShrink={0} width={IMAGE_SIZE} height={IMAGE_SIZE}>
+            <Box
+              component="img"
+              src={item.image}
+              sx={{ pointerEvents: "none" }}
+            ></Box>
+          </Box>
           <Box
-            width={IMAGE_SIZE}
-            height={IMAGE_SIZE}
-            component="img"
-            src={item.image}
-            sx={{ pointerEvents: "none" }}
-          ></Box>
-          <Box display="flex" flexDirection="column" justifyContent="center">
+            flex={1}
+            flexDirection="column"
+            justifyContent="center"
+            overflow="hidden"
+          >
             {children}
           </Box>
         </Box>
