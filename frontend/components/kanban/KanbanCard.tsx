@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Card, Divider, IconButton, useTheme } from "@mui/material";
+import {
+  Box,
+  Card,
+  Divider,
+  IconButton,
+  Tooltip,
+  useTheme,
+} from "@mui/material";
 import {
   draggable,
   dropTargetForElements,
@@ -102,12 +109,14 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
             {children}
           </Box>
           <Box display="flex" flexDirection="column" justifyContent="center">
-            <IconButton
-              sx={{ height: "fit-content" }}
-              onClick={() => removeItem(item.id)}
-            >
-              <Close />
-            </IconButton>
+            <Tooltip title="Remove from watchlist">
+              <IconButton
+                sx={{ height: "fit-content" }}
+                onClick={() => removeItem(item.id)}
+              >
+                <Close />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Box>
       </Card>
