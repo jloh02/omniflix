@@ -26,7 +26,7 @@ const PAGES = [
 
 const NavigationBar = () => {
   return (
-    <AppBar className="sticky">
+    <AppBar className="!sticky">
       <Toolbar>
         <Link href={DASHBOARD_PAGE_ROUTE}>
           <Typography variant="h6" className="pr-2.5">
@@ -35,7 +35,7 @@ const NavigationBar = () => {
         </Link>
         <ButtonGroup>
           {PAGES.map(([pageLabel, path]) => (
-            <Button key={path} variant="text" className="px-5">
+            <Button key={path} variant="text" className="!px-5">
               <Link href={path}>
                 <Typography textAlign="center" color="white">
                   {pageLabel}
