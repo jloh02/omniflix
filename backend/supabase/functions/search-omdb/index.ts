@@ -24,6 +24,7 @@ async function cacheItems(
       year: item.Year,
     };
   });
+
   const { error } = await client.from(
     TableNames.MOVIES_CACHE_TABLE,
   )
