@@ -7,5 +7,10 @@ enum WatchlistAction {
   UPDATE = "update",
 }
 
+enum TableNames {
+  WATCHLIST = "watchlist_entries",
+  MOVIES_CACHE_TABLE = "movies",
+}
+
 export type { OMDBType };
-export { ALLOWED_OMDB_TYPES, WatchlistAction };
+export { ALLOWED_OMDB_TYPES, TableNames, WatchlistAction };

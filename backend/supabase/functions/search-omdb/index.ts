@@ -3,9 +3,56 @@ import {
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
-import { ALLOWED_OMDB_TYPES, OMDBType } from "../_shared/constants.ts";
+import {
+  ALLOWED_OMDB_TYPES,
+  OMDBType,
+  TableNames,
+} from "../_shared/constants.ts";
+import { Tables } from "../_shared/types.gen.ts";
+
+//TODO handle type for various movies, series, episodes
+async function cacheItems(
+  client: SupabaseClient,
+  items: any[],
+  type: OMDBType,
+) {
+  console.log(items);
+  const entriesToUpsert = items.map((item) => {
+    return {
+      imdb_id: item.imdbID,
+      poster_url: item.Poster,
+      title: item.Title,
+      year: item.Year,
+    };
+  });
+  const { error } = await client.from(
+    TableNames.MOVIES_CACHE_TABLE,
+  )
+    .upsert(entriesToUpsert, {
+      defaultToNull: true,
+      onConflict: "imdb_id",
+      ignoreDuplicates: true,
+    })
+    .returns<Tables<TableNames.MOVIES_CACHE_TABLE>>();
+
+  if (error) {
+    console.error("Error upserting data", error);
+  }
+}
 
 Deno.serve(async (req: Request) => {
+  const adminSupabaseClient: SupabaseClient = createClient(
+    Deno.env.get("SUPABASE_URL") ?? "",
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+        },
+      },
+    },
+  );
+
   const OMDB_API_KEY = Deno.env.get("OMDB_API_KEY");
   if (!OMDB_API_KEY) throw new Error("OMDB_API_KEY is not defined");
 
@@ -41,7 +88,10 @@ Deno.serve(async (req: Request) => {
     `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
   );
   const resBody = await res.json();
-  if (!resBody.Error) return new Response(JSON.stringify(resBody));
+  if (!resBody.Error) {
+    await cacheItems(adminSupabaseClient, resBody.Search, type);
+    return new Response(JSON.stringify(resBody));
+  }
 
   const titleRes = await fetch(
     `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
@@ -54,46 +104,6 @@ Deno.serve(async (req: Request) => {
   }
 
   // Format data so it matches the search API
+  await cacheItems(adminSupabaseClient, [titleResBody], type);
   return new Response(JSON.stringify({ Search: [titleResBody] }));
-
-  // const supabaseClient: SupabaseClient = createClient(
-  //   Deno.env.get("SUPABASE_URL") ?? "",
-  //   Deno.env.get("SUPABASE_ANON_KEY") ?? "",
-  //   {
-  //     global: { headers: { Authorization: req.headers.get("Authorization")! } },
-  //   },
-  // );
-
-  // const adminSupabaseClient = createClient(
-  //   Deno.env.get("SUPABASE_URL") ?? "",
-  //   Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
-  //   {
-  //     global: {
-  //       headers: {
-  //         Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
-  //       },
-  //     },
-  //   },
-  // );
-
-  // const authHeader = req.headers.get("Authorization")!;
-  // const token = authHeader.replace("Bearer ", "");
-  // const user = await supabaseClient.auth.getUser(token);
-
-  // if (!user || !user.data.user) {
-  //   return new Response("Unauthorized", { status: 401 });
-  // }
-
-  // const body = await req.json();
-
-  // const searchQueries = body.search as { mediaType: string; imdbId: string }[];
-
-  // .forEach(async (searchQuery) => {
-  //   const { mediaType, imdbId } = searchQuery;
-
-  // });
-
-  // return new Response(JSON.stringify({ error: "Invalid type" }), {
-  //   status: 400,
-  // });
 });

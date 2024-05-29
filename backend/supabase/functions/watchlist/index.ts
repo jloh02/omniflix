@@ -2,7 +2,7 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
-import { WatchlistAction } from "../_shared/constants.ts";
+import { TableNames, WatchlistAction } from "../_shared/constants.ts";
 import {
   extendLexorank,
   genFirstLexoRank,
@@ -18,12 +18,12 @@ async function getLastColumnOrder(
   media_type: string,
   status_column?: number,
 ) {
-  const { data } = await client.from("watchlist_entries")
+  const { data } = await client.from(TableNames.WATCHLIST)
     .select("column_order")
     .match({ user_id, media_type, status_column: status_column ?? 0 })
     .order("column_order", { ascending: false })
     .limit(1)
-    .returns<Tables<"watchlist_entries">[]>()
+    .returns<Tables<TableNames.WATCHLIST>[]>()
     .single();
 
   const columnOrder = data ? (data.column_order) : genFirstLexoRank();
@@ -68,7 +68,7 @@ Deno.serve(async (req: Request) => {
       media_type,
       status_column,
     );
-    const { error } = await supabaseClient.from("watchlist_entries")
+    const { error } = await supabaseClient.from(TableNames.WATCHLIST)
       .insert({
         user_id,
         media_type,
@@ -76,7 +76,7 @@ Deno.serve(async (req: Request) => {
         column_order,
         status_column: status_column ?? 0,
       })
-      .returns<TablesInsert<"watchlist_entries">>();
+      .returns<TablesInsert<TableNames.WATCHLIST>>();
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -90,10 +90,10 @@ Deno.serve(async (req: Request) => {
   }
 
   if (body.type === WatchlistAction.REMOVE) {
-    const { error } = await supabaseClient.from("watchlist_entries")
+    const { error } = await supabaseClient.from(TableNames.WATCHLIST)
       .delete()
       .match({ user_id, media_type, media_id })
-      .returns<TablesUpdate<"watchlist_entries">>();
+      .returns<TablesUpdate<TableNames.WATCHLIST>>();
 
     if (error) {
       return new Response(JSON.stringify({ error: error.message }), {
@@ -139,7 +139,7 @@ Deno.serve(async (req: Request) => {
       }
 
       const { error: updateOldError } = await supabaseClient.from(
-        "watchlist_entries",
+        TableNames.WATCHLIST,
       )
         .update({
           status_column,
@@ -150,7 +150,7 @@ Deno.serve(async (req: Request) => {
           media_type,
           column_order: oldColumnOrder,
         })
-        .returns<TablesUpdate<"watchlist_entries">>();
+        .returns<TablesUpdate<TableNames.WATCHLIST>>();
 
       if (updateOldError) {
         return new Response(JSON.stringify({ error: updateOldError.message }), {
@@ -160,11 +160,11 @@ Deno.serve(async (req: Request) => {
 
       const column_order = getLexorank(column_order_before, column_order_after);
       const { error: insertError } = await supabaseClient.from(
-        "watchlist_entries",
+        TableNames.WATCHLIST,
       )
         .update({ status_column, column_order })
         .match({ user_id, media_type, media_id })
-        .returns<TablesUpdate<"watchlist_entries">>();
+        .returns<TablesUpdate<TableNames.WATCHLIST>>();
       if (insertError) {
         return new Response(JSON.stringify({ error: insertError.message }), {
           status: 400,
@@ -180,10 +180,10 @@ Deno.serve(async (req: Request) => {
         column_order_after,
         diff,
       );
-      const { error } = await supabaseClient.from("watchlist_entries")
+      const { error } = await supabaseClient.from(TableNames.WATCHLIST)
         .update({ status_column, column_order })
         .match({ user_id, media_type, media_id })
-        .returns<TablesUpdate<"watchlist_entries">>();
+        .returns<TablesUpdate<TableNames.WATCHLIST>>();
 
       if (error) {
         return new Response(JSON.stringify({ error }), {
