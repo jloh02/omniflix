@@ -35,7 +35,7 @@ async function getWatchlist(
   const { data: cacheData, error: cacheError } = await supabase
     .from(MOVIES_CACHE_TABLE)
     .select()
-    .in("imdbId", movieIds)
+    .in("imdb_id", movieIds)
     .returns<Tables<"movies">[]>();
 
   // TODO handle cache missing in database (Should not happen for future cache development)
@@ -44,7 +44,7 @@ async function getWatchlist(
   }
 
   const data = cacheData.reduce((acc, item) => {
-    acc.set(item.imdbId, item);
+    acc.set(item.imdb_id, item);
     return acc;
   }, new Map<string, Tables<"movies">>());
 
@@ -64,7 +64,7 @@ async function getWatchlist(
       columnOrder: item.column_order,
       title: itemData?.title ?? "",
       year: itemData?.year ?? "",
-      image: itemData?.poster ?? "",
+      image: itemData?.poster_url ?? "",
     });
     return acc;
   }, result);
