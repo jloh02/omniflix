@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Card, Divider, useTheme } from "@mui/material";
+import { Box, Card, Divider, IconButton, useTheme } from "@mui/material";
 import {
   draggable,
   dropTargetForElements,
@@ -11,11 +11,13 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
+import { Close } from "@mui/icons-material";
 
 interface KanbanCardProps {
   item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
+  removeItem: (id: string) => void;
 }
 
 const IMAGE_SIZE = 100;
@@ -24,6 +26,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
   item,
   instanceId,
   children,
+  removeItem,
 }: KanbanCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -97,6 +100,14 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
             overflow="hidden"
           >
             {children}
+          </Box>
+          <Box display="flex" flexDirection="column" justifyContent="center">
+            <IconButton
+              sx={{ height: "fit-content" }}
+              onClick={() => removeItem(item.id)}
+            >
+              <Close />
+            </IconButton>
           </Box>
         </Box>
       </Card>

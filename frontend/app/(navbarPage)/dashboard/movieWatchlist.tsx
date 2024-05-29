@@ -37,6 +37,7 @@ const MovieWatchlist: React.FC = () => {
             <Typography variant="body1">{item.year}</Typography>
           </CardContent>
         )}
+        mediaType={MediaType.MOVIE}
       />
     </Box>
   );

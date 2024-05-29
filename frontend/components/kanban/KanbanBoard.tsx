@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
 import { Box } from "@mui/material";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -12,6 +12,7 @@ import {
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import updateWatchlist from "@/utils/database/watchlist/updateWatchlist";
 import { MediaType } from "@/utils/constants";
+import removeFromWatchlist from "@/utils/database/watchlist/removeFromWatchlist";
 
 interface KanbanBoardProps {
   kanbanData?: { [columnId: string]: KanbanItem[] };
@@ -20,6 +21,7 @@ interface KanbanBoardProps {
     React.SetStateAction<{ [columnId: string]: KanbanItem[] } | undefined>
   >;
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
+  mediaType: MediaType;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
@@ -27,6 +29,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   columnNames,
   setKanbanData,
   renderKanbanCard,
+  mediaType,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
 
@@ -60,6 +63,31 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
         ]),
       ),
     [kanbanData],
+  );
+
+  const removeItem = useCallback(
+    (id: string) => {
+      removeFromWatchlist(mediaType, id).then((success) => {
+        if (!success) return;
+
+        setKanbanData((prevData) => {
+          if (!prevData) return;
+
+          const updatedData = structuredClone(prevData);
+
+          for (const column of Object.values(updatedData)) {
+            const idx = column.findIndex((item) => item.id === id);
+            if (idx !== -1) {
+              column.splice(idx, 1);
+              break;
+            }
+          }
+
+          return updatedData;
+        });
+      });
+    },
+    [mediaType, kanbanData],
   );
 
   useEffect(() => {
@@ -160,6 +188,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           instanceId={instanceId}
           items={items}
           renderKanbanCard={renderKanbanCard}
+          removeItem={removeItem}
         />
       ))}
     </Box>
