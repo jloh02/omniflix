@@ -1,14 +1,26 @@
 import React from "react";
 import TabbedView from "@/components/tabbedView/TabbedView";
 import Watchlist from "./watchlist";
+import Favorites from "./favorites";
 
 const Dashboard: React.FC = () => {
   return (
-    <TabbedView tabLabels={["In Progress", "Favorites", "Feed", "Done"]}>
+    <TabbedView
+      tabLabels={[
+        "Overview",
+        "Favorites",
+        "Feed",
+        "Not Started",
+        "In Progress",
+        "Finished",
+      ]}
+    >
       <Watchlist />
-      <div>Favorites Page WIP</div>
+      <Favorites />
       <div>Feed Page WIP</div>
-      <div>Watched Page WIP</div>
+      <div>"To Watch" Page WIP</div>
+      <div>"Watching" Page WIP</div>
+      <div>"Watched" Page WIP</div>
     </TabbedView>
   );
 };

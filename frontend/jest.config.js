@@ -8,4 +8,7 @@ module.exports = {
   },
   testPathIgnorePatterns: ["./dist"],
   globalSetup: "<rootDir>/jest.setup.ts",
+  moduleNameMapper: {
+    "^@/(.*)$": "<rootDir>/$1",
+  },
 };
