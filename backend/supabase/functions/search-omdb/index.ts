@@ -16,7 +16,6 @@ async function cacheItems(
   items: any[],
   type: OMDBType,
 ) {
-  console.log(items);
   const entriesToUpsert = items.map((item) => {
     return {
       imdb_id: item.imdbID,
