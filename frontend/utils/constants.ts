@@ -32,6 +32,7 @@ export enum MediaType {
 }
 
 // Supabase edge function names
+export const SEARCH_OMDB_FUNCTION = "search-omdb";
 export const WATCHLIST_FUNCTION = "watchlist";
 export enum WatchlistFunctionAction {
   ADD = "add",
