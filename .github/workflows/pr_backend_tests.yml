@@ -45,6 +45,8 @@ jobs:
   test-migrations-functions:
     name: Supabase Migrations and Functions Tests
     runs-on: ubuntu-latest
+    env:
+      OMDB_API_KEY: ${{ secrets.NEXT_OMDB_API_KEY }}
     steps:
       - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1

@@ -46,6 +46,11 @@ cd omniflix
 5. To test locally, you can use `curl` or the `javascript` client library (refer below for more information)
    - To create a new function, run `yarn supabase functions new <function_name>`
 6. After developing, run `yarn db:stop` to stop local database container
+7. Update the environment variables in `backend/.env` with your OMDB API key
+   ```
+   OMDB_API_KEY=[INSERT OMDB API KEY]
+   ```
+   `OMDB_API_KEY` can be found in the email sent to you right after registering.
 
 #### Testing with Curl
 
@@ -89,11 +94,3 @@ In the `.env.local` file, these environment variables need to be set up:
    ```
 
    Both `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` can be found from the backend setup for local development. For production DB, it can be found in [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-
-2. Update your OMDB API key.
-
-   ```
-   NEXT_OMDB_API_KEY=[INSERT OMDB API KEY]
-   ```
-
-   `NEXT_OMDB_API_KEY` can be found in the email sent to you right after registering.
