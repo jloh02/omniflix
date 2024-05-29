@@ -30,7 +30,9 @@ const MovieWatchlist: React.FC = () => {
         setKanbanData={setMovieWatchlist}
         renderKanbanCard={(item) => (
           <CardContent>
-            <Typography variant="h6">{item.title}</Typography>
+            <Typography variant="h6" noWrap={true} textOverflow="ellipsis">
+              {item.title}
+            </Typography>
             <Typography variant="body1">{item.year}</Typography>
           </CardContent>
         )}
