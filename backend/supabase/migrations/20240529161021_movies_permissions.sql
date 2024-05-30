@@ -23,3 +23,19 @@ add
 
 alter table
   "public"."watchlist_entries" validate constraint "watchlist_entries_column_order_check";
+
+alter table
+  "public"."favorites_entries"
+add
+  constraint "favorites_entries_media_id_fkey" FOREIGN KEY (media_id) REFERENCES movies(imdb_id) not valid;
+
+alter table
+  "public"."favorites_entries" validate constraint "favorites_entries_media_id_fkey";
+
+alter table
+  "public"."watchlist_entries"
+add
+  constraint "watchlist_entries_media_id_fkey" FOREIGN KEY (media_id) REFERENCES movies(imdb_id) not valid;
+
+alter table
+  "public"."watchlist_entries" validate constraint "watchlist_entries_media_id_fkey";
