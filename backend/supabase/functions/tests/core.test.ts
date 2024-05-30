@@ -23,7 +23,7 @@ const testClientCreation = async () => {
   const client: SupabaseClient = createClient(
     supabaseUrl,
     supabaseKey,
-    options,
+    options
   );
 
   // Test a simple query to the database

@@ -1,8 +1,8 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE } from "../constants";
+import { FAVORITES_TABLE, MediaType } from "../../constants";
 
-async function addToFavorites(mediaType: string, mediaId: string) {
+async function addToFavorites(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -12,16 +12,14 @@ async function addToFavorites(mediaType: string, mediaId: string) {
     return;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from(FAVORITES_TABLE)
-    .insert({ media_type: mediaType, media_id: mediaId })
-    .select();
+    .insert({ user_id: user.id, media_type: mediaType, media_id: mediaId });
 
   if (error) {
     return;
   }
-
-  return data;
+  return;
 }
 
 export default addToFavorites;

@@ -58,6 +58,13 @@ export type Database = {
         }
         Relationships: [
           {
+            foreignKeyName: "favorites_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["imdb_id"]
+          },
+          {
             foreignKeyName: "favorites_entries_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
@@ -78,7 +85,7 @@ export type Database = {
           released: string | null
           runtime: number | null
           title: string | null
-          year: number | null
+          year: string | null
         }
         Insert: {
           created_at?: string
@@ -91,7 +98,7 @@ export type Database = {
           released?: string | null
           runtime?: number | null
           title?: string | null
-          year?: number | null
+          year?: string | null
         }
         Update: {
           created_at?: string
@@ -104,7 +111,7 @@ export type Database = {
           released?: string | null
           runtime?: number | null
           title?: string | null
-          year?: number | null
+          year?: string | null
         }
         Relationships: []
       }
@@ -166,6 +173,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "watchlist_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["imdb_id"]
+          },
           {
             foreignKeyName: "watchlist_entries_user_id_fkey"
             columns: ["user_id"]

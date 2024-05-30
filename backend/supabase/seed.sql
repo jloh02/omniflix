@@ -68,3 +68,15 @@ INSERT INTO
     from
       auth.users
   );
+
+-- generate movies
+INSERT INTO
+  public.movies (imdb_id, title, year, poster_url) (
+    select
+      'tt' || RIGHT('0000000' || (ROW_NUMBER() OVER() - 1), 7),
+      'Movie ' || (ROW_NUMBER() OVER() - 1),
+      2000,
+      'https://m.media-amazon.com/images/M/MV5BMTU2NjA1ODgzMF5BMl5BanBnXkFtZTgwMTM2MTI4MjE@._V1_SX300.jpg'
+    FROM
+      generate_series(0, 100)
+  );

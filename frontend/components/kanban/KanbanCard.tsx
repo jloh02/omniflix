@@ -1,5 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Card, Divider, useTheme } from "@mui/material";
+import {
+  Box,
+  Card,
+  Divider,
+  IconButton,
+  Tooltip,
+  useTheme,
+} from "@mui/material";
 import {
   draggable,
   dropTargetForElements,
@@ -11,11 +18,13 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
+import { Close } from "@mui/icons-material";
 
 interface KanbanCardProps {
   item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
+  removeItem: (id: string) => void;
 }
 
 const IMAGE_SIZE = 100;
@@ -24,6 +33,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
   item,
   instanceId,
   children,
+  removeItem,
 }: KanbanCardProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -83,15 +93,30 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
         }}
       >
         <Box display="flex" flexDirection="row">
+          <Box flexShrink={0} width={IMAGE_SIZE} height={IMAGE_SIZE}>
+            <Box
+              component="img"
+              src={item.image}
+              sx={{ pointerEvents: "none" }}
+            ></Box>
+          </Box>
           <Box
-            width={IMAGE_SIZE}
-            height={IMAGE_SIZE}
-            component="img"
-            src={item.image}
-            sx={{ pointerEvents: "none" }}
-          ></Box>
-          <Box display="flex" flexDirection="column" justifyContent="center">
+            flex={1}
+            flexDirection="column"
+            justifyContent="center"
+            overflow="hidden"
+          >
             {children}
+          </Box>
+          <Box display="flex" flexDirection="column" justifyContent="center">
+            <Tooltip title="Remove from watchlist">
+              <IconButton
+                sx={{ height: "fit-content" }}
+                onClick={() => removeItem(item.id)}
+              >
+                <Close />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Box>
       </Card>

@@ -16,10 +16,12 @@ import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
   MINIMUM_SEARCH_LENGTH,
+  MediaType,
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovie from "@/utils/types/IMovie";
 import { objectKeysToLowerCase } from "@/utils/objectKeysToLowerCase";
+import searchOmdb from "@/utils/database/movies/searchOmdb";
 
 const Movies: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -47,30 +49,26 @@ const Movies: React.FC = () => {
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
 
-    fetch(`/api/v1/omdb?query=${searchInput}&type=movie`).then(
-      async (response) => {
-        const responseJson = await response.json();
-
-        if (responseJson["Error"]) {
-          setError(responseJson["Error"]);
-          setIsLoading(false);
-          return;
-        }
-
-        if (!responseJson["Search"]) {
-          setError("No results found");
-          setIsLoading(false);
-          return;
-        }
-
-        setSearchResult(
-          (responseJson["Search"] as object[]).map(
-            (movie: object) => objectKeysToLowerCase(movie) as IMovie,
-          ),
-        );
+    searchOmdb(MediaType.MOVIE, searchInput).then(async (response) => {
+      if (response["Error"]) {
+        setError(response["Error"]);
         setIsLoading(false);
-      },
-    );
+        return;
+      }
+
+      if (!response["Search"]) {
+        setError("No results found");
+        setIsLoading(false);
+        return;
+      }
+
+      setSearchResult(
+        (response["Search"] as object[]).map(
+          (movie: object) => objectKeysToLowerCase(movie) as IMovie,
+        ),
+      );
+      setIsLoading(false);
+    });
   }, [searchInputDebounced]);
 
   return (
@@ -104,8 +102,8 @@ const Movies: React.FC = () => {
         <LinearProgress color="secondary" />
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
-          {searchResult.map((movie) => (
-            <Grid item>
+          {searchResult.map((movie, idx) => (
+            <Grid key={idx} item>
               <MovieCard movie={movie} />
             </Grid>
           ))}

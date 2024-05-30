@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
 import { Box } from "@mui/material";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -10,30 +10,50 @@ import {
   KanbanItemWithKeyIndex,
 } from "./kanbanTypes";
 import { extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
+import updateWatchlist from "@/utils/database/watchlist/updateWatchlist";
+import { MediaType } from "@/utils/constants";
+import removeFromWatchlist from "@/utils/database/watchlist/removeFromWatchlist";
 
 interface KanbanBoardProps {
-  kanbanData: { [columnId: string]: KanbanItem[] };
+  kanbanData?: { [columnId: string]: KanbanItem[] };
+  columnNames: string[];
   setKanbanData: React.Dispatch<
-    React.SetStateAction<{
-      [columnId: string]: KanbanItem[];
-    }>
+    React.SetStateAction<{ [columnId: string]: KanbanItem[] } | undefined>
   >;
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
+  mediaType: MediaType;
 }
 
 const KanbanBoard: React.FC<KanbanBoardProps> = ({
   kanbanData,
+  columnNames,
   setKanbanData,
   renderKanbanCard,
+  mediaType,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
+
+  if (!kanbanData)
+    kanbanData = columnNames.reduce(
+      (acc, colName) => {
+        acc[colName] = [];
+        return acc;
+      },
+      {} as { [columnName: string]: KanbanItem[] },
+    );
+
+  if (columnNames.length !== Object.keys(kanbanData).length)
+    throw new Error("Column names length does not match kanban data length");
+
+  if (columnNames.some((colName) => kanbanData && !kanbanData[colName]))
+    throw new Error("Column names do not match kanban data keys");
 
   const dataWithKeyAndIdx = useMemo<{
     [columnId: string]: KanbanItemWithKeyIndex[];
   }>(
     () =>
       Object.fromEntries(
-        Object.entries(kanbanData).map(([columnTitle, items]) => [
+        Object.entries(kanbanData ?? {}).map(([columnTitle, items]) => [
           columnTitle,
           items.map((item, index) => ({
             ...item,
@@ -43,6 +63,31 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
         ]),
       ),
     [kanbanData],
+  );
+
+  const removeItem = useCallback(
+    (id: string) => {
+      removeFromWatchlist(mediaType, id).then((success) => {
+        if (!success) return;
+
+        setKanbanData((prevData) => {
+          if (!prevData) return;
+
+          const updatedData = structuredClone(prevData);
+
+          for (const column of Object.values(updatedData)) {
+            const idx = column.findIndex((item) => item.id === id);
+            if (idx !== -1) {
+              column.splice(idx, 1);
+              break;
+            }
+          }
+
+          return updatedData;
+        });
+      });
+    },
+    [mediaType, kanbanData],
   );
 
   useEffect(() => {
@@ -90,7 +135,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
             throw new Error("Unhandled KanbanDropType in KanbanBoard");
         }
 
-        if (!sourceColumn || !desColumn || !itemToMove || !itemToMove.id)
+        if (
+          !sourceColumn ||
+          !desColumn ||
+          !itemToMove ||
+          !itemToMove.columnOrder
+        )
           return;
 
         // Do not move if the item is dropped in the same column and the same index
@@ -98,6 +148,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           return;
 
         setKanbanData((prevData) => {
+          if (!prevData) return;
+
           const updatedData = structuredClone(prevData);
 
           // Remove old item from list
@@ -112,6 +164,14 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           } else {
             updatedData[desColumn].push(itemToMove);
           }
+
+          updateWatchlist(
+            MediaType.MOVIE,
+            itemToMove.id,
+            columnNames.indexOf(desColumn),
+            updatedData[desColumn][insertIdx - 1]?.columnOrder,
+            updatedData[desColumn][insertIdx + 1]?.columnOrder,
+          );
 
           return updatedData;
         });
@@ -128,6 +188,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           instanceId={instanceId}
           items={items}
           renderKanbanCard={renderKanbanCard}
+          removeItem={removeItem}
         />
       ))}
     </Box>

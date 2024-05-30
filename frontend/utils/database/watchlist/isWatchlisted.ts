@@ -1,8 +1,9 @@
 "use server";
-import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE } from "../constants";
 
-async function isFavorited(mediaType: string, mediaId: string) {
+import { createClient } from "@/utils/supabase/server";
+import { MediaType, WATCHLIST_TABLE } from "../../constants";
+
+async function isWatchlisted(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
   const {
     data: { user },
@@ -13,11 +14,9 @@ async function isFavorited(mediaType: string, mediaId: string) {
   }
 
   const { data, error } = await supabase
-    .from(FAVORITES_TABLE)
+    .from(WATCHLIST_TABLE)
     .select("*")
-    .eq("user_id", user.id)
-    .eq("media_type", mediaType)
-    .eq("media_id", mediaId)
+    .match({ media_type: mediaType, media_id: mediaId, user_id: user.id })
     .limit(1);
 
   if (error) {
@@ -27,4 +26,4 @@ async function isFavorited(mediaType: string, mediaId: string) {
   return data && data.length > 0;
 }
 
-export default isFavorited;
+export default isWatchlisted;

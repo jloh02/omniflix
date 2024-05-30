@@ -14,6 +14,7 @@ interface KanbanColumnProps {
   instanceId: symbol;
   items: KanbanItemWithKeyIndex[];
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
+  removeItem: (id: string) => void;
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
@@ -21,6 +22,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   instanceId,
   items,
   renderKanbanCard,
+  removeItem,
 }: KanbanColumnProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -45,7 +47,13 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   }, [ref, title]);
 
   return (
-    <Box display="flex" flexDirection="column" width="100%" ref={ref}>
+    <Box
+      flex="1 1 0px"
+      width="0"
+      display="flex"
+      flexDirection="column"
+      ref={ref}
+    >
       <Typography pl={1} sx={{ userSelect: "none" }}>
         {title}
       </Typography>
@@ -65,7 +73,12 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         }}
       >
         {items.map((item, idx) => (
-          <KanbanCard key={idx} instanceId={instanceId} item={item}>
+          <KanbanCard
+            key={idx}
+            instanceId={instanceId}
+            item={item}
+            removeItem={removeItem}
+          >
             {renderKanbanCard(item)}
           </KanbanCard>
         ))}
