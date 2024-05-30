@@ -12,3 +12,14 @@ alter column
   "year"
 set
   data type text using "year" :: text;
+
+alter table
+  "public"."watchlist_entries" drop constraint "watchlist_entries_column_order_check";
+
+alter table
+  "public"."watchlist_entries"
+add
+  constraint "watchlist_entries_column_order_check" CHECK ((length(column_order) > 0)) not valid;
+
+alter table
+  "public"."watchlist_entries" validate constraint "watchlist_entries_column_order_check";
