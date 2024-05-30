@@ -75,7 +75,7 @@ const Movies: React.FC = () => {
 
   return (
     <Box sx={{ width: "90%", padding: "10px" }}>
-      <Typography align="left" variant="h4" className="my-4">
+      <Typography align="left" variant="h4" className="!my-4">
         Movies
       </Typography>
       <TextField
@@ -93,7 +93,7 @@ const Movies: React.FC = () => {
             </InputAdornment>
           ),
         }}
-        className="w-full mb-8"
+        className="w-full !mb-8"
         placeholder="Search"
         variant="outlined"
         value={searchInput}
