@@ -1,4 +1,4 @@
-const MIN_KEY_LENGTH = 2;
+const MIN_KEY_LENGTH = 1;
 const CHARSET =
   "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
