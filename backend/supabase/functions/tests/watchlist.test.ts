@@ -14,7 +14,7 @@ const NUMBER_COLUMNS = 3;
 const NUMBER_OF_MOVIES = 15;
 const NUMBER_OF_INSERT_UPDATES = 100;
 
-const INSERT_SPAM_NUM = 20;
+const INSERT_SPAM_NUM = 25;
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
@@ -228,6 +228,8 @@ const testWatchlistInserts = async () => {
       movie_id,
     );
   }
+  const entries = await getWatchlistEntries(client);
+  assertEquals(entries[0].map(([id, _]) => id), movieIds);
 
   let column_order_after = null;
   for (const movie_id of movieIds) {
@@ -254,6 +256,8 @@ const testWatchlistInserts = async () => {
 
     column_order_after = body.column_order;
   }
+  const entries2 = await getWatchlistEntries(client);
+  assertEquals(entries2[1].map(([id, _]) => id), movieIds.toReversed());
 
   await removeAllEntries(client);
 };

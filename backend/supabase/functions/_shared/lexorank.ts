@@ -45,10 +45,10 @@ const getLexorankDiff = (a: string, b: string) => {
   return totalDiff;
 };
 
-const getLexorank = (a: string, b: string, totalDiff?: number) => {
+const getLexorank = (a: string, b: string) => {
   [a, b] = balanceStrings(a, b);
 
-  if (!totalDiff) totalDiff = getLexorankDiff(a, b);
+  let totalDiff = getLexorankDiff(a, b);
 
   if (totalDiff <= 0) {
     throw new Error(
@@ -74,13 +74,8 @@ const getLexorank = (a: string, b: string, totalDiff?: number) => {
   return result;
 };
 
-const extendLexorank = (a: string, last: boolean) => {
-  return a + (last ? CHARSET[CHARSET.length - 1] : CHARSET[0]);
-};
-
 export {
   balanceStrings,
-  extendLexorank,
   genFirstLexoRank,
   genLastLexoRank,
   getLexorank,
