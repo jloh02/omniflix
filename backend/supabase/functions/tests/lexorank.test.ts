@@ -62,12 +62,7 @@ const testLexorankMiddleRandom = () => {
     const middle = getLexorank(a, b);
     const diffA = getLexorankDiff(a, middle);
     const diffB = getLexorankDiff(middle, b);
-    assertAlmostEquals(
-      diffA,
-      diffB,
-      1,
-      `a: ${a}, b: ${b}, middle: ${middle}`,
-    );
+    assertAlmostEquals(diffA, diffB, 1, `a: ${a}, b: ${b}, middle: ${middle}`);
   }
 };
 
@@ -113,5 +108,5 @@ Deno.test("getLexorankDiff", testGetLexorankDiff);
 Deno.test("getLexorank with random", testLexorankMiddleRandom);
 Deno.test(
   "getLexorank with missing parameters",
-  testLexorankMissingBeforeAfter,
+  testLexorankMissingBeforeAfter
 );

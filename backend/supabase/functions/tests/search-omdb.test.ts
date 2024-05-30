@@ -27,7 +27,7 @@ const options = {
 async function testError(
   client: SupabaseClient,
   body: object,
-  assertions: (errorMsg: string) => void,
+  assertions: (errorMsg: string) => void
 ) {
   const res = await client.functions.invoke("search-omdb", {
     body,
@@ -41,7 +41,7 @@ async function testError(
 async function testSuccess(
   client: SupabaseClient,
   body: object,
-  assertions: (body: any) => void | Promise<void>,
+  assertions: (body: any) => void | Promise<void>
 ) {
   const res = await client.functions.invoke("search-omdb", {
     body,
@@ -55,7 +55,7 @@ const testSearchOmdb = async () => {
   const client: SupabaseClient = createClient(
     supabaseUrl,
     supabaseKey,
-    options,
+    options
   );
 
   await testError(client, {}, (errorMsg) => {
@@ -71,13 +71,9 @@ const testSearchOmdb = async () => {
     assertStringIncludes(errorMsg, "Missing params");
     assertStringIncludes(errorMsg, "type");
   });
-  await testError(
-    client,
-    { query: "query", type: "invalid" },
-    (errorMsg) => {
-      assertStringIncludes(errorMsg, "Invalid type");
-    },
-  );
+  await testError(client, { query: "query", type: "invalid" }, (errorMsg) => {
+    assertStringIncludes(errorMsg, "Invalid type");
+  });
 
   await testSuccess(client, { query: "John", type: "movie" }, (body) => {
     assertExists(body["Search"]);
@@ -100,7 +96,7 @@ const testSearchOmdb = async () => {
         assertExists(body2["Search"]);
         assertNotEquals(body2["Search"].length, 0);
         assertNotEquals(body1.Search[0].Title, body2.Search[0].Title);
-      },
+      }
     );
   });
 };

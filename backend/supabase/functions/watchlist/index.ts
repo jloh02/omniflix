@@ -14,9 +14,10 @@ async function getLastColumnOrder(
   client: SupabaseClient,
   user_id: string,
   media_type: string,
-  status_column?: number,
+  status_column?: number
 ) {
-  const { data } = await client.from(TableNames.WATCHLIST)
+  const { data } = await client
+    .from(TableNames.WATCHLIST)
     .select("column_order")
     .match({ user_id, media_type, status_column: status_column ?? 0 })
     .order("column_order", { ascending: false })
@@ -24,7 +25,7 @@ async function getLastColumnOrder(
     .returns<Tables<TableNames.WATCHLIST>[]>()
     .single();
 
-  const columnOrder = data ? (data.column_order) : genFirstLexoRank();
+  const columnOrder = data ? data.column_order : genFirstLexoRank();
   return getLexorank(columnOrder, genLastLexoRank(columnOrder.length));
 }
 
@@ -34,7 +35,7 @@ Deno.serve(async (req: Request) => {
     Deno.env.get("SUPABASE_ANON_KEY") ?? "",
     {
       global: { headers: { Authorization: req.headers.get("Authorization")! } },
-    },
+    }
   );
 
   const authHeader = req.headers.get("Authorization")!;
@@ -55,7 +56,7 @@ Deno.serve(async (req: Request) => {
       JSON.stringify({
         error: "Invalid negative status column",
       }),
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -64,7 +65,7 @@ Deno.serve(async (req: Request) => {
       JSON.stringify({
         error: "Missing required fields: media_type, media_id",
       }),
-      { status: 400 },
+      { status: 400 }
     );
   }
 
@@ -73,9 +74,10 @@ Deno.serve(async (req: Request) => {
       supabaseClient,
       user_id,
       media_type,
-      status_column,
+      status_column
     );
-    const { error } = await supabaseClient.from(TableNames.WATCHLIST)
+    const { error } = await supabaseClient
+      .from(TableNames.WATCHLIST)
       .insert({
         user_id,
         media_type,
@@ -97,7 +99,8 @@ Deno.serve(async (req: Request) => {
   }
 
   if (body.type === WatchlistAction.REMOVE) {
-    const { error } = await supabaseClient.from(TableNames.WATCHLIST)
+    const { error } = await supabaseClient
+      .from(TableNames.WATCHLIST)
       .delete()
       .match({ user_id, media_type, media_id })
       .returns<TablesUpdate<TableNames.WATCHLIST>>();
@@ -127,12 +130,13 @@ Deno.serve(async (req: Request) => {
         JSON.stringify({
           error: "column_order_before must be less than column_order_after",
         }),
-        { status: 400 },
+        { status: 400 }
       );
     }
 
     const column_order = getLexorank(column_order_before, column_order_after);
-    const { error } = await supabaseClient.from(TableNames.WATCHLIST)
+    const { error } = await supabaseClient
+      .from(TableNames.WATCHLIST)
       .update({ status_column, column_order })
       .match({ user_id, media_type, media_id })
       .returns<TablesUpdate<TableNames.WATCHLIST>>();

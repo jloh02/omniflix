@@ -26,7 +26,7 @@ const testHelloWorld = async () => {
   const client: SupabaseClient = createClient(
     supabaseUrl,
     supabaseKey,
-    options,
+    options
   );
 
   // Invoke the 'hello-world' function with a parameter
@@ -34,7 +34,7 @@ const testHelloWorld = async () => {
     "hello-world",
     {
       body: { name: "bar" },
-    },
+    }
   );
 
   // Check for errors from the function invocation

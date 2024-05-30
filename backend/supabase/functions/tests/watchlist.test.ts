@@ -34,7 +34,7 @@ async function testInsertWatchlist(
   client: SupabaseClient,
   action: WatchlistAction,
   status_column: number,
-  media_id: string,
+  media_id: string
 ) {
   const { data: func_data, error: func_error } = await client.functions.invoke(
     "watchlist",
@@ -45,10 +45,11 @@ async function testInsertWatchlist(
         media_id,
         status_column,
       },
-    },
+    }
   );
 
   if (func_error) {
+    console.error((await func_error.context.json()).error);
     throw new Error("Invalid response: " + func_error.message);
   }
 
@@ -63,29 +64,33 @@ async function testInsertWatchlist(
 }
 
 async function getWatchlistEntries(
-  client: SupabaseClient,
-): Promise<([string, string][])[]> {
+  client: SupabaseClient
+): Promise<[string, string][][]> {
   return await Promise.all(
     Array.from<unknown, Promise<[string, string][]>>(
       { length: NUMBER_COLUMNS },
       async (_, status_column) => {
-        return (await client.from("watchlist_entries")
-          .select("*")
-          .match({ media_type: "movie", status_column })
-          .order("column_order", { ascending: true })
-          .returns<Tables<"watchlist_entries">[]>())
-          .data
-          ?.map<[string, string]>((
-            entry,
-          ) => [entry.media_id, entry.column_order]) ?? [];
-      },
-    ),
+        return (
+          (
+            await client
+              .from("watchlist_entries")
+              .select("*")
+              .match({ media_type: "movie", status_column })
+              .order("column_order", { ascending: true })
+              .returns<Tables<"watchlist_entries">[]>()
+          ).data?.map<[string, string]>((entry) => [
+            entry.media_id,
+            entry.column_order,
+          ]) ?? []
+        );
+      }
+    )
   );
 }
 
 async function testInsertionUpdates(
   client: SupabaseClient,
-  entries: [string, string][][],
+  entries: [string, string][][]
 ) {
   let fromCol;
   do {
@@ -102,9 +107,8 @@ async function testInsertionUpdates(
   entries[toCol].splice(toIdx, 0, entries[fromCol].splice(fromIdx, 1)[0]);
 
   const column_order_before = toIdx > 0 ? entries[toCol][toIdx - 1][1] : null;
-  const column_order_after = toIdx < entries[toCol].length - 1
-    ? entries[toCol][toIdx + 1][1]
-    : null;
+  const column_order_after =
+    toIdx < entries[toCol].length - 1 ? entries[toCol][toIdx + 1][1] : null;
 
   const { data, error } = await client.functions.invoke("watchlist", {
     body: {
@@ -128,8 +132,11 @@ async function testInsertionUpdates(
   assertEquals(body.success, true);
   assertExists(body.column_order);
 
-  entries[toCol][(toIdx < entries[toCol].length) ? toIdx : (toIdx - 1)]
-    .splice(1, 1, body.column_order);
+  entries[toCol][toIdx < entries[toCol].length ? toIdx : toIdx - 1].splice(
+    1,
+    1,
+    body.column_order
+  );
 
   // Ensure simulation matches
   const updatedState = await getWatchlistEntries(client);
@@ -138,29 +145,31 @@ async function testInsertionUpdates(
   // Ensure data integrity
   assertEquals(
     updatedState,
-    updatedState.map((col) => col?.sort((a, b) => b[1].localeCompare(a[1]))),
+    updatedState.map((col) => col?.sort((a, b) => b[1].localeCompare(a[1])))
   );
 }
 
 async function removeAllEntries(client: SupabaseClient) {
   const finalEntries = await getWatchlistEntries(client);
-  await Promise.all(finalEntries.flatMap((col, status_column) => {
-    return (col.map(async (entry) => {
-      await testInsertWatchlist(
-        client,
-        WatchlistAction.REMOVE,
-        status_column,
-        entry[0],
-      );
-    }));
-  }));
+  await Promise.all(
+    finalEntries.flatMap((col, status_column) => {
+      return col.map(async (entry) => {
+        await testInsertWatchlist(
+          client,
+          WatchlistAction.REMOVE,
+          status_column,
+          entry[0]
+        );
+      });
+    })
+  );
 }
 
 const testWatchlist = async () => {
   const client: SupabaseClient = createClient(
     supabaseUrl,
     supabaseKey,
-    options,
+    options
   );
 
   const authRes = await client.auth.signInWithPassword({
@@ -174,7 +183,7 @@ const testWatchlist = async () => {
 
   const movieIds = Array.from(
     { length: NUMBER_OF_MOVIES },
-    (_, index) => `tt${index.toString().padStart(7, "0")}`,
+    (_, index) => `tt${index.toString().padStart(7, "0")}`
   );
 
   for (const [idx, movie_id] of movieIds.entries()) {
@@ -182,7 +191,7 @@ const testWatchlist = async () => {
       client,
       WatchlistAction.ADD,
       idx % NUMBER_COLUMNS,
-      movie_id,
+      movie_id
     );
   }
 
@@ -203,7 +212,7 @@ const testWatchlistInserts = async () => {
   const client: SupabaseClient = createClient(
     supabaseUrl,
     supabaseKey,
-    options,
+    options
   );
 
   const authRes = await client.auth.signInWithPassword({
@@ -217,19 +226,17 @@ const testWatchlistInserts = async () => {
 
   const movieIds = Array.from(
     { length: INSERT_SPAM_NUM },
-    (_, index) => `tt${index.toString().padStart(7, "0")}`,
+    (_, index) => `tt${index.toString().padStart(7, "0")}`
   );
 
   for (const movie_id of movieIds) {
-    await testInsertWatchlist(
-      client,
-      WatchlistAction.ADD,
-      0,
-      movie_id,
-    );
+    await testInsertWatchlist(client, WatchlistAction.ADD, 0, movie_id);
   }
   const entries = await getWatchlistEntries(client);
-  assertEquals(entries[0].map(([id, _]) => id), movieIds);
+  assertEquals(
+    entries[0].map(([id, _]) => id),
+    movieIds
+  );
 
   let column_order_after = null;
   for (const movie_id of movieIds) {
@@ -257,7 +264,10 @@ const testWatchlistInserts = async () => {
     column_order_after = body.column_order;
   }
   const entries2 = await getWatchlistEntries(client);
-  assertEquals(entries2[1].map(([id, _]) => id), movieIds.toReversed());
+  assertEquals(
+    entries2[1].map(([id, _]) => id),
+    movieIds.toReversed()
+  );
 
   await removeAllEntries(client);
 };

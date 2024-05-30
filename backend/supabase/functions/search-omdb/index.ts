@@ -13,7 +13,7 @@ import { Tables } from "../_shared/types.gen.ts";
 async function cacheItems(
   client: SupabaseClient,
   items: any[],
-  type: OMDBType,
+  type: OMDBType
 ) {
   const entriesToUpsert = items.map((item) => {
     return {
@@ -24,9 +24,8 @@ async function cacheItems(
     };
   });
 
-  const { error } = await client.from(
-    TableNames.MOVIES_CACHE_TABLE,
-  )
+  const { error } = await client
+    .from(TableNames.MOVIES_CACHE_TABLE)
     .upsert(entriesToUpsert, {
       defaultToNull: true,
       onConflict: "imdb_id",
@@ -49,7 +48,7 @@ Deno.serve(async (req: Request) => {
           Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
         },
       },
-    },
+    }
   );
 
   const OMDB_API_KEY = Deno.env.get("OMDB_API_KEY");
@@ -66,25 +65,25 @@ Deno.serve(async (req: Request) => {
       JSON.stringify({
         error: "Missing params: " + errorStr.map((x) => `'${x}'`).join(", "),
       }),
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   const mediaType = ALLOWED_OMDB_TYPES.find(
-    (validType) => validType === type,
+    (validType) => validType === type
   ) as OMDBType;
   if (!mediaType) {
     return new Response(
       JSON.stringify({
         error: "Invalid type. Allowed types: " + ALLOWED_OMDB_TYPES.join(", "),
       }),
-      { status: 400 },
+      { status: 400 }
     );
   }
 
   // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`,
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`
   );
   const resBody = await res.json();
   if (!resBody.Error) {
@@ -93,7 +92,7 @@ Deno.serve(async (req: Request) => {
   }
 
   const titleRes = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`,
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`
   );
   const titleResBody = await titleRes.json();
 

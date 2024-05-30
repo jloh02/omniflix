@@ -52,7 +52,7 @@ const getLexorank = (a: string, b: string) => {
 
   if (totalDiff <= 0) {
     throw new Error(
-      `Lexorank difference between ${a} and ${b} is non-positive: ${totalDiff}`,
+      `Lexorank difference between ${a} and ${b} is non-positive: ${totalDiff}`
     );
   }
 
