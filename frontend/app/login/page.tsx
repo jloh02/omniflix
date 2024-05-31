@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from "@/utils/constants";
+import { Typography } from "@mui/material";
 
 export default function Login({
   searchParams,
@@ -61,20 +62,16 @@ export default function Login({
   return (
     <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
       <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <label className="text-md" htmlFor="email">
-          Email
-        </label>
+        <Typography color="white">Email</Typography>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-inherit border mb-6 border-white text-white"
           name="email"
           placeholder="you@example.com"
           required
         />
-        <label className="text-md" htmlFor="password">
-          Password
-        </label>
+        <Typography color="white">Password</Typography>
         <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6"
+          className="rounded-md px-4 py-2 bg-inherit border mb-6 border-white text-white"
           type="password"
           name="password"
           placeholder="••••••••"
@@ -89,13 +86,13 @@ export default function Login({
         </SubmitButton>
         <SubmitButton
           formAction={signUp}
-          className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+          className="border border-white/20 rounded-md px-4 py-2 text-white mb-2"
           pendingText="Signing Up..."
         >
           Sign Up
         </SubmitButton>
         {searchParams?.message && (
-          <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
+          <p className="mt-4 p-4 bg-white/10 text-white text-center">
             {searchParams.message}
           </p>
         )}
