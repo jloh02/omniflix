@@ -1,0 +1,37 @@
+name: Sync Staging to Preprod
+
+on:
+  push:
+    branches:
+      - staging
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.OMNIFLIX_BOT_APPID }}
+          private-key: ${{ secrets.OMNIFLIX_BOT_SECRET }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Setup Bot Account
+        run: |
+          git config user.name Omniflix Bot
+          git config user.email github-actions@github.com
+      - name: Sync Staging to Preprod
+        run: |
+          git checkout main
+          git fetch origin
+          git checkout preprod
+          git pull
+          git merge origin/staging
+          git push origin preprod

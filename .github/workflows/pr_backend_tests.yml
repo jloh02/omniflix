@@ -3,7 +3,8 @@ name: PR Backend Checks
 on:
   pull_request:
     branches:
-      - main
+      - staging
+      - prod
     paths:
       - backend/**
   workflow_dispatch:
@@ -17,7 +18,7 @@ jobs:
     name: Supabase Type Generation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
@@ -46,7 +47,7 @@ jobs:
     name: Supabase Migrations and Functions Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
