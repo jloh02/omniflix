@@ -2,10 +2,8 @@ name: Deploy Supabase Functions
 
 on:
   push:
-    branches:
-      - main
-    paths:
-      - backend/**
+    branches: ["dev"]
+    tags: ["*"]
   workflow_dispatch:
 
 defaults:
@@ -16,11 +14,17 @@ jobs:
   deploy-functions:
     name: Deploy Supabase Functions
     runs-on: ubuntu-latest
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Set environment for branch
+        run: |
+          if [[ $GITHUB_REF_NAME == 'dev' ]]; then
+              echo "SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_STAGING_ACCESS_TOKEN }}" >> "$GITHUB_ENV"
+              echo "PROJECT_ID=${{ secrets.SUPABASE_STAGING_PROJECT_ID }}" >> "$GITHUB_ENV"
+          else
+              echo "SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_ACCESS_TOKEN }}" >> "$GITHUB_ENV"
+              echo "PROJECT_ID=${{ secrets.SUPABASE_PROJECT_ID }}" >> "$GITHUB_ENV"
+          fi
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
@@ -28,14 +32,24 @@ jobs:
   deploy-db:
     name: Deploy Supabase Database Migrations
     runs-on: ubuntu-latest
-    env:
-      SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
-      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
-      PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
     steps:
-      - uses: actions/checkout@v3
+      - name: Set environment for branch
+        run: |
+          if [[ $GITHUB_REF_NAME == 'dev' ]]; then
+              echo "SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_STAGING_ACCESS_TOKEN }}" >> "$GITHUB_ENV"
+              echo "PROJECT_ID=${{ secrets.SUPABASE_STAGING_PROJECT_ID }}" >> "$GITHUB_ENV"
+              echo "SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_STAGING_DB_PASSWORD }}" >> "$GITHUB_ENV"
+          else
+              echo "SUPABASE_ACCESS_TOKEN=${{ secrets.SUPABASE_ACCESS_TOKEN }}" >> "$GITHUB_ENV"
+              echo "PROJECT_ID=${{ secrets.SUPABASE_PROJECT_ID }}" >> "$GITHUB_ENV"
+              echo "SUPABASE_DB_PASSWORD=${{ secrets.SUPABASE_DB_PASSWORD }}" >> "$GITHUB_ENV"
+          fi
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
       - run: supabase link --project-ref $PROJECT_ID
       - run: supabase db push
+      # Only reset staging database
+      - if: ${{ github.ref_name == 'dev' }}
+        run: supabase db reset

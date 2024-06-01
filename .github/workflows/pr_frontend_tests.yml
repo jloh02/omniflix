@@ -2,8 +2,7 @@ name: PR Frontend Checks
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: ["dev", "main"]
     paths:
       - frontend/**
   workflow_dispatch:
@@ -17,7 +16,7 @@ jobs:
     name: Prettier Lint
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set Node.js 20
         uses: actions/setup-node@v3
         with:
@@ -32,7 +31,7 @@ jobs:
     name: Jest Test
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set Node.js 20
         uses: actions/setup-node@v3
         with:

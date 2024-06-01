@@ -37,3 +37,5 @@ next-env.d.ts
 
 # VSCode Settings
 .vscode/settings.json
+
+.vercel

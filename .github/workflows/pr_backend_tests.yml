@@ -2,8 +2,7 @@ name: PR Backend Checks
 
 on:
   pull_request:
-    branches:
-      - main
+    branches: ["dev", "main"]
     paths:
       - backend/**
   workflow_dispatch:
@@ -17,7 +16,7 @@ jobs:
     name: Supabase Type Generation
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
@@ -46,14 +45,14 @@ jobs:
     name: Supabase Migrations and Functions Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
           version: 1.167.4
       - uses: denoland/setup-deno@v1
         with:
           deno-version: 1.43.6
-      - run: echo "OMDB_API_KEY=${{ secrets.NEXT_OMDB_API_KEY }}" > .env.local
+      - run: echo "OMDB_API_KEY=${{ secrets.OMDB_API_KEY }}" > .env.local
       - run: supabase start
       - run: supabase functions serve --env-file=.env.local &
       - run: deno test --allow-all ./supabase/functions/tests/
