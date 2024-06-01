@@ -1,8 +1,6 @@
-name: Sync Dev to main
+name: Sync Main to Dev
 
 on:
-  push:
-    branches: ["dev"]
   workflow_dispatch:
 
 permissions:
