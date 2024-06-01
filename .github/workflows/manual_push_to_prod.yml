@@ -1,0 +1,21 @@
+name: Push to Production
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy to Production
+        run: |
+          git checkout preprod
+          git pull
+          git checkout prod
+          git merge preprod
+          git push origin prod
