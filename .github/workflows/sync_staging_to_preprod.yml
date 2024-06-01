@@ -1,9 +1,8 @@
-name: Sync Staging to Preprod
+name: Sync Dev to Master
 
 on:
   push:
-    branches:
-      - staging
+    branches: ["dev"]
   workflow_dispatch:
 
 permissions:
@@ -27,11 +26,11 @@ jobs:
         run: |
           git config user.name Omniflix Bot
           git config user.email github-actions@github.com
-      - name: Sync Staging to Preprod
+      - name: Sync Dev to Master
         run: |
-          git checkout main
+          git checkout dev
           git fetch origin
-          git checkout preprod
+          git checkout main
           git pull
-          git merge origin/staging
-          git push origin preprod
+          git merge origin/dev
+          git push origin main

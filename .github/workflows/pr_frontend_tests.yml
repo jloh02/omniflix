@@ -2,9 +2,7 @@ name: PR Frontend Checks
 
 on:
   pull_request:
-    branches:
-      - staging
-      - prod
+    branches: ["dev", "master"]
     paths:
       - frontend/**
   workflow_dispatch:
