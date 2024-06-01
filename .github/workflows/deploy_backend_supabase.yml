@@ -50,4 +50,4 @@ jobs:
       - run: supabase db push
       # Only reset staging database
       - if: ${{ github.ref_name == 'dev' }}
-        run: supabase db reset --linked
+        run: supabase db reset --linked <<< 'y'
