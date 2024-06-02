@@ -9,12 +9,20 @@ permissions:
 
 jobs:
   deploy-frontend:
+    name: Deploy Frontend to Vercel Production
     runs-on: ubuntu-latest
     env:
       VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
       - uses: actions/checkout@v4
+      - name: Only allow releases from main branch
+        run: |
+          branch=$(git branch -r --contains ${{ github.ref }} --format "%(refname:lstrip=3)")
+          if [ "$branch" != "main" ]; then
+            echo "Not on main branch, skipping deployment"
+            exit 1
+          fi
       - run: npm install --global vercel@latest
       - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
       - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
