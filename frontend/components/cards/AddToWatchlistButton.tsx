@@ -5,7 +5,7 @@ import { Add, Check } from "@mui/icons-material";
 import addToWatchlist from "@/utils/database/watchlist/addToWatchlist";
 import { MediaType } from "@/utils/constants";
 
-export const AddToWatchlistButton: React.FC<{
+const AddToWatchlistButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
 }> = ({ mediaType, mediaId }) => {
@@ -49,3 +49,5 @@ export const AddToWatchlistButton: React.FC<{
     </Tooltip>
   );
 };
+
+export default AddToWatchlistButton;

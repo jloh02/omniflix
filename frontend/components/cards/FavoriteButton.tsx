@@ -7,7 +7,7 @@ import isFavorited from "@/utils/database/favorites/isFavorited";
 import removeFromFavorites from "@/utils/database/favorites/removeFromFavorites";
 import { MediaType } from "@/utils/constants";
 
-export const FavoriteButton: React.FC<{
+const FavoriteButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
 }> = ({ mediaType, mediaId }) => {
@@ -46,3 +46,5 @@ export const FavoriteButton: React.FC<{
     </Tooltip>
   );
 };
+
+export default FavoriteButton;

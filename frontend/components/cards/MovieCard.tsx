@@ -6,19 +6,19 @@ import {
   Typography,
   Chip,
   Box,
-  IconButton,
 } from "@mui/material";
 import IMovie from "@/utils/types/IMovie";
 import { MediaType } from "@/utils/constants";
-import { FavoriteButton } from "./FavoriteButton";
-import { AddToWatchlistButton } from "./AddToWatchlistButton";
-import { ThumbDown, ThumbUp } from "@mui/icons-material";
+import FavoriteButton from "./FavoriteButton";
+import AddToWatchlistButton from "./AddToWatchlistButton";
+import LikeDislikeButtons from "./LikeDislikeButtons";
 
-interface MovieCardProps {
+type MovieCardProps = {
   movie: IMovie;
-}
+  showLabel?: boolean;
+};
 
-const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
       <CardMedia component="img" image={movie.poster} className="h-72" />
@@ -30,13 +30,15 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             mediaId={movie.imdbID}
           />
         </Box>
-        <Chip
-          label="Movie"
-          sx={{
-            color: "white",
-            backgroundColor: (theme) => theme.palette.primary.light,
-          }}
-        />
+        {showLabel ? (
+          <Chip
+            label="Movie"
+            sx={{
+              color: "white",
+              backgroundColor: (theme) => theme.palette.primary.light,
+            }}
+          />
+        ) : null}
       </Box>
       <CardContent className="p-2.5 last:pb-8">
         <Typography
@@ -64,12 +66,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             left: 0,
           }}
         >
-          <IconButton>
-            <ThumbUp />
-          </IconButton>
-          <IconButton>
-            <ThumbDown />
-          </IconButton>
+          <LikeDislikeButtons
+            mediaType={MediaType.MOVIE}
+            mediaId={movie.imdbID}
+          />
         </Box>
       </CardContent>
     </Card>

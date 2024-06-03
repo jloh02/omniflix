@@ -104,7 +104,7 @@ const Movies: React.FC = () => {
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie, idx) => (
             <Grid key={idx} item>
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} showLabel={false} />
             </Grid>
           ))}
         </Grid>
