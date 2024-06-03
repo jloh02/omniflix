@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { IconButton, Tooltip } from "@mui/material";
-import StarIcon from "@mui/icons-material/Star";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import addToFavorites from "@/utils/database/favorites/addToFavorites";
 import isFavorited from "@/utils/database/favorites/isFavorited";
 import removeFromFavorites from "@/utils/database/favorites/removeFromFavorites";
@@ -39,9 +39,9 @@ export const FavoriteButton: React.FC<{
         }}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        sx={{ color: "yellow" }}
+        sx={{ color: "red" }}
       >
-        {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
+        {isFavoritedState || hover ? <FavoriteIcon /> : <FavoriteBorderIcon />}
       </IconButton>
     </Tooltip>
   );
