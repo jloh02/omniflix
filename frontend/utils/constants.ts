@@ -43,3 +43,15 @@ export enum WatchlistFunctionAction {
   REMOVE = "remove",
   UPDATE = "update",
 }
+
+// App Colors
+export const BACKGROUND = "#121212";
+export const TEXT = "#ffffff";
+export const TEXT_SECONDARY = "#ffffffb3";
+export const TEXT_DISABLED = "#ffffff80";
+export const PRIMARY = "#003366";
+export const PRIMARY_LIGHT = "0088cc";
+export const PRIMARY_DARK = "#002347";
+export const SECONDARY = "#fd7702";
+export const SECONDARY_LIGHT = "#ff8e00";
+export const SECONDARY_DARK = "#ff5003";
