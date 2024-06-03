@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
 import IMovie from "@/utils/types/IMovie";
-import MovieCard from "../movies/movieCard";
+import MovieCard from "../../../components/cards/MovieCard";
 import getFavorites from "@/utils/database/getFavorites";
 import IMovieDetails from "@/utils/types/IMovieDetails";
 
