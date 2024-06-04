@@ -31,6 +31,8 @@ export const WATCHLIST_TABLE = "watchlist_entries";
 export const FAVORITES_TABLE = "favorites_entries";
 export const MOVIES_CACHE_TABLE = "movies";
 
+// Datable Constants and Types
+export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
 }
