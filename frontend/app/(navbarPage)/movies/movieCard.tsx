@@ -30,7 +30,6 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
   mediaType,
   mediaId,
 }) => {
-  const [hover, setHover] = useState(false);
   const [isFavoritedState, setIsFavoritedState] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -80,15 +79,18 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
                 }
                 setIsLoading(false);
               }}
-              onMouseEnter={() => setHover(true)}
-              onMouseLeave={() => setHover(false)}
               sx={{ color: "yellow", height: 30, width: 30 }}
             >
-              {isFavoritedState || hover ? (
-                <StarIcon />
-              ) : (
-                <StarBorderIcon sx={{ fill: "yellow" }} />
-              )}
+              <Box display="flex">
+                <StarIcon
+                  className={`hover:opacity-100 ${isFavoritedState ? "opacity-100" : "opacity-0"}`}
+                  sx={{
+                    position: "absolute",
+                    transition: "opacity 0.2s linear",
+                  }}
+                />
+                <StarBorderIcon />
+              </Box>
             </IconButton>
           )}
         </Box>
