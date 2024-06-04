@@ -6,7 +6,9 @@ import {
   IconButton,
   Typography,
   Tooltip,
-  useTheme,
+  CircularProgress,
+  Box,
+  Theme,
 } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
@@ -29,37 +31,64 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
 }) => {
   const [hover, setHover] = useState(false);
   const [isFavoritedState, setIsFavoritedState] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const checkIsFavorited = async () => {
       const favorited = await isFavorited(mediaType, mediaId);
       setIsFavoritedState(favorited ?? false);
+      setIsLoading(false);
     };
 
     checkIsFavorited();
-  }, [mediaType, mediaId]);
+  }, [mediaType, mediaId, isFavoritedState, isLoading]);
 
   return (
-    <Tooltip
-      title={isFavoritedState ? "Remove from Favorites" : "Add to Favorites"}
-    >
-      <IconButton
-        onClick={async () => {
-          if (isFavoritedState) {
-            await removeFromFavorites(mediaType, mediaId);
-            setIsFavoritedState(false);
-          } else {
-            await addToFavorites(mediaType, mediaId);
-            setIsFavoritedState(true);
-          }
-        }}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        sx={{ color: "yellow" }}
+    <Box>
+      <Tooltip
+        title={
+          isLoading
+            ? "Loading Favorites"
+            : isFavoritedState
+              ? "Remove from Favorites"
+              : "Add to Favorites"
+        }
       >
-        {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
-      </IconButton>
-    </Tooltip>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 30,
+            width: 30,
+          }}
+        >
+          {isLoading && (
+            <CircularProgress size={20} color="secondary" sx={{ height: 30 }} />
+          )}
+          {!isLoading && (
+            <IconButton
+              onClick={async () => {
+                setIsLoading(true);
+                if (isFavoritedState) {
+                  await removeFromFavorites(mediaType, mediaId);
+                  setIsFavoritedState(false);
+                } else {
+                  await addToFavorites(mediaType, mediaId);
+                  setIsFavoritedState(true);
+                }
+                setIsLoading(false);
+              }}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              sx={{ color: "yellow", height: 30, width: 30 }}
+            >
+              {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
+            </IconButton>
+          )}
+        </Box>
+      </Tooltip>
+    </Box>
   );
 };
 
@@ -68,18 +97,19 @@ const AddToWatchlistButton: React.FC<{
   mediaId: string;
 }> = ({ mediaType, mediaId }) => {
   const [isAddedToWatchlist, setIsAddedToWatchlist] = useState<boolean>(false);
-  const theme = useTheme();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    isWatchlisted(mediaType, mediaId).then((watchlisted) =>
-      setIsAddedToWatchlist(watchlisted ?? false),
-    );
-  }, [mediaType, mediaId]);
+    isWatchlisted(mediaType, mediaId).then((watchlisted) => {
+      setIsAddedToWatchlist(watchlisted ?? false);
+      setIsLoading(false);
+    });
+  }, [mediaType, mediaId, isLoading, isAddedToWatchlist]);
 
   const iconStyle = (showOnAdded: boolean) => {
     return {
       position: "absolute",
-      color:
+      color: (theme: Theme) =>
         showOnAdded === isAddedToWatchlist
           ? theme.palette.text.primary
           : "transparent",
@@ -89,22 +119,47 @@ const AddToWatchlistButton: React.FC<{
   };
 
   return (
-    <Tooltip
-      title={isAddedToWatchlist ? "Already in Watchlist" : "Add to Watchlist"}
-    >
-      <IconButton
-        disableRipple={isAddedToWatchlist}
-        onClick={() => {
-          setIsAddedToWatchlist(true);
-          addToWatchlist(mediaType, mediaId).then((success) =>
-            setIsAddedToWatchlist(success),
-          );
-        }}
+    <Box>
+      <Tooltip
+        title={
+          isLoading
+            ? "Loading Watchlist"
+            : isAddedToWatchlist
+              ? "Already in Watchlist"
+              : "Add to Watchlist"
+        }
       >
-        <Check sx={iconStyle(true)} />
-        <Add sx={iconStyle(false)} />
-      </IconButton>
-    </Tooltip>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: 30,
+            width: 30,
+          }}
+        >
+          {isLoading && (
+            <CircularProgress size={20} color="secondary" sx={{ height: 30 }} />
+          )}
+          {!isLoading && (
+            <IconButton
+              onClick={() => {
+                setIsLoading(true);
+                setIsAddedToWatchlist(true);
+                addToWatchlist(mediaType, mediaId).then((success) => {
+                  setIsAddedToWatchlist(success);
+                  setIsLoading(false);
+                });
+              }}
+              sx={{ height: 30, width: 30 }}
+            >
+              <Check sx={iconStyle(true)} />
+              <Add sx={iconStyle(false)} />
+            </IconButton>
+          )}
+        </Box>
+      </Tooltip>
+    </Box>
   );
 };
 
@@ -112,12 +167,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
   return (
     <Card className="relative w-52 h-full">
       <CardMedia component="img" image={movie.poster} className="h-72" />
-      <FavoriteButton mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
-      <AddToWatchlistButton
-        mediaType={MediaType.MOVIE}
-        mediaId={movie.imdbID}
-      />
       <CardContent className="p-2.5 last:pb-2.5">
+        <Box display="flex" sx={{ height: 40 }}>
+          <FavoriteButton mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
+          <AddToWatchlistButton
+            mediaType={MediaType.MOVIE}
+            mediaId={movie.imdbID}
+          />
+        </Box>
         <Typography variant="body1">{movie.title}</Typography>
         <Typography variant="body2">{movie.year}</Typography>
       </CardContent>
