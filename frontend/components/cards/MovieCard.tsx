@@ -22,25 +22,28 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
       <CardMedia component="img" image={movie.poster} className="h-72" />
-      <Box display="flex" justifyContent="space-between" p={1}>
-        <Box>
-          <FavoriteButton mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
-          <AddToWatchlistButton
-            mediaType={MediaType.MOVIE}
-            mediaId={movie.imdbID}
-          />
-        </Box>
-        {showLabel ? (
-          <Chip
-            label="Movie"
-            sx={{
-              color: "white",
-              backgroundColor: (theme) => theme.palette.primary.light,
-            }}
-          />
-        ) : null}
-      </Box>
       <CardContent className="p-2.5 last:pb-8">
+        <Box display="flex" justifyContent="space-between" className="mb-2">
+          <Box>
+            <FavoriteButton
+              mediaType={MediaType.MOVIE}
+              mediaId={movie.imdbID}
+            />
+            <AddToWatchlistButton
+              mediaType={MediaType.MOVIE}
+              mediaId={movie.imdbID}
+            />
+          </Box>
+          {showLabel ? (
+            <Chip
+              label="Movie"
+              sx={{
+                color: "white",
+                backgroundColor: (theme) => theme.palette.primary.light,
+              }}
+            />
+          ) : null}
+        </Box>
         <Typography
           variant="body1"
           sx={{

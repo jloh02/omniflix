@@ -40,6 +40,7 @@ const FavoriteButton: React.FC<{
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         sx={{ color: "red" }}
+        className="p-0 pr-2"
       >
         {isFavoritedState || hover ? <FavoriteIcon /> : <FavoriteBorderIcon />}
       </IconButton>
