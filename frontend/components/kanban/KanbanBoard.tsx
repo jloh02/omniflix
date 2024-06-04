@@ -33,6 +33,13 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
 
+  if (columnNames.length > COMPLETED_STATUS_COLUMN_INDEX + 1) {
+    throw new Error(
+      "Column names length exceeds the maximum number of columns: " +
+        (COMPLETED_STATUS_COLUMN_INDEX + 1),
+    );
+  }
+
   if (!kanbanData)
     kanbanData = columnNames.reduce(
       (acc, colName) => {
