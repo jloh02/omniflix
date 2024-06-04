@@ -38,9 +38,8 @@ async function getWatchlist(
     .in("imdb_id", movieIds)
     .returns<Tables<TableNames.MOVIES_CACHE>[]>();
 
-  // TODO handle cache missing in database (Should not happen for future cache development)
   if (cacheError || !cacheData) {
-    return;
+    throw new Error("Cache should always contain updated data. None found");
   }
 
   const data = cacheData.reduce((acc, item) => {
