@@ -1,11 +1,11 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { TableNames } from "../constants";
-import getMovieDetails from "../omdbApi/getMovieDetails";
-import IMovieDetails from "../types/IMovieDetails";
+import { MediaType, TableNames } from "../../constants";
+import getMovieDetails from "../../omdbApi/getMovieDetails";
+import IMovieDetails from "../../types/IMovieDetails";
 
 async function getFavorites(
-  mediaType: string,
+  mediaType: MediaType,
 ): Promise<IMovieDetails[] | undefined> {
   const supabase = createClient();
   const {
