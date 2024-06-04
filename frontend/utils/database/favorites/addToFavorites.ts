@@ -16,10 +16,7 @@ async function addToFavorites(mediaType: MediaType, mediaId: string) {
     .from(FAVORITES_TABLE)
     .insert({ user_id: user.id, media_type: mediaType, media_id: mediaId });
 
-  if (error) {
-    return;
-  }
-  return;
+  return !error;
 }
 
 export default addToFavorites;

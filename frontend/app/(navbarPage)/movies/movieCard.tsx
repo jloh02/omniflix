@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   Card,
   CardMedia,
@@ -20,6 +20,7 @@ import isWatchlisted from "@/utils/database/watchlist/isWatchlisted";
 import { Add, Check } from "@mui/icons-material";
 import addToWatchlist from "@/utils/database/watchlist/addToWatchlist";
 import { MediaType } from "@/utils/constants";
+import removeFromWatchlist from "@/utils/database/watchlist/removeFromWatchlist";
 
 interface MovieCardProps {
   movie: IMovie;
@@ -33,15 +34,15 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
   const [isFavoritedState, setIsFavoritedState] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
-    const checkIsFavorited = async () => {
-      const favorited = await isFavorited(mediaType, mediaId);
-      setIsFavoritedState(favorited ?? false);
-      setIsLoading(false);
-    };
+  const checkIsFavorited = useCallback(async () => {
+    const favorited = await isFavorited(mediaType, mediaId);
+    setIsFavoritedState(favorited ?? false);
+    setIsLoading(false);
+  }, [isFavoritedState, isLoading, mediaType, mediaId]);
 
+  useEffect(() => {
     checkIsFavorited();
-  }, [mediaType, mediaId, isFavoritedState, isLoading]);
+  }, [mediaType, mediaId]);
 
   return (
     <Box>
@@ -71,11 +72,11 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
               onClick={async () => {
                 setIsLoading(true);
                 if (isFavoritedState) {
-                  await removeFromFavorites(mediaType, mediaId);
-                  setIsFavoritedState(false);
+                  const success = await removeFromFavorites(mediaType, mediaId);
+                  if (success) setIsFavoritedState(false);
                 } else {
-                  await addToFavorites(mediaType, mediaId);
-                  setIsFavoritedState(true);
+                  const success = await addToFavorites(mediaType, mediaId);
+                  if (success) setIsFavoritedState(true);
                 }
                 setIsLoading(false);
               }}
@@ -83,7 +84,11 @@ const FavoriteButton: React.FC<{ mediaType: MediaType; mediaId: string }> = ({
               onMouseLeave={() => setHover(false)}
               sx={{ color: "yellow", height: 30, width: 30 }}
             >
-              {isFavoritedState || hover ? <StarIcon /> : <StarBorderIcon />}
+              {isFavoritedState || hover ? (
+                <StarIcon />
+              ) : (
+                <StarBorderIcon sx={{ fill: "yellow" }} />
+              )}
             </IconButton>
           )}
         </Box>
@@ -99,12 +104,16 @@ const AddToWatchlistButton: React.FC<{
   const [isAddedToWatchlist, setIsAddedToWatchlist] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  const checkIsWatchlisted = useCallback(async () => {
+    return await isWatchlisted(mediaType, mediaId);
+  }, [mediaType, mediaId, isLoading, isAddedToWatchlist]);
+
   useEffect(() => {
-    isWatchlisted(mediaType, mediaId).then((watchlisted) => {
+    checkIsWatchlisted().then((watchlisted) => {
       setIsAddedToWatchlist(watchlisted ?? false);
       setIsLoading(false);
     });
-  }, [mediaType, mediaId, isLoading, isAddedToWatchlist]);
+  }, [mediaType, mediaId]);
 
   const iconStyle = (showOnAdded: boolean) => {
     return {
@@ -125,7 +134,7 @@ const AddToWatchlistButton: React.FC<{
           isLoading
             ? "Loading Watchlist"
             : isAddedToWatchlist
-              ? "Already in Watchlist"
+              ? "Remove from Watchlist"
               : "Add to Watchlist"
         }
       >
@@ -143,13 +152,16 @@ const AddToWatchlistButton: React.FC<{
           )}
           {!isLoading && (
             <IconButton
-              onClick={() => {
+              onClick={async () => {
                 setIsLoading(true);
-                setIsAddedToWatchlist(true);
-                addToWatchlist(mediaType, mediaId).then((success) => {
-                  setIsAddedToWatchlist(success);
-                  setIsLoading(false);
-                });
+                if (isAddedToWatchlist) {
+                  const success = await removeFromWatchlist(mediaType, mediaId);
+                  if (success) setIsAddedToWatchlist(false);
+                } else {
+                  const success = await addToWatchlist(mediaType, mediaId);
+                  if (success) setIsAddedToWatchlist(true);
+                }
+                setIsLoading(false);
               }}
               sx={{ height: 30, width: 30 }}
             >

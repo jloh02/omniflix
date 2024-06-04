@@ -12,18 +12,14 @@ async function removeFromFavorites(mediaType: MediaType, mediaId: string) {
     return;
   }
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from(FAVORITES_TABLE)
     .delete()
     .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId);
 
-  if (error) {
-    return;
-  }
-
-  return data;
+  return !error;
 }
 
 export default removeFromFavorites;
