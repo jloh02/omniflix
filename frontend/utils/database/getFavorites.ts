@@ -1,6 +1,6 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE } from "../constants";
+import { TableNames } from "../constants";
 import getMovieDetails from "../omdbApi/getMovieDetails";
 import IMovieDetails from "../types/IMovieDetails";
 
@@ -17,7 +17,7 @@ async function getFavorites(
   }
 
   const { data, error } = await supabase
-    .from(FAVORITES_TABLE)
+    .from(TableNames.FAVORITES)
     .select("media_id")
     .eq("user_id", user.id)
     .eq("media_type", mediaType);

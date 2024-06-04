@@ -27,10 +27,11 @@ export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
 // Database table names
-export const WATCHLIST_TABLE = "watchlist_entries";
-export const FAVORITES_TABLE = "favorites_entries";
-export const MOVIES_CACHE_TABLE = "movies";
-
+export enum TableNames {
+  WATCHLIST = "watchlist_entries",
+  FAVORITES = "favorites_entries",
+  MOVIES_CACHE = "movies",
+}
 export enum MediaType {
   MOVIE = "movie",
 }

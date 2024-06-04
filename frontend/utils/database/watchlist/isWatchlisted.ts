@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { MediaType, WATCHLIST_TABLE } from "../../constants";
+import { MediaType, TableNames } from "../../constants";
 
 async function isWatchlisted(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
@@ -14,7 +14,7 @@ async function isWatchlisted(mediaType: MediaType, mediaId: string) {
   }
 
   const { data, error } = await supabase
-    .from(WATCHLIST_TABLE)
+    .from(TableNames.WATCHLIST)
     .select("*")
     .match({ media_type: mediaType, media_id: mediaId, user_id: user.id })
     .limit(1);

@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { MOVIES_CACHE_TABLE, WATCHLIST_TABLE } from "../../constants";
+import { TableNames } from "../../constants";
 import { Enums, Tables } from "@/utils/supabase/types.gen";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
@@ -19,7 +19,7 @@ async function getWatchlist(
   }
 
   const { data: watchlistData, error } = await supabase
-    .from(WATCHLIST_TABLE)
+    .from(TableNames.WATCHLIST)
     .select()
     .match({ user_id: user.id, media_type: mediaType })
     .returns<Tables<"watchlist_entries">[]>()
@@ -33,7 +33,7 @@ async function getWatchlist(
 
   // Read from movie cache
   const { data: cacheData, error: cacheError } = await supabase
-    .from(MOVIES_CACHE_TABLE)
+    .from(TableNames.MOVIES_CACHE)
     .select()
     .in("imdb_id", movieIds)
     .returns<Tables<"movies">[]>();
