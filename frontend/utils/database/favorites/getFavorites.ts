@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { MediaType, TableNames } from "../../constants";
 import getMovieDetails from "../../omdbApi/getMovieDetails";
 import IMovieDetails from "../../types/IMovieDetails";
+import { Tables } from "@/utils/supabase/types.gen";
 
 async function getFavorites(
   mediaType: MediaType,
@@ -20,7 +21,8 @@ async function getFavorites(
     .from(TableNames.FAVORITES)
     .select("media_id")
     .eq("user_id", user.id)
-    .eq("media_type", mediaType);
+    .eq("media_type", mediaType)
+    .returns<Tables<TableNames.FAVORITES>[]>();
 
   if (error) {
     throw new Error(

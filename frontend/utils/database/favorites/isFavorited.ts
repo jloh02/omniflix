@@ -1,6 +1,7 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
 import { MediaType, TableNames } from "../../constants";
+import { Tables } from "@/utils/supabase/types.gen";
 
 async function isFavorited(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
@@ -18,7 +19,8 @@ async function isFavorited(mediaType: MediaType, mediaId: string) {
     .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId)
-    .limit(1);
+    .limit(1)
+    .returns<Tables<TableNames.FAVORITES>[]>();
 
   if (error) {
     return;

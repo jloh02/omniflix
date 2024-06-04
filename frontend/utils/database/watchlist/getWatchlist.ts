@@ -22,7 +22,7 @@ async function getWatchlist(
     .from(TableNames.WATCHLIST)
     .select()
     .match({ user_id: user.id, media_type: mediaType })
-    .returns<Tables<"watchlist_entries">[]>()
+    .returns<Tables<TableNames.WATCHLIST>[]>()
     .order("column_order");
 
   if (error || !watchlistData) {
@@ -36,7 +36,7 @@ async function getWatchlist(
     .from(TableNames.MOVIES_CACHE)
     .select()
     .in("imdb_id", movieIds)
-    .returns<Tables<"movies">[]>();
+    .returns<Tables<TableNames.MOVIES_CACHE>[]>();
 
   // TODO handle cache missing in database (Should not happen for future cache development)
   if (cacheError || !cacheData) {
@@ -46,7 +46,7 @@ async function getWatchlist(
   const data = cacheData.reduce((acc, item) => {
     acc.set(item.imdb_id, item);
     return acc;
-  }, new Map<string, Tables<"movies">>());
+  }, new Map<string, Tables<TableNames.MOVIES_CACHE>>());
 
   // Group by columnNames
   let result = columnNames.reduce(
