@@ -7,7 +7,7 @@ const themeOptions: ThemeOptions = {
     mode: "dark",
     primary: {
       main: "#003366",
-      light: "#003f7d",
+      light: "#0088cc",
       dark: "#002347",
     },
     secondary: {
