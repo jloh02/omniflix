@@ -1,8 +1,9 @@
 "use server";
+
 import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE } from "../constants";
-import getMovieDetails from "../omdbApi/getMovieDetails";
-import IMovieDetails from "../types/IMovieDetails";
+import { FAVORITES_TABLE } from "@/utils/constants";
+import getMovieDetails from "../../omdbApi/getMovieDetails";
+import IMovieDetails from "@/utils/types/IMovieDetails";
 
 async function getFavorites(
   mediaType: string,

@@ -182,7 +182,7 @@ export type Database = {
       watchlist_entries: {
         Row: {
           column_order: string
-          created_at: string | null
+          created_at: string
           id: number
           media_id: string
           media_type: Database["public"]["Enums"]["media_type"]
@@ -191,7 +191,7 @@ export type Database = {
         }
         Insert: {
           column_order?: string
-          created_at?: string | null
+          created_at?: string
           id?: never
           media_id: string
           media_type: Database["public"]["Enums"]["media_type"]
@@ -200,7 +200,7 @@ export type Database = {
         }
         Update: {
           column_order?: string
-          created_at?: string | null
+          created_at?: string
           id?: never
           media_id?: string
           media_type?: Database["public"]["Enums"]["media_type"]
