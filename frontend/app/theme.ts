@@ -51,6 +51,16 @@ const themeOptions: ThemeOptions = {
         },
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        root: { backgroundColor: "#12121210" },
+        paper: {
+          backgroundImage: "none",
+          backgroundColor: "#121212",
+          transition: "background-color 0.2s",
+        },
+      },
+    },
     MuiOutlinedInput: {
       styleOverrides: {
         root: {

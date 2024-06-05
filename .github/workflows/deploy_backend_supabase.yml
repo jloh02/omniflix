@@ -47,7 +47,7 @@ jobs:
         with:
           version: 1.167.4
       - run: supabase link --project-ref $PROJECT_ID
-      - run: supabase db push
+      - run: supabase db push --include-all
       # Only reset staging database
       - if: ${{ github.ref_name == 'dev' }}
         run: supabase db reset --linked <<< 'y'

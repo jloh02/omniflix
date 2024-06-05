@@ -1,50 +1,41 @@
-import React, { useEffect, useState } from "react";
-import { IconButton, Tooltip } from "@mui/material";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import React from "react";
 import addToFavorites from "@/utils/database/favorites/addToFavorites";
 import isFavorited from "@/utils/database/favorites/isFavorited";
 import removeFromFavorites from "@/utils/database/favorites/removeFromFavorites";
 import { MediaType } from "@/utils/constants";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import LoadableCardButton from "./LoadableCardButton";
 
 const FavoriteButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
-}> = ({ mediaType, mediaId }) => {
-  const [hover, setHover] = useState(false);
-  const [isFavoritedState, setIsFavoritedState] = useState<boolean>(false);
-
-  useEffect(() => {
-    const checkIsFavorited = async () => {
-      const favorited = await isFavorited(mediaType, mediaId);
-      setIsFavoritedState(favorited ?? false);
-    };
-
-    checkIsFavorited();
-  }, [mediaType, mediaId]);
-
+}> = (props) => {
   return (
-    <Tooltip
-      title={isFavoritedState ? "Remove from Favorites" : "Add to Favorites"}
-    >
-      <IconButton
-        onClick={async () => {
-          if (isFavoritedState) {
-            await removeFromFavorites(mediaType, mediaId);
-            setIsFavoritedState(false);
-          } else {
-            await addToFavorites(mediaType, mediaId);
-            setIsFavoritedState(true);
-          }
-        }}
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
-        sx={{ color: "red" }}
-        className="p-0 pr-2"
-      >
-        {isFavoritedState || hover ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-      </IconButton>
-    </Tooltip>
+    <LoadableCardButton
+      {...props}
+      checkEnabledFn={isFavorited}
+      disableFn={removeFromFavorites}
+      enableFn={addToFavorites}
+      loadingText="Loading Watchlist"
+      enabledText="Remove from Watchlist"
+      disabledText="Add to Watchlist"
+      childIcon={(isEnabled: boolean) => {
+        return (
+          <>
+            <FavoriteIcon
+              className={`hover:opacity-100 ${isEnabled ? "opacity-100" : "opacity-0"}`}
+              sx={{
+                color: "red",
+                position: "absolute",
+                transition: "opacity 0.2s ease-in",
+              }}
+            />
+            <FavoriteBorderIcon sx={{ color: "red" }} />
+          </>
+        );
+      }}
+    />
   );
 };
 
