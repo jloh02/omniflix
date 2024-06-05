@@ -5,14 +5,14 @@ import { Add, Check } from "@mui/icons-material";
 import addToWatchlist from "@/utils/database/watchlist/addToWatchlist";
 import { MediaType } from "@/utils/constants";
 import removeFromWatchlist from "@/utils/database/watchlist/removeFromWatchlist";
-import HoverableCardButton from "./HoverableCardButton";
+import LoadableCardButton from "./LoadableCardButton";
 
 const AddToWatchlistButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
 }> = (props) => {
   return (
-    <HoverableCardButton
+    <LoadableCardButton
       {...props}
       checkEnabledFn={isWatchlisted}
       disableFn={removeFromWatchlist}

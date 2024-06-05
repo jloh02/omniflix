@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, IconButton, Tooltip } from "@mui/material";
+import { Box } from "@mui/material";
 import {
   ThumbDown,
   ThumbDownOutlined,
@@ -7,7 +7,7 @@ import {
   ThumbUpOutlined,
 } from "@mui/icons-material";
 import { MediaType } from "@/utils/constants";
-import HoverableCardButton from "./HoverableCardButton";
+import LoadableCardButton from "./LoadableCardButton";
 
 const LikeDislikeButtons: React.FC<{
   mediaType: MediaType;
@@ -21,7 +21,7 @@ const LikeDislikeButtons: React.FC<{
   //TODO integrate with backend
   return (
     <Box display="flex" gap={1} padding={1}>
-      <HoverableCardButton
+      <LoadableCardButton
         {...props}
         checkEnabledFn={async () => false}
         disableFn={async () => true}
@@ -46,7 +46,7 @@ const LikeDislikeButtons: React.FC<{
         }}
       />
 
-      <HoverableCardButton
+      <LoadableCardButton
         {...props}
         checkEnabledFn={async () => false}
         disableFn={async () => true}
@@ -57,7 +57,7 @@ const LikeDislikeButtons: React.FC<{
         childIcon={(isEnabled: boolean) => {
           return (
             <>
-              <ThumbUp
+              <ThumbDown
                 className={`hover:opacity-100 ${isEnabled ? "opacity-100" : "opacity-0"}`}
                 sx={{
                   color: "red",
@@ -65,7 +65,7 @@ const LikeDislikeButtons: React.FC<{
                   transition: "opacity 0.2s ease-in",
                 }}
               />
-              <ThumbUpOutlined sx={{ color: "red" }} />
+              <ThumbDownOutlined sx={{ color: "red" }} />
             </>
           );
         }}

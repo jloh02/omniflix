@@ -5,14 +5,14 @@ import removeFromFavorites from "@/utils/database/favorites/removeFromFavorites"
 import { MediaType } from "@/utils/constants";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import HoverableCardButton from "./HoverableCardButton";
+import LoadableCardButton from "./LoadableCardButton";
 
 const FavoriteButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
 }> = (props) => {
   return (
-    <HoverableCardButton
+    <LoadableCardButton
       {...props}
       checkEnabledFn={isFavorited}
       disableFn={removeFromFavorites}
