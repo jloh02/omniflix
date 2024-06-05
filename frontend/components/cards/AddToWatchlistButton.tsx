@@ -1,52 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { IconButton, Tooltip, useTheme } from "@mui/material";
+import React from "react";
+import { Theme } from "@mui/material";
 import isWatchlisted from "@/utils/database/watchlist/isWatchlisted";
 import { Add, Check } from "@mui/icons-material";
 import addToWatchlist from "@/utils/database/watchlist/addToWatchlist";
 import { MediaType } from "@/utils/constants";
+import removeFromWatchlist from "@/utils/database/watchlist/removeFromWatchlist";
+import LoadableCardButton from "./LoadableCardButton";
 
 const AddToWatchlistButton: React.FC<{
   mediaType: MediaType;
   mediaId: string;
-}> = ({ mediaType, mediaId }) => {
-  const [isAddedToWatchlist, setIsAddedToWatchlist] = useState<boolean>(false);
-  const theme = useTheme();
-
-  useEffect(() => {
-    isWatchlisted(mediaType, mediaId).then((watchlisted) =>
-      setIsAddedToWatchlist(watchlisted ?? false),
-    );
-  }, [mediaType, mediaId]);
-
-  const iconStyle = (showOnAdded: boolean) => {
-    return {
-      position: "absolute",
-      color:
-        showOnAdded === isAddedToWatchlist
-          ? theme.palette.text.primary
-          : "transparent",
-      transform: isAddedToWatchlist ? "rotate(0)" : "rotate(-90deg)",
-      transition: "all 0.2s ease-out",
-    };
-  };
-
+}> = (props) => {
   return (
-    <Tooltip
-      title={isAddedToWatchlist ? "Already in Watchlist" : "Add to Watchlist"}
-    >
-      <IconButton
-        disableRipple={isAddedToWatchlist}
-        onClick={() => {
-          setIsAddedToWatchlist(true);
-          addToWatchlist(mediaType, mediaId).then((success) =>
-            setIsAddedToWatchlist(success),
-          );
-        }}
-      >
-        <Check sx={iconStyle(true)} />
-        <Add sx={iconStyle(false)} />
-      </IconButton>
-    </Tooltip>
+    <LoadableCardButton
+      {...props}
+      checkEnabledFn={isWatchlisted}
+      disableFn={removeFromWatchlist}
+      enableFn={addToWatchlist}
+      loadingText="Loading Watchlist"
+      enabledText="Remove from Watchlist"
+      disabledText="Add to Watchlist"
+      childIcon={(isEnabled: boolean) => {
+        const iconStyle = (showOnAdded: boolean) => {
+          return {
+            color: (theme: Theme) =>
+              showOnAdded === isEnabled
+                ? theme.palette.text.primary
+                : "transparent",
+            transform: isEnabled ? "rotate(0)" : "rotate(-90deg)",
+            transition: "transform 0.2s ease-out, color 0.15s linear",
+          };
+        };
+        return (
+          <>
+            <Check sx={{ position: "absolute", ...iconStyle(true) }} />
+            <Add sx={iconStyle(false)} />
+          </>
+        );
+      }}
+    />
   );
 };
 
