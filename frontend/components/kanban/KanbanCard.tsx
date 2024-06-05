@@ -1,10 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Box,
+  Button,
   Card,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   IconButton,
   Tooltip,
+  Typography,
   useTheme,
 } from "@mui/material";
 import {
@@ -39,6 +45,8 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
   const theme = useTheme();
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [dragEdge, setDragEdge] = useState<Edge | null>(null);
+  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     const element = ref.current;
@@ -112,7 +120,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
             <Tooltip title="Remove from watchlist">
               <IconButton
                 sx={{ height: "fit-content" }}
-                onClick={() => removeItem(item.id)}
+                onClick={() => setIsConfirmationDialogOpen(true)}
               >
                 <Close />
               </IconButton>
@@ -121,6 +129,35 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
         </Box>
       </Card>
       {dragEdge === "bottom" && Indicator}
+      <Dialog
+        open={isConfirmationDialogOpen}
+        onClose={() => setIsConfirmationDialogOpen(false)}
+      >
+        <DialogTitle>Remove from watchlist?</DialogTitle>
+        <DialogContent>
+          <Typography>
+            {item.title} ({item.year})
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{ color: "white" }}
+            onClick={() => setIsConfirmationDialogOpen(false)}
+          >
+            Disagree
+          </Button>
+          <Button
+            color="secondary"
+            onClick={() => {
+              removeItem(item.id);
+              setIsConfirmationDialogOpen(false);
+            }}
+            autoFocus
+          >
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };
