@@ -1,11 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import {
-  COMPLETED_STATUS_COLUMN_INDEX,
-  MOVIES_CACHE_TABLE,
-  WATCHLIST_TABLE,
-} from "../../constants";
+import { COMPLETED_STATUS_COLUMN_INDEX, TableNames } from "../../constants";
 import { Enums, Tables } from "@/utils/supabase/types.gen";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
@@ -23,10 +19,10 @@ async function getWatchlist(
   }
 
   const { data: watchlistData, error } = await supabase
-    .from(WATCHLIST_TABLE)
+    .from(TableNames.WATCHLIST)
     .select()
     .match({ user_id: user.id, media_type: mediaType })
-    .returns<Tables<"watchlist_entries">[]>()
+    .returns<Tables<TableNames.WATCHLIST>[]>()
     .order("column_order");
 
   if (error || !watchlistData) {
@@ -37,20 +33,19 @@ async function getWatchlist(
 
   // Read from movie cache
   const { data: cacheData, error: cacheError } = await supabase
-    .from(MOVIES_CACHE_TABLE)
+    .from(TableNames.MOVIES_CACHE)
     .select()
     .in("imdb_id", movieIds)
-    .returns<Tables<"movies">[]>();
+    .returns<Tables<TableNames.MOVIES_CACHE>[]>();
 
-  // TODO handle cache missing in database (Should not happen for future cache development)
   if (cacheError || !cacheData) {
-    return;
+    throw new Error("Cache should always contain updated data. None found");
   }
 
   const data = cacheData.reduce((acc, item) => {
     acc.set(item.imdb_id, item);
     return acc;
-  }, new Map<string, Tables<"movies">>());
+  }, new Map<string, Tables<TableNames.MOVIES_CACHE>>());
 
   // Group by columnNames
   let result = columnNames.reduce(

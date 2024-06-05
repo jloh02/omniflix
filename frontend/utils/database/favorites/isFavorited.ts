@@ -1,6 +1,7 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE, MediaType } from "../../constants";
+import { MediaType, TableNames } from "../../constants";
+import { Tables } from "@/utils/supabase/types.gen";
 
 async function isFavorited(mediaType: MediaType, mediaId: string) {
   const supabase = createClient();
@@ -13,12 +14,13 @@ async function isFavorited(mediaType: MediaType, mediaId: string) {
   }
 
   const { data, error } = await supabase
-    .from(FAVORITES_TABLE)
+    .from(TableNames.FAVORITES)
     .select("*")
     .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId)
-    .limit(1);
+    .limit(1)
+    .returns<Tables<TableNames.FAVORITES>[]>();
 
   if (error) {
     return;

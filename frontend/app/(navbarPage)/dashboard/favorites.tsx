@@ -6,6 +6,7 @@ import IMovie from "@/utils/types/IMovie";
 import MovieCard from "../../../components/cards/MovieCard";
 import getFavorites from "@/utils/database/favorites/getFavorites";
 import IMovieDetails from "@/utils/types/IMovieDetails";
+import { MediaType } from "@/utils/constants";
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<IMovieDetails[]>([]);
@@ -16,7 +17,7 @@ const Favorites: React.FC = () => {
     const fetchFavorites = async () => {
       try {
         setIsLoading(true);
-        const data = await getFavorites("movie");
+        const data = await getFavorites(MediaType.MOVIE);
         setFavorites(data ?? ([] as IMovieDetails[]));
       } catch (err) {
         setError((err as Error).message);

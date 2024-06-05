@@ -1,12 +1,13 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { FAVORITES_TABLE } from "@/utils/constants";
-import getMovieDetails from "../../omdbApi/getMovieDetails";
+import { MediaType, TableNames } from "@/utils/constants";
+import { Tables } from "@/utils/supabase/types.gen";
+import getMovieDetails from "@/utils/omdbApi/getMovieDetails";
 import IMovieDetails from "@/utils/types/IMovieDetails";
 
 async function getFavorites(
-  mediaType: string,
+  mediaType: MediaType,
 ): Promise<IMovieDetails[] | undefined> {
   const supabase = createClient();
   const {
@@ -18,10 +19,11 @@ async function getFavorites(
   }
 
   const { data, error } = await supabase
-    .from(FAVORITES_TABLE)
+    .from(TableNames.FAVORITES)
     .select("media_id")
     .eq("user_id", user.id)
-    .eq("media_type", mediaType);
+    .eq("media_type", mediaType)
+    .returns<Tables<TableNames.FAVORITES>[]>();
 
   if (error) {
     throw new Error(
