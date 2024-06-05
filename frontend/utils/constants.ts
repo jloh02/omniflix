@@ -32,6 +32,9 @@ export enum TableNames {
   FAVORITES = "favorites_entries",
   MOVIES_CACHE = "movies",
 }
+
+// Datable Constants and Types
+export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
 }

@@ -1,9 +1,10 @@
 "use server";
+
 import { createClient } from "@/utils/supabase/server";
-import { MediaType, TableNames } from "../../constants";
-import getMovieDetails from "../../omdbApi/getMovieDetails";
-import IMovieDetails from "../../types/IMovieDetails";
+import { MediaType, TableNames } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
+import getMovieDetails from "@/utils/omdbApi/getMovieDetails";
+import IMovieDetails from "@/utils/types/IMovieDetails";
 
 async function getFavorites(
   mediaType: MediaType,

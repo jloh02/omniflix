@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { TableNames } from "../../constants";
+import { COMPLETED_STATUS_COLUMN_INDEX, TableNames } from "../../constants";
 import { Enums, Tables } from "@/utils/supabase/types.gen";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
@@ -57,6 +57,8 @@ async function getWatchlist(
   );
 
   result = watchlistData.reduce((acc, item) => {
+    if (item.status_column === COMPLETED_STATUS_COLUMN_INDEX)
+      item.status_column = columnNames.length - 1;
     if (item.status_column > columnNames.length) {
       throw new Error("Invalid status column returned by database");
     }

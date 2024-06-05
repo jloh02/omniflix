@@ -11,7 +11,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
 import React, { useEffect, useState } from "react";
-import MovieCard from "./movieCard";
+import MovieCard from "../../../components/cards/MovieCard";
 import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
@@ -104,7 +104,7 @@ const Movies: React.FC = () => {
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((movie, idx) => (
             <Grid key={idx} item>
-              <MovieCard movie={movie} />
+              <MovieCard movie={movie} showLabel={false} />
             </Grid>
           ))}
         </Grid>

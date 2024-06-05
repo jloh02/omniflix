@@ -73,6 +73,41 @@ export type Database = {
           },
         ]
       }
+      likes_dislikes: {
+        Row: {
+          created_at: string
+          id: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          status: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          status: number
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          media_id?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+          status?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "likes_dislikes_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       movies: {
         Row: {
           created_at: string
@@ -147,7 +182,7 @@ export type Database = {
       watchlist_entries: {
         Row: {
           column_order: string
-          created_at: string | null
+          created_at: string
           id: number
           media_id: string
           media_type: Database["public"]["Enums"]["media_type"]
@@ -156,7 +191,7 @@ export type Database = {
         }
         Insert: {
           column_order?: string
-          created_at?: string | null
+          created_at?: string
           id?: never
           media_id: string
           media_type: Database["public"]["Enums"]["media_type"]
@@ -165,7 +200,7 @@ export type Database = {
         }
         Update: {
           column_order?: string
-          created_at?: string | null
+          created_at?: string
           id?: never
           media_id?: string
           media_type?: Database["public"]["Enums"]["media_type"]
