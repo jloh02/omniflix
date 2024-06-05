@@ -24,7 +24,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
       <CardMedia component="img" image={movie.poster} className="h-72" />
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
-          <Box display="flex" sx={{ height: 40 }}>
+          <Box display="flex" gap={1}>
             <FavoriteButton
               mediaType={MediaType.MOVIE}
               mediaId={movie.imdbID}
