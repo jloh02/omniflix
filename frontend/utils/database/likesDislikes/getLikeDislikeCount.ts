@@ -20,7 +20,6 @@ async function getLikeDislikeCount(
   const { count: likeCount, error: likeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .eq("status", LikeStatus.LIKE)
@@ -35,7 +34,6 @@ async function getLikeDislikeCount(
   const { count: dislikeCount, error: dislikeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })
-    .eq("user_id", user.id)
     .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .eq("status", LikeStatus.DISLIKE)
