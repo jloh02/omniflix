@@ -30,6 +30,7 @@ export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 export enum TableNames {
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
+  LIKES_DISLIKES = "likes_dislikes",
   MOVIES_CACHE = "movies",
 }
 
@@ -37,6 +38,11 @@ export enum TableNames {
 export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
+}
+export enum LikeStatus {
+  LIKE = 1,
+  NONE = 0,
+  DISLIKE = -1,
 }
 
 // Supabase edge function names
