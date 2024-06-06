@@ -45,9 +45,9 @@ const LikeDislikeButtons: React.FC<{
         setKey((prevKey) => prevKey + 1);
         return res;
       }}
-      loadingText="Loading Likes"
-      enabledText="Like"
-      disabledText="Remove Like"
+      loadingText="Loading..."
+      enabledText="Remove Like"
+      disabledText="Like"
       childIcon={(isEnabled: boolean) => {
         return (
           <>
@@ -92,9 +92,9 @@ const LikeDislikeButtons: React.FC<{
         setKey((prevKey) => prevKey + 1);
         return res;
       }}
-      loadingText="Loading Likes"
-      enabledText="Dislike"
-      disabledText="Remove dislike"
+      loadingText="Loading..."
+      enabledText="Remove dislike"
+      disabledText="Dislike"
       childIcon={(isEnabled: boolean) => {
         return (
           <>

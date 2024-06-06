@@ -50,7 +50,7 @@ const HoverableCardButton: React.FC<HoverableCardButtonProps> = ({
   return (
     <Box>
       <Tooltip
-        title={isLoading ? loadingText : isEnabled ? disabledText : enabledText}
+        title={isLoading ? loadingText : isEnabled ? enabledText : disabledText}
       >
         <Box
           sx={{
