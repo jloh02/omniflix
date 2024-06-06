@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { MediaType } from "@/utils/constants";
 
-interface HoverableCardButtonProps {
+interface LoadableCardButtonProps {
   mediaType: MediaType;
   mediaId: string;
   checkEnabledFn: (
@@ -23,7 +23,7 @@ interface HoverableCardButtonProps {
   childIcon: JSX.Element | ((isEnabled: boolean) => JSX.Element);
 }
 
-const HoverableCardButton: React.FC<HoverableCardButtonProps> = ({
+const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
   mediaType,
   mediaId,
   checkEnabledFn,
@@ -104,4 +104,4 @@ const HoverableCardButton: React.FC<HoverableCardButtonProps> = ({
   );
 };
 
-export default HoverableCardButton;
+export default LoadableCardButton;
