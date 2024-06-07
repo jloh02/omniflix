@@ -2,8 +2,8 @@
 
 import { createClient } from "@/utils/supabase/server";
 import {
+  FunctionNames,
   MediaType,
-  WATCHLIST_FUNCTION,
   WatchlistFunctionAction,
 } from "../../constants";
 
@@ -17,13 +17,16 @@ async function addToWatchlist(mediaType: MediaType, mediaId: string) {
     return;
   }
 
-  const { data, error } = await supabase.functions.invoke(WATCHLIST_FUNCTION, {
-    body: {
-      type: WatchlistFunctionAction.ADD,
-      media_type: mediaType,
-      media_id: mediaId,
+  const { data, error } = await supabase.functions.invoke(
+    FunctionNames.WATCHLIST,
+    {
+      body: {
+        type: WatchlistFunctionAction.ADD,
+        media_type: mediaType,
+        media_id: mediaId,
+      },
     },
-  });
+  );
 
   if (error) {
     console.error(error);

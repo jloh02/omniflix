@@ -21,7 +21,7 @@ type MovieCardProps = {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
-      <CardMedia component="img" image={movie.poster} className="h-72" />
+      <CardMedia component="img" image={movie.poster_url} className="h-72" />
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
           <Box display="flex" gap={1}>

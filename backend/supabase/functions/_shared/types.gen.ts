@@ -110,11 +110,11 @@ export type Database = {
       }
       movies: {
         Row: {
-          created_at: string
+          created_at: string | null
+          data: Json | null
           genre: string[] | null
           imdb_id: string
           imdb_rating: number | null
-          plot: string | null
           poster_url: string | null
           rated: string | null
           released: string | null
@@ -123,11 +123,11 @@ export type Database = {
           year: string | null
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
+          data?: Json | null
           genre?: string[] | null
           imdb_id: string
           imdb_rating?: number | null
-          plot?: string | null
           poster_url?: string | null
           rated?: string | null
           released?: string | null
@@ -136,11 +136,11 @@ export type Database = {
           year?: string | null
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
+          data?: Json | null
           genre?: string[] | null
           imdb_id?: string
           imdb_rating?: number | null
-          plot?: string | null
           poster_url?: string | null
           rated?: string | null
           released?: string | null
