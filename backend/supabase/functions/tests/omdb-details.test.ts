@@ -75,29 +75,17 @@ const testOmdbDetails = async () => {
     assertStringIncludes(errorMsg, "Invalid type");
   });
 
-  await testSuccess(client, { id: "tt0363771", type: "movie" }, (body) => {
-    assertExists(body["rated"]);
+  await testError(client, { id: "tt0000000", type: "movie" }, (errorMsg) => {
+    assertStringIncludes(errorMsg, "Error");
   });
 
-  // await testSuccess(client, { query: "it", type: "movie" }, (body) => {
-  //   assertExists(body["Search"]);
-  //   assertEquals(body["Search"].length, 1);
-  // });
-
-  // await testSuccess(client, { query: "lion", type: "movie" }, async (body1) => {
-  //   assertExists(body1["Search"]);
-  //   assertNotEquals(body1["Search"].length, 0);
-
-  //   await testSuccess(
-  //     client,
-  //     { query: "lion", type: "movie", page: "2" },
-  //     (body2) => {
-  //       assertExists(body2["Search"]);
-  //       assertNotEquals(body2["Search"].length, 0);
-  //       assertNotEquals(body1.Search[0].Title, body2.Search[0].Title);
-  //     }
-  //   );
-  // });
+  await testSuccess(client, { id: "tt0363771", type: "movie" }, (body) => {
+    assertExists(body["rated"]);
+    assertExists(body["released"]);
+    assertExists(body["runtime"]);
+    assertExists(body["genre"]);
+    assertExists(body["data"]);
+  });
 };
 
 Deno.test("OMDB Details Test", testOmdbDetails);
