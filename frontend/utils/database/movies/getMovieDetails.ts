@@ -1,9 +1,11 @@
 "use server";
-
 import { createClient } from "@/utils/supabase/server";
 import { FunctionNames, MediaType } from "../../constants";
+import IMovieDetails from "../../types/IMovieDetails";
 
-async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
+async function getMovieDetails(
+  movieId: string,
+): Promise<IMovieDetails | undefined> {
   const supabase = createClient();
   const {
     data: { user },
@@ -14,12 +16,11 @@ async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
   }
 
   const { data, error } = await supabase.functions.invoke(
-    FunctionNames.SEARCH_OMDB,
+    FunctionNames.OMDB_DETAILS,
     {
       body: {
-        query,
-        type: mediaType,
-        page,
+        type: MediaType.MOVIE,
+        id: movieId,
       },
     },
   );
@@ -28,7 +29,7 @@ async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
     return await error.context.json();
   }
 
-  return JSON.parse(data);
+  return JSON.parse(data) as IMovieDetails;
 }
 
-export default searchOmdb;
+export default getMovieDetails;
