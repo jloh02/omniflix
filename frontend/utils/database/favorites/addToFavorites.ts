@@ -4,15 +4,18 @@ import { MediaType, TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
 async function addToFavorites(mediaType: MediaType, mediaId: string) {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, return
   if (!user) {
     return;
   }
 
+  // Insert into favorites table
   const { error } = await supabase
     .from(TableNames.FAVORITES)
     .insert({ user_id: user.id, media_type: mediaType, media_id: mediaId })

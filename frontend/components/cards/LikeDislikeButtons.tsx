@@ -27,7 +27,10 @@ const LikeDislikeButtons: React.FC<{
   });
 
   useEffect(() => {
+    // Fetch and set the media's current status for the user
     getLikeStatus(props.mediaType, props.mediaId).then(setLikeStatus);
+
+    // Fetch and set the media's total like and dislike count
     getLikeDislikeCount(props.mediaType, props.mediaId).then(
       setLikeDislikeCount,
     );

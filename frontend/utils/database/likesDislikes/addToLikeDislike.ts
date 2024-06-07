@@ -8,15 +8,18 @@ async function addToLikeDislike(
   mediaId: string,
   likeStatus: LikeStatus,
 ) {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, throw an error
   if (!user) {
     throw new Error("Please login again.");
   }
 
+  // Check if the media item is already liked/disliked by the user
   const { data: existingEntry } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*")
@@ -27,6 +30,7 @@ async function addToLikeDislike(
 
   let error;
   if (existingEntry && existingEntry.length > 0) {
+    // If the media item is already liked/disliked, update the like status
     const { error } = await supabase
       .from(TableNames.LIKES_DISLIKES)
       .update({
@@ -37,6 +41,7 @@ async function addToLikeDislike(
       .eq("media_id", mediaId)
       .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
   } else {
+    // If the media item is not liked/disliked, add a new entry
     const { error } = await supabase
       .from(TableNames.LIKES_DISLIKES)
       .insert({

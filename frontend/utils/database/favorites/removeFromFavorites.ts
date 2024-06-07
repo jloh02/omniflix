@@ -4,15 +4,18 @@ import { MediaType, TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
 async function removeFromFavorites(mediaType: MediaType, mediaId: string) {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, return
   if (!user) {
     return;
   }
 
+  // Remove the media item from the user's favorites
   const { error } = await supabase
     .from(TableNames.FAVORITES)
     .delete()

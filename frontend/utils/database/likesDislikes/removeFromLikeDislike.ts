@@ -4,15 +4,18 @@ import { MediaType, TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
 async function removeFromLikeDislike(mediaType: MediaType, mediaId: string) {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, throw an error
   if (!user) {
     throw new Error("Please login again.");
   }
 
+  // Remove the media item from the user's likes/dislikes
   const { error } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .delete()

@@ -8,15 +8,18 @@ async function getLikeDislikeCount(
   mediaType: MediaType,
   mediaId: string,
 ): Promise<{ likeCount: number; dislikeCount: number }> {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, throw an error
   if (!user) {
     throw new Error("Please login again.");
   }
 
+  // Fetch like count
   const { count: likeCount, error: likeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })
@@ -31,6 +34,7 @@ async function getLikeDislikeCount(
     );
   }
 
+  // Fetch dislike count
   const { count: dislikeCount, error: dislikeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })

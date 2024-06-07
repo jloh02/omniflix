@@ -8,15 +8,18 @@ async function getLikeStatus(
   mediaType: MediaType,
   mediaId: string,
 ): Promise<LikeStatus> {
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  // If user is not logged in, throw an error
   if (!user) {
     throw new Error("Please login again.");
   }
 
+  // Fetch like status
   const { data, error } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("status")
