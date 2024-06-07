@@ -1,4 +1,6 @@
-interface IMovieDetails {
+import IMovie from "@/utils/types/IMovie";
+
+interface IMovieDetails extends IMovie {
   title: string;
   year: string;
   rated: string;

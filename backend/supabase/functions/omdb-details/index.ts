@@ -64,7 +64,6 @@ Deno.serve(async (req: Request) => {
     .single();
 
   // Return cached value if valid cache
-  console.log(error, data, cacheLimit);
   if (
     !error &&
     data.created_at &&
