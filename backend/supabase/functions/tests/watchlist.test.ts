@@ -9,12 +9,17 @@ import {
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
 import { WatchlistAction } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
+import fs from "node:fs";
 
 const NUMBER_COLUMNS = 3;
 const NUMBER_OF_MOVIES = 15;
 const NUMBER_OF_INSERT_UPDATES = 100;
 
 const INSERT_SPAM_NUM = 25;
+
+const MOVIE_IDS: string[] = fs
+  .readFileSync("./supabase/movieIds.txt", "utf-8")
+  .split("\n");
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
@@ -181,10 +186,7 @@ const testWatchlist = async () => {
     throw authRes.error;
   }
 
-  const movieIds = Array.from(
-    { length: NUMBER_OF_MOVIES },
-    (_, index) => `tt${index.toString().padStart(7, "0")}`
-  );
+  const movieIds = MOVIE_IDS.slice(0, NUMBER_OF_MOVIES);
 
   for (const [idx, movie_id] of movieIds.entries()) {
     await testInsertWatchlist(
@@ -224,10 +226,7 @@ const testWatchlistInserts = async () => {
     throw authRes.error;
   }
 
-  const movieIds = Array.from(
-    { length: INSERT_SPAM_NUM },
-    (_, index) => `tt${index.toString().padStart(7, "0")}`
-  );
+  const movieIds = MOVIE_IDS.slice(0, INSERT_SPAM_NUM);
 
   for (const movie_id of movieIds) {
     await testInsertWatchlist(client, WatchlistAction.ADD, 0, movie_id);

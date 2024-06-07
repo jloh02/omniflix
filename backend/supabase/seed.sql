@@ -80,14 +80,14 @@ INSERT INTO
     "released",
     "runtime",
     "genre",
-    "plot",
+    "data",
     "poster_url",
     "imdb_rating"
   )
 VALUES
   (
     'tt0363771',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Narnia: The Lion, the Witch and the Wardrobe',
     '2005',
     null,
@@ -100,7 +100,7 @@ VALUES
   ),
   (
     'tt0110148',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'Interview with the Vampire: The Vampire Chronicles',
     '1994',
     null,
@@ -113,7 +113,7 @@ VALUES
   ),
   (
     'tt0296572',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Riddick',
     '2004',
     null,
@@ -126,7 +126,7 @@ VALUES
   ),
   (
     'tt0499448',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Narnia: Prince Caspian',
     '2008',
     null,
@@ -139,7 +139,7 @@ VALUES
   ),
   (
     'tt0980970',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Narnia: The Voyage of the Dawn Treader',
     '2010',
     null,
@@ -152,7 +152,7 @@ VALUES
   ),
   (
     'tt0416236',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Spiderwick Chronicles',
     '2008',
     null,
@@ -165,7 +165,7 @@ VALUES
   ),
   (
     'tt2990140',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Christmas Chronicles',
     '2018',
     null,
@@ -178,7 +178,7 @@ VALUES
   ),
   (
     'tt11057644',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Christmas Chronicles: Part Two',
     '2020',
     null,
@@ -191,7 +191,7 @@ VALUES
   ),
   (
     'tt0407658',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Riddick: Dark Fury',
     '2004',
     null,
@@ -204,7 +204,7 @@ VALUES
   ),
   (
     'tt0366620',
-    cast('2024-05-30 13:34:47.523056+00' as date),
+    null,
     'The Chronicles of Riddick: Into Pitch Black',
     '2000',
     null,
@@ -217,7 +217,7 @@ VALUES
   ),
   (
     'tt5884052',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon: Detective Pikachu',
     '2019',
     null,
@@ -230,7 +230,7 @@ VALUES
   ),
   (
     'tt0190641',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon: The First Movie - Mewtwo Strikes Back',
     '1998',
     null,
@@ -243,7 +243,7 @@ VALUES
   ),
   (
     'tt0210234',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon the Movie 2000',
     '1999',
     null,
@@ -256,7 +256,7 @@ VALUES
   ),
   (
     'tt0235679',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon 3 the Movie: Spell of the Unown',
     '2000',
     null,
@@ -269,7 +269,7 @@ VALUES
   ),
   (
     'tt0287635',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokemon 4Ever: Celebi - Voice of the Forest',
     '2001',
     null,
@@ -282,7 +282,7 @@ VALUES
   ),
   (
     'tt6595896',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon the Movie: I Choose You!',
     '2017',
     null,
@@ -295,7 +295,7 @@ VALUES
   ),
   (
     'tt0347791',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon Heroes',
     '2002',
     null,
@@ -308,7 +308,7 @@ VALUES
   ),
   (
     'tt8856470',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon: Mewtwo Strikes Back - Evolution',
     '2019',
     null,
@@ -321,7 +321,7 @@ VALUES
   ),
   (
     'tt0875609',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon: Lucario and the Mystery of Mew',
     '2005',
     null,
@@ -334,7 +334,7 @@ VALUES
   ),
   (
     'tt0420076',
-    cast('2024-05-30 13:36:37.460886+00' as date),
+    null,
     'Pokémon: Jirachi - Wish Maker',
     '2003',
     null,
@@ -347,7 +347,7 @@ VALUES
   ),
   (
     'tt1201607',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Deathly Hallows: Part 2',
     '2011',
     null,
@@ -360,7 +360,7 @@ VALUES
   ),
   (
     'tt0241527',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Sorcerernulls Stone',
     '2001',
     null,
@@ -373,7 +373,7 @@ VALUES
   ),
   (
     'tt0295297',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Chamber of Secrets',
     '2002',
     null,
@@ -386,7 +386,7 @@ VALUES
   ),
   (
     'tt0304141',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Prisoner of Azkaban',
     '2004',
     null,
@@ -399,7 +399,7 @@ VALUES
   ),
   (
     'tt0330373',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Goblet of Fire',
     '2005',
     null,
@@ -412,7 +412,7 @@ VALUES
   ),
   (
     'tt0373889',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Order of the Phoenix',
     '2007',
     null,
@@ -425,7 +425,7 @@ VALUES
   ),
   (
     'tt0926084',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Deathly Hallows: Part 1',
     '2010',
     null,
@@ -438,7 +438,7 @@ VALUES
   ),
   (
     'tt0417741',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Harry Potter and the Half-Blood Prince',
     '2009',
     null,
@@ -451,7 +451,7 @@ VALUES
   ),
   (
     'tt0098635',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'When Harry Met Sally...',
     '1989',
     null,
@@ -464,7 +464,7 @@ VALUES
   ),
   (
     'tt0066999',
-    cast('2024-05-30 13:38:30.68412+00' as date),
+    null,
     'Dirty Harry',
     '1971',
     null,
@@ -477,7 +477,7 @@ VALUES
   ),
   (
     'tt0076759',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode IV - A New Hope',
     '1977',
     null,
@@ -490,7 +490,7 @@ VALUES
   ),
   (
     'tt0080684',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode V - The Empire Strikes Back',
     '1980',
     null,
@@ -503,7 +503,7 @@ VALUES
   ),
   (
     'tt0086190',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode VI - Return of the Jedi',
     '1983',
     null,
@@ -516,7 +516,7 @@ VALUES
   ),
   (
     'tt2488496',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode VII - The Force Awakens',
     '2015',
     null,
@@ -529,7 +529,7 @@ VALUES
   ),
   (
     'tt0120915',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode I - The Phantom Menace',
     '1999',
     null,
@@ -542,7 +542,7 @@ VALUES
   ),
   (
     'tt0121766',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode III - Revenge of the Sith',
     '2005',
     null,
@@ -555,7 +555,7 @@ VALUES
   ),
   (
     'tt0121765',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode II - Attack of the Clones',
     '2002',
     null,
@@ -568,7 +568,7 @@ VALUES
   ),
   (
     'tt3748528',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Rogue One: A Star Wars Story',
     '2016',
     null,
@@ -581,7 +581,7 @@ VALUES
   ),
   (
     'tt2527336',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode VIII - The Last Jedi',
     '2017',
     null,
@@ -594,7 +594,7 @@ VALUES
   ),
   (
     'tt2527338',
-    cast('2024-05-30 13:39:07.82599+00' as date),
+    null,
     'Star Wars: Episode IX - The Rise of Skywalker',
     '2019',
     null,
@@ -607,7 +607,7 @@ VALUES
   ),
   (
     'tt5159842',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Jochem Myjer: Yeee-haa',
     '2006',
     null,
@@ -620,7 +620,7 @@ VALUES
   ),
   (
     'tt7494176',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Ceon Haa Zi Gaau',
     '2010',
     null,
@@ -633,7 +633,7 @@ VALUES
   ),
   (
     'tt8490876',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Haa Mee Maratha',
     '2018',
     null,
@@ -646,7 +646,7 @@ VALUES
   ),
   (
     'tt11668536',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Haa',
     '2007',
     null,
@@ -659,7 +659,7 @@ VALUES
   ),
   (
     'tt26083178',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Wai Onlawon Haa',
     '2022',
     null,
@@ -672,7 +672,7 @@ VALUES
   ),
   (
     'tt27563547',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Haa Hun Dikari No Baap',
     '2013',
     null,
@@ -685,7 +685,7 @@ VALUES
   ),
   (
     'tt0250413',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Haa Mazha Marg Eklaa',
     '1963',
     null,
@@ -698,7 +698,7 @@ VALUES
   ),
   (
     'tt2318537',
-    cast('2024-05-30 13:44:15.900756+00' as date),
+    null,
     'Häh häh hää',
     '1974',
     null,
@@ -711,7 +711,7 @@ VALUES
   ),
   (
     'tt2931968',
-    cast('2024-05-30 13:44:21.449011+00' as date),
+    null,
     'Háry János',
     '1983',
     null,
@@ -724,7 +724,7 @@ VALUES
   ),
   (
     'tt0343814',
-    cast('2024-05-30 13:44:21.449011+00' as date),
+    null,
     'Háry János',
     '1965',
     null,
@@ -737,7 +737,7 @@ VALUES
   ),
   (
     'tt0033735',
-    cast('2024-05-30 13:44:21.449011+00' as date),
+    null,
     'Háry János',
     '1941',
     null,
@@ -750,7 +750,7 @@ VALUES
   ),
   (
     'tt12252330',
-    cast('2024-05-30 13:44:21.449011+00' as date),
+    null,
     'Kodály Zoltán: Háry János',
     '1962',
     null,
@@ -763,7 +763,7 @@ VALUES
   ),
   (
     'tt12275496',
-    cast('2024-05-30 13:44:21.449011+00' as date),
+    null,
     'Háry János',
     '1964',
     null,
@@ -776,7 +776,7 @@ VALUES
   ),
   (
     'tt16116174',
-    cast('2024-05-30 13:44:25.456769+00' as date),
+    null,
     'Harry Potter 20th Anniversary: Return to Hogwarts',
     '2022',
     null,
@@ -789,7 +789,7 @@ VALUES
   ),
   (
     'tt1756545',
-    cast('2024-05-30 13:44:25.456769+00' as date),
+    null,
     'Harry Potter and the Forbidden Journey',
     '2010',
     null,
@@ -802,7 +802,7 @@ VALUES
   ),
   (
     'tt1049413',
-    cast('2024-05-30 14:39:56.253934+00' as date),
+    null,
     'Up',
     '2009',
     null,
@@ -815,7 +815,7 @@ VALUES
   ),
   (
     'tt0892769',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'How to Train Your Dragon',
     '2010',
     null,
@@ -828,7 +828,7 @@ VALUES
   ),
   (
     'tt1568346',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'The Girl with the Dragon Tattoo',
     '2011',
     null,
@@ -841,7 +841,7 @@ VALUES
   ),
   (
     'tt1646971',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'How to Train Your Dragon 2',
     '2014',
     null,
@@ -854,7 +854,7 @@ VALUES
   ),
   (
     'tt0289765',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'Red Dragon',
     '2002',
     null,
@@ -867,7 +867,7 @@ VALUES
   ),
   (
     'tt0190332',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'Crouching Tiger, Hidden Dragon',
     '2000',
     null,
@@ -880,7 +880,7 @@ VALUES
   ),
   (
     'tt1132620',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'The Girl with the Dragon Tattoo',
     '2009',
     null,
@@ -893,7 +893,7 @@ VALUES
   ),
   (
     'tt5109280',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'Raya and the Last Dragon',
     '2021',
     null,
@@ -906,7 +906,7 @@ VALUES
   ),
   (
     'tt0859163',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'The Mummy: Tomb of the Dragon Emperor',
     '2008',
     null,
@@ -919,7 +919,7 @@ VALUES
   ),
   (
     'tt2386490',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'How to Train Your Dragon: The Hidden World',
     '2019',
     null,
@@ -932,7 +932,7 @@ VALUES
   ),
   (
     'tt0070034',
-    cast('2024-05-30 14:40:11.970546+00' as date),
+    null,
     'Enter the Dragon',
     '1973',
     null,
@@ -945,7 +945,7 @@ VALUES
   ),
   (
     'tt2911666',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Wick',
     '2014',
     null,
@@ -958,7 +958,7 @@ VALUES
   ),
   (
     'tt4425200',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Wick: Chapter 2',
     '2017',
     null,
@@ -971,7 +971,7 @@ VALUES
   ),
   (
     'tt6146586',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Wick: Chapter 3 - Parabellum',
     '2019',
     null,
@@ -984,7 +984,7 @@ VALUES
   ),
   (
     'tt0120601',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'Being John Malkovich',
     '1999',
     null,
@@ -997,7 +997,7 @@ VALUES
   ),
   (
     'tt10366206',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Wick: Chapter 4',
     '2023',
     null,
@@ -1010,7 +1010,7 @@ VALUES
   ),
   (
     'tt0401729',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Carter',
     '2012',
     null,
@@ -1023,7 +1023,7 @@ VALUES
   ),
   (
     'tt0989757',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'Dear John',
     '2010',
     null,
@@ -1036,7 +1036,7 @@ VALUES
   ),
   (
     'tt0251160',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Q',
     '2002',
     null,
@@ -1049,7 +1049,7 @@ VALUES
   ),
   (
     'tt0455967',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Tucker Must Die',
     '2006',
     null,
@@ -1062,7 +1062,7 @@ VALUES
   ),
   (
     'tt1783732',
-    cast('2024-05-31 03:16:03.453658+00' as date),
+    null,
     'John Dies at the End',
     '2012',
     null,
@@ -1075,7 +1075,7 @@ VALUES
   ),
   (
     'tt7983428',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Panchayat',
     '2017',
     null,
@@ -1088,7 +1088,7 @@ VALUES
   ),
   (
     'tt0366864',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Panchayat',
     '1958',
     null,
@@ -1101,7 +1101,7 @@ VALUES
   ),
   (
     'tt1453252',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Makkala Panchayat',
     '2007',
     null,
@@ -1114,7 +1114,7 @@ VALUES
   ),
   (
     'tt1838617',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Panchayat',
     '1996',
     null,
@@ -1127,7 +1127,7 @@ VALUES
   ),
   (
     'tt13979128',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Pyaar Banam Khap Panchayat',
     '2020',
     null,
@@ -1140,7 +1140,7 @@ VALUES
   ),
   (
     'tt14509842',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Paani Panchayat',
     '2017',
     null,
@@ -1153,7 +1153,7 @@ VALUES
   ),
   (
     'tt15378088',
-    cast('2024-05-31 03:21:55.140946+00' as date),
+    null,
     'Wound of Panchayat',
     '2009',
     null,
@@ -1166,7 +1166,7 @@ VALUES
   ),
   (
     'tt0073707',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Sholay',
     '1975',
     null,
@@ -1179,7 +1179,7 @@ VALUES
   ),
   (
     'tt10011102',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'The Sholay Girl',
     '2019',
     null,
@@ -1192,7 +1192,7 @@ VALUES
   ),
   (
     'tt0391099',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Duplicate Sholay',
     '2002',
     null,
@@ -1205,7 +1205,7 @@ VALUES
   ),
   (
     'tt0271138',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Ramgarh Ke Sholay',
     '1991',
     null,
@@ -1218,7 +1218,7 @@ VALUES
   ),
   (
     'tt0270994',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Hong Kong Key Sholay',
     '1985',
     null,
@@ -1231,7 +1231,7 @@ VALUES
   ),
   (
     'tt0271173',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Sholay',
     '1984',
     null,
@@ -1244,7 +1244,7 @@ VALUES
   ),
   (
     'tt0273405',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Aag Aur Sholay',
     '1987',
     null,
@@ -1257,7 +1257,7 @@ VALUES
   ),
   (
     'tt0400732',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Phool Aur Sholay',
     '1976',
     null,
@@ -1270,7 +1270,7 @@ VALUES
   ),
   (
     'tt0400818',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Sholay',
     '1977',
     null,
@@ -1283,7 +1283,7 @@ VALUES
   ),
   (
     'tt0270820',
-    cast('2024-05-31 03:26:07.560926+00' as date),
+    null,
     'Aag Ke Sholay',
     '1988',
     null,
@@ -1296,7 +1296,7 @@ VALUES
   ),
   (
     'tt0441773',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Panda',
     '2008',
     null,
@@ -1309,7 +1309,7 @@ VALUES
   ),
   (
     'tt1302011',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Panda 2',
     '2011',
     null,
@@ -1322,7 +1322,7 @@ VALUES
   ),
   (
     'tt2267968',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Panda 3',
     '2016',
     null,
@@ -1335,7 +1335,7 @@ VALUES
   ),
   (
     'tt0373074',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Hustle',
     '2004',
     null,
@@ -1348,7 +1348,7 @@ VALUES
   ),
   (
     'tt21692408',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Panda 4',
     '2024',
     null,
@@ -1361,7 +1361,7 @@ VALUES
   ),
   (
     'tt2952602',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Jungle',
     '2014',
     null,
@@ -1374,7 +1374,7 @@ VALUES
   ),
   (
     'tt4217392',
-    cast('2024-05-31 14:17:19.450318+00' as date),
+    null,
     'Kung Fu Yoga',
     '2017',
     null,
