@@ -18,8 +18,8 @@ const FavoriteButton: React.FC<{
       disableFn={removeFromFavorites}
       enableFn={addToFavorites}
       loadingText="Loading..."
-      enabledText="Remove from Favorite"
-      disabledText="Add to Favorite"
+      enabledText="Remove from Favorites"
+      disabledText="Add to Favorites"
       childIcon={(isEnabled: boolean) => {
         return (
           <>
