@@ -41,10 +41,7 @@ const LikeDislikeButtons: React.FC<{
       <LoadableCardButton
         {...props}
         checkEnabledFn={() => Promise.resolve(likeStatus === LikeStatus.LIKE)}
-        disableFn={async (
-          mediaType: MediaType,
-          mediaId: string,
-        ): Promise<boolean | undefined> => {
+        disableFn={async (mediaType, mediaId) => {
           const res = await removeFromLikeDislike(mediaType, mediaId);
           setLikeDislikeCount((count) => ({
             ...count,
@@ -53,10 +50,7 @@ const LikeDislikeButtons: React.FC<{
           setLikeStatus(LikeStatus.NONE);
           return res;
         }}
-        enableFn={async (
-          mediaType: MediaType,
-          mediaId: string,
-        ): Promise<boolean | undefined> => {
+        enableFn={async (mediaType, mediaId) => {
           const res = await addToLikeDislike(
             mediaType,
             mediaId,
@@ -101,10 +95,7 @@ const LikeDislikeButtons: React.FC<{
         checkEnabledFn={() =>
           Promise.resolve(likeStatus === LikeStatus.DISLIKE)
         }
-        disableFn={async (
-          mediaType: MediaType,
-          mediaId: string,
-        ): Promise<boolean | undefined> => {
+        disableFn={async (mediaType, mediaId) => {
           const res = await removeFromLikeDislike(mediaType, mediaId);
           setLikeDislikeCount((count) => ({
             ...count,
@@ -113,10 +104,7 @@ const LikeDislikeButtons: React.FC<{
           setLikeStatus(LikeStatus.NONE);
           return res;
         }}
-        enableFn={async (
-          mediaType: MediaType,
-          mediaId: string,
-        ): Promise<boolean | undefined> => {
+        enableFn={async (mediaType, mediaId) => {
           const res = await addToLikeDislike(
             mediaType,
             mediaId,
