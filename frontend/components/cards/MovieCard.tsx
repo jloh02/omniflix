@@ -12,6 +12,7 @@ import { MediaType } from "@/utils/constants";
 import FavoriteButton from "./FavoriteButton";
 import AddToWatchlistButton from "./AddToWatchlistButton";
 import LikeDislikeButtons from "./LikeDislikeButtons";
+import Link from "next/link";
 
 type MovieCardProps = {
   movie: IMovie;
@@ -21,7 +22,9 @@ type MovieCardProps = {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
-      <CardMedia component="img" src={movie.poster_url} className="h-72" />
+      <Link href={`/movies/${movie.imdb_id}`}>
+        <CardMedia component="img" src={movie.poster_url} className="h-72" />
+      </Link>
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
           <Box display="flex" gap={1}>

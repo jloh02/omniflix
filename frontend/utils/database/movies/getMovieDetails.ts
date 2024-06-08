@@ -26,7 +26,7 @@ async function getMovieDetails(
   );
 
   if (error) {
-    return await error.context.json();
+    throw new Error(await error.context.json());
   }
 
   return JSON.parse(data) as IMovieDetails;
