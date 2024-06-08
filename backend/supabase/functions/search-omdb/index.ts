@@ -9,20 +9,32 @@ import {
 } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
 
+// Mapping of OMDB key names to usable key name
+type KeyValueMap = { [key: string]: any };
+const KEY_MAP: KeyValueMap = {
+  Title: "title",
+  Year: "year",
+  imdbID: "imdb_id",
+  Poster: "poster_url",
+};
+
+function mapKeys(omdbResult: KeyValueMap) {
+  const newObj: KeyValueMap = {};
+  for (const key in KEY_MAP) {
+    if (key in omdbResult) {
+      newObj[KEY_MAP[key]] = omdbResult[key];
+    }
+  }
+  return newObj;
+}
+
 //TODO handle type for various movies, series, episodes
 async function cacheItems(
   client: SupabaseClient,
   items: any[],
   type: OMDBType
 ) {
-  const entriesToUpsert = items.map((item) => {
-    return {
-      imdb_id: item.imdbID,
-      poster_url: item.Poster,
-      title: item.Title,
-      year: item.Year,
-    };
-  });
+  const entriesToUpsert = items.map(mapKeys);
 
   const { error } = await client
     .from(TableNames.MOVIES_CACHE_TABLE)
@@ -88,7 +100,12 @@ Deno.serve(async (req: Request) => {
   const resBody = await res.json();
   if (!resBody.Error) {
     await cacheItems(adminSupabaseClient, resBody.Search, type);
-    return new Response(JSON.stringify(resBody));
+    return new Response(
+      JSON.stringify({
+        ...resBody,
+        Search: resBody.Search.map(mapKeys),
+      })
+    );
   }
 
   const titleRes = await fetch(
@@ -103,5 +120,5 @@ Deno.serve(async (req: Request) => {
 
   // Format data so it matches the search API
   await cacheItems(adminSupabaseClient, [titleResBody], type);
-  return new Response(JSON.stringify({ Search: [titleResBody] }));
+  return new Response(JSON.stringify({ Search: [mapKeys(titleResBody)] }));
 });

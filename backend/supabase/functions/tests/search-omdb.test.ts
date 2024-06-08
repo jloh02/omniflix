@@ -95,7 +95,7 @@ const testSearchOmdb = async () => {
       (body2) => {
         assertExists(body2["Search"]);
         assertNotEquals(body2["Search"].length, 0);
-        assertNotEquals(body1.Search[0].Title, body2.Search[0].Title);
+        assertNotEquals(body1.Search[0].title, body2.Search[0].title);
       }
     );
   });
