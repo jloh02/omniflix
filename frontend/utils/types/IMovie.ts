@@ -1,7 +1,7 @@
 interface IMovie {
   title: string;
   year: string;
-  imdbID: string;
+  imdb_id: string;
   poster_url: string;
 }
 

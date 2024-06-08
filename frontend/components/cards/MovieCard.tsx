@@ -21,17 +21,17 @@ type MovieCardProps = {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
-      <CardMedia component="img" image={movie.poster_url} className="h-72" />
+      <CardMedia component="img" src={movie.poster_url} className="h-72" />
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
           <Box display="flex" gap={1}>
             <FavoriteButton
               mediaType={MediaType.MOVIE}
-              mediaId={movie.imdbID}
+              mediaId={movie.imdb_id}
             />
             <AddToWatchlistButton
               mediaType={MediaType.MOVIE}
-              mediaId={movie.imdbID}
+              mediaId={movie.imdb_id}
             />
           </Box>
           {showLabel ? (
@@ -71,7 +71,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
         >
           <LikeDislikeButtons
             mediaType={MediaType.MOVIE}
-            mediaId={movie.imdbID}
+            mediaId={movie.imdb_id}
           />
         </Box>
       </CardContent>
