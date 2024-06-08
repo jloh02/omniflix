@@ -17,7 +17,7 @@ const AddToWatchlistButton: React.FC<{
       checkEnabledFn={isWatchlisted}
       disableFn={removeFromWatchlist}
       enableFn={addToWatchlist}
-      loadingText="Loading Watchlist"
+      loadingText="Loading..."
       enabledText="Remove from Watchlist"
       disabledText="Add to Watchlist"
       childIcon={(isEnabled: boolean) => {

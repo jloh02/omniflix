@@ -1,34 +1,77 @@
-import React, { useState } from "react";
-import { Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Typography } from "@mui/material";
 import {
   ThumbDown,
   ThumbDownOutlined,
   ThumbUp,
   ThumbUpOutlined,
 } from "@mui/icons-material";
-import { MediaType } from "@/utils/constants";
+import { LikeStatus, MediaType } from "@/utils/constants";
 import LoadableCardButton from "./LoadableCardButton";
+import addToLikeDislike from "@/utils/database/likesDislikes/addToLikeDislike";
+import getLikeStatus from "@/utils/database/likesDislikes/getLikeStatus";
+import removeFromLikeDislike from "@/utils/database/likesDislikes/removeFromLikeDislike";
+import getLikeDislikeCount from "@/utils/database/likesDislikes/getLikeDislikeCount";
 
 const LikeDislikeButtons: React.FC<{
   mediaType: MediaType;
   mediaId: string;
 }> = (props) => {
-  const [isLiked, setLiked] = useState<boolean>(false);
-  const [isHoverOverLiked, setHoverOverLiked] = useState<boolean>(false);
-  const [isDisliked, setDisliked] = useState<boolean>(false);
-  const [isHoverOverDisliked, setHoverOverDisliked] = useState<boolean>(false);
+  const [likeStatus, setLikeStatus] = useState<LikeStatus>(LikeStatus.NONE);
+  const [likeDislikeCount, setLikeDislikeCount] = useState<{
+    likeCount: number;
+    dislikeCount: number;
+  }>({
+    likeCount: 0,
+    dislikeCount: 0,
+  });
 
-  //TODO integrate with backend
-  return (
-    <Box display="flex" gap={1} padding={1}>
+  useEffect(() => {
+    // Fetch and set the media's current status for the user
+    getLikeStatus(props.mediaType, props.mediaId).then(setLikeStatus);
+
+    // Fetch and set the media's total like and dislike count
+    getLikeDislikeCount(props.mediaType, props.mediaId).then(
+      setLikeDislikeCount,
+    );
+  }, [props.mediaType, props.mediaId]);
+
+  const LikeButton = (
+    <Box display="flex" alignItems="center">
+      <Typography style={{ color: "green" }}>
+        {likeDislikeCount.likeCount}
+      </Typography>
       <LoadableCardButton
         {...props}
-        checkEnabledFn={async () => false}
-        disableFn={async () => true}
-        enableFn={async () => true}
-        loadingText="Loading Likes"
-        enabledText="Like"
-        disabledText="Remove Like"
+        checkEnabledFn={() => Promise.resolve(likeStatus === LikeStatus.LIKE)}
+        disableFn={async (mediaType, mediaId) => {
+          const res = await removeFromLikeDislike(mediaType, mediaId);
+          setLikeDislikeCount((count) => ({
+            ...count,
+            likeCount: count.likeCount - 1,
+          }));
+          setLikeStatus(LikeStatus.NONE);
+          return res;
+        }}
+        enableFn={async (mediaType, mediaId) => {
+          const res = await addToLikeDislike(
+            mediaType,
+            mediaId,
+            LikeStatus.LIKE,
+          );
+          setLikeDislikeCount((count) => ({
+            likeCount: count.likeCount + 1,
+            dislikeCount:
+              likeStatus === LikeStatus.DISLIKE
+                ? count.dislikeCount - 1
+                : count.dislikeCount,
+          }));
+          setLikeStatus(LikeStatus.LIKE);
+          return res;
+        }}
+        loadingText="Loading..."
+        enabledText="Remove Like"
+        disabledText="Like"
         childIcon={(isEnabled: boolean) => {
           return (
             <>
@@ -45,15 +88,44 @@ const LikeDislikeButtons: React.FC<{
           );
         }}
       />
+    </Box>
+  );
 
+  const DislikeButton = (
+    <Box display="flex" alignItems="center">
       <LoadableCardButton
         {...props}
-        checkEnabledFn={async () => false}
-        disableFn={async () => true}
-        enableFn={async () => true}
-        loadingText="Loading Likes"
-        enabledText="Dislike"
-        disabledText="Remove dislike"
+        checkEnabledFn={() =>
+          Promise.resolve(likeStatus === LikeStatus.DISLIKE)
+        }
+        disableFn={async (mediaType, mediaId) => {
+          const res = await removeFromLikeDislike(mediaType, mediaId);
+          setLikeDislikeCount((count) => ({
+            ...count,
+            dislikeCount: count.dislikeCount - 1,
+          }));
+          setLikeStatus(LikeStatus.NONE);
+          return res;
+        }}
+        enableFn={async (mediaType, mediaId) => {
+          const res = await addToLikeDislike(
+            mediaType,
+            mediaId,
+            LikeStatus.DISLIKE,
+          );
+          setLikeDislikeCount((count) => ({
+            likeCount:
+              likeStatus === LikeStatus.LIKE
+                ? count.likeCount - 1
+                : count.likeCount,
+            dislikeCount: count.dislikeCount + 1,
+          }));
+          setLikeStatus(LikeStatus.DISLIKE);
+          return res;
+        }}
+        loadingText="Loading..."
+        enabledText="Remove dislike"
+        disabledText="Dislike"
         childIcon={(isEnabled: boolean) => {
           return (
             <>
@@ -70,6 +142,21 @@ const LikeDislikeButtons: React.FC<{
           );
         }}
       />
+      <Typography style={{ color: "red" }}>
+        {likeDislikeCount.dislikeCount}
+      </Typography>
+    </Box>
+  );
+
+  return (
+    <Box
+      key={`${likeStatus}-${likeDislikeCount}`}
+      display="flex"
+      gap={1}
+      padding={1}
+    >
+      {LikeButton}
+      {DislikeButton}
     </Box>
   );
 };
