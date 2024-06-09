@@ -53,12 +53,11 @@ interface InfoSummaryHeaderProps {
 const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
   return (
     <Box
-      width="100%"
+      margin={2}
       display="flex"
       justifyContent="center"
-      sx={{
-        background: "linear-gradient(45deg, #003366 30%, #002347 90%)",
-      }}
+      borderRadius={4}
+      sx={{ background: "#002347" }}
     >
       <Box display="flex" alignItems="start" margin={2}>
         <CardMedia

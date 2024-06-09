@@ -59,7 +59,12 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
   }
 
   return (
-    <Box>
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+    >
       <InfoSummaryHeader movie={movieDetails} />
     </Box>
   );
