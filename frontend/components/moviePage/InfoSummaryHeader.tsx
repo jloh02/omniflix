@@ -54,17 +54,19 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
   return (
     <Box
       margin={2}
+      padding={2}
       display="flex"
+      flexDirection="column"
       justifyContent="center"
       borderRadius={4}
       sx={{ background: "#002347" }}
     >
-      <Box display="flex" alignItems="start" margin={2}>
+      <Box display="flex" alignItems="start">
         <CardMedia
           component="img"
           image={movie.poster}
           alt={movie.title}
-          sx={{ height: "35vh", width: "auto", objectFit: "contain", mr: 2 }}
+          sx={{ height: "30vh", width: "auto", objectFit: "contain", mr: 2 }}
         />
         <Box flex={1}>
           <Typography variant="h6">{movie.title}</Typography>
@@ -76,9 +78,11 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
           </Typography>
           <RatingsRow imdbRating={movie.imdbRating} />
           <ButtonsRow mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
-          <Typography variant="body2">{movie.plot}</Typography>
         </Box>
       </Box>
+      <Typography variant="body2" align="justify" marginTop={1}>
+        {movie.plot}
+      </Typography>
     </Box>
   );
 };
