@@ -9,12 +9,12 @@ const PasswordRow: React.FC = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "start",
           alignItems: "center",
           padding: 1,
         }}
       >
-        <Box sx={{ width: 110 }}>
+        <Box width="100px">
           <Typography>Password</Typography>
         </Box>
         <Box
