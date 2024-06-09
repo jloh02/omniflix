@@ -29,7 +29,7 @@ async function getMovieDetails(
     throw new Error(await error.context.json());
   }
 
-  return JSON.parse(data) as IMovieDetails;
+  return JSON.parse(data).data as IMovieDetails;
 }
 
 export default getMovieDetails;

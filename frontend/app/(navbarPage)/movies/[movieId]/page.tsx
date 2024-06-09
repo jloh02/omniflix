@@ -59,8 +59,8 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
   }
 
   return (
-    <Box width="100%">
-      <InfoSummaryHeader movieId={params.movieId} />
+    <Box>
+      <InfoSummaryHeader movie={movieDetails} />
     </Box>
   );
 };
