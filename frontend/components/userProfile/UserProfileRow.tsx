@@ -3,45 +3,106 @@ import { Box, Button, Divider, TextField, Typography } from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import { useState } from "react";
 
-const PasswordRow: React.FC = () => {
+interface LabelProps {
+  label: string;
+}
+
+const Label: React.FC<LabelProps> = ({ label }) => {
   return (
-    <>
-      <Box
+    <Box width="100px">
+      <Typography>{label}</Typography>
+    </Box>
+  );
+};
+
+interface DefaultRowProps {
+  value: string;
+  onUpdate: (newValue: string) => void;
+}
+
+const DefaultRow: React.FC<DefaultRowProps> = ({ value, onUpdate }) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newValue, setNewValue] = useState<string>(value);
+
+  return isEditing ? (
+    <Box display="flex" alignItems="center" gap={1}>
+      <TextField
+        required
+        value={newValue}
+        onChange={(e) => setNewValue(e.target.value)}
+        size="small"
+      />
+      <Button
+        variant="contained"
+        onClick={() => {
+          onUpdate(newValue);
+          setIsEditing(!isEditing);
+        }}
         sx={{
-          display: "flex",
-          justifyContent: "start",
-          alignItems: "center",
-          padding: 1,
+          color: "#0088cc !important",
         }}
       >
-        <Box width="100px">
-          <Typography>Password</Typography>
-        </Box>
-        <Box
-          sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
-        >
-          <Button
-            sx={{
-              color: "#0088cc !important",
-            }}
-          >
-            Change Password
-          </Button>
-        </Box>
-      </Box>
-      <Divider />
+        Update
+      </Button>
+      <Button
+        onClick={() => {
+          setNewValue(value);
+          setIsEditing(!isEditing);
+        }}
+        sx={{
+          color: "#0088cc !important",
+        }}
+      >
+        Cancel
+      </Button>
+    </Box>
+  ) : (
+    <>
+      <Typography sx={{ flexGrow: 1 }}>{newValue}</Typography>
+      <Button
+        endIcon={<Edit />}
+        onClick={() => setIsEditing(!isEditing)}
+        sx={{
+          color: "#0088cc !important",
+        }}
+      >
+        Edit
+      </Button>
     </>
+  );
+};
+
+const PasswordRow: React.FC = () => {
+  return (
+    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
+      <Button
+        sx={{
+          color: "#0088cc !important",
+        }}
+      >
+        Change Password
+      </Button>
+    </Box>
   );
 };
 
 interface UserProfileRowProps {
   label: string;
-  value: string;
+  value?: string;
+  updateFunction: (newValue: string) => void;
 }
 
-export default function UserProfileRow({ label, value }: UserProfileRowProps) {
-  const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [newValue, setNewValue] = useState<string>(value);
+export default function UserProfileRow({
+  label,
+  value,
+  updateFunction,
+}: UserProfileRowProps) {
+  let valueRow;
+  if (label === "Password") {
+    valueRow = <PasswordRow />;
+  } else {
+    valueRow = <DefaultRow value={value || ""} onUpdate={updateFunction} />;
+  }
 
   return (
     <>
@@ -53,49 +114,8 @@ export default function UserProfileRow({ label, value }: UserProfileRowProps) {
           padding: 1,
         }}
       >
-        <Box width="100px">
-          <Typography>{label}</Typography>
-        </Box>
-        {isEditing ? (
-          <Box display="flex" alignItems="center" gap={1}>
-            <TextField
-              required
-              value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              size="small"
-            />
-            <Button
-              variant="contained"
-              onClick={() => setIsEditing(!isEditing)}
-              sx={{
-                color: "#0088cc !important",
-              }}
-            >
-              Update
-            </Button>
-            <Button
-              onClick={() => setIsEditing(!isEditing)}
-              sx={{
-                color: "#0088cc !important",
-              }}
-            >
-              Cancel
-            </Button>
-          </Box>
-        ) : (
-          <>
-            <Typography sx={{ flexGrow: 1 }}>{newValue}</Typography>
-            <Button
-              endIcon={<Edit />}
-              onClick={() => setIsEditing(!isEditing)}
-              sx={{
-                color: "#0088cc !important",
-              }}
-            >
-              Edit
-            </Button>
-          </>
-        )}
+        <Label label={label} />
+        {valueRow}
       </Box>
       <Divider />
     </>
