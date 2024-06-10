@@ -21,7 +21,7 @@ interface IMovieDetails extends IMovie {
   imdbVotes: string;
   imdbID: string;
   type: string;
-  dvd: string;
+  dVD: string;
   boxOffice: string;
   production: string;
   website: string;
