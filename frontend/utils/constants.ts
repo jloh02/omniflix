@@ -28,6 +28,7 @@ export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
 // Database table names
 export enum TableNames {
+  USERS_INFO = "users_info",
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",

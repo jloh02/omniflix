@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 
-export default async function UserSectionHeader() {
+const UserSectionHeader: React.FC = () => {
   return (
     <Box
       sx={{
@@ -22,4 +22,6 @@ export default async function UserSectionHeader() {
       </Box>
     </Box>
   );
-}
+};
+
+export default UserSectionHeader;
