@@ -1,5 +1,14 @@
 "use client";
-import { Box, Button, Divider, TextField, Typography } from "@mui/material";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Divider,
+  Snackbar,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Edit } from "@mui/icons-material";
 import { useState } from "react";
 
@@ -23,51 +32,79 @@ interface DefaultRowProps {
 const DefaultRow: React.FC<DefaultRowProps> = ({ value, onUpdate }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  return isEditing ? (
-    <Box display="flex" alignItems="center" gap={1}>
-      <TextField
-        required
-        value={newValue}
-        onChange={(e) => setNewValue(e.target.value)}
-        size="small"
-      />
-      <Button
-        variant="contained"
-        onClick={() => {
-          onUpdate(newValue);
-          setIsEditing(!isEditing);
-        }}
-        sx={{
-          color: "#0088cc !important",
-        }}
-      >
-        Update
-      </Button>
-      <Button
-        onClick={() => {
-          setNewValue(value);
-          setIsEditing(!isEditing);
-        }}
-        sx={{
-          color: "#0088cc !important",
-        }}
-      >
-        Cancel
-      </Button>
-    </Box>
-  ) : (
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  const SuccessSnackbar = (
+    <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+        <AlertTitle>Update successful!</AlertTitle>
+        Please reload to see the changes.
+      </Alert>
+    </Snackbar>
+  );
+
+  return (
     <>
-      <Typography sx={{ flexGrow: 1 }}>{newValue}</Typography>
-      <Button
-        endIcon={<Edit />}
-        onClick={() => setIsEditing(!isEditing)}
-        sx={{
-          color: "#0088cc !important",
-        }}
-      >
-        Edit
-      </Button>
+      {isEditing ? (
+        <Box width="100%" display="flex" alignItems="center" gap={1}>
+          <TextField
+            required
+            value={newValue}
+            onChange={(e) => setNewValue(e.target.value)}
+            size="small"
+            fullWidth
+            multiline
+          />
+          <Button
+            variant="contained"
+            onClick={() => {
+              onUpdate(newValue);
+              setIsEditing(!isEditing);
+              setOpenSnackbar(true);
+            }}
+            sx={{
+              color: "#0088cc !important",
+            }}
+          >
+            Update
+          </Button>
+          <Button
+            onClick={() => {
+              setNewValue(value);
+              setIsEditing(!isEditing);
+            }}
+            sx={{
+              color: "#0088cc !important",
+            }}
+          >
+            Cancel
+          </Button>
+        </Box>
+      ) : (
+        <>
+          <Typography sx={{ flexGrow: 1 }}>{newValue}</Typography>
+          <Button
+            endIcon={<Edit />}
+            onClick={() => setIsEditing(!isEditing)}
+            sx={{
+              color: "#0088cc !important",
+            }}
+          >
+            Edit
+          </Button>
+        </>
+      )}
+      {SuccessSnackbar}
     </>
   );
 };
