@@ -2,7 +2,7 @@ import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
-async function updateUserInfo(column: string, value: string) {
+async function updateUserInfo(column: string, value: string): Promise<boolean> {
   // Fetch current user
   const supabase = createClient();
   const {

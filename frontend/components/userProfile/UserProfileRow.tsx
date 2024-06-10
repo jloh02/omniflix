@@ -25,16 +25,28 @@ const Label: React.FC<LabelProps> = ({ label }) => {
 };
 
 interface DefaultRowProps {
+  label: string;
   value: string;
-  onUpdate: (newValue: string) => void;
+  onUpdate: (newValue: string) => boolean;
 }
 
-const DefaultRow: React.FC<DefaultRowProps> = ({ value, onUpdate }) => {
+const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
+  const [error, setError] = useState<string | null>(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  const handleClose = (
+  const validateInput = (value: string) => {
+    if (label === "Username") {
+      // Add your validation logic here. For example:
+      const isValid = /^[a-zA-Z0-9]+$/.test(value);
+      setError(
+        isValid ? null : "Username can only contain letters and numbers.",
+      );
+    }
+  };
+
+  const handleCloseSnackbar = (
     event: React.SyntheticEvent | Event,
     reason?: string,
   ) => {
@@ -45,8 +57,16 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ value, onUpdate }) => {
   };
 
   const SuccessSnackbar = (
-    <Snackbar open={openSnackbar} autoHideDuration={5000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+    <Snackbar
+      open={openSnackbar}
+      autoHideDuration={5000}
+      onClose={handleCloseSnackbar}
+    >
+      <Alert
+        onClose={handleCloseSnackbar}
+        severity="success"
+        sx={{ width: "100%" }}
+      >
         <AlertTitle>Update successful!</AlertTitle>
         Please reload to see the changes.
       </Alert>
@@ -60,17 +80,23 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ value, onUpdate }) => {
           <TextField
             required
             value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
+            onChange={(e) => {
+              setNewValue(e.target.value);
+              validateInput(e.target.value);
+            }}
+            error={Boolean(error)}
+            helperText={error}
             size="small"
             fullWidth
-            multiline
+            multiline={label === "Bio"}
           />
           <Button
             variant="contained"
             onClick={() => {
-              onUpdate(newValue);
-              setIsEditing(!isEditing);
-              setOpenSnackbar(true);
+              if (onUpdate(newValue)) {
+                setOpenSnackbar(true);
+                setIsEditing(!isEditing);
+              }
             }}
             sx={{
               color: "#0088cc !important",
@@ -138,7 +164,9 @@ export default function UserProfileRow({
   if (label === "Password") {
     valueRow = <PasswordRow />;
   } else {
-    valueRow = <DefaultRow value={value || ""} onUpdate={updateFunction} />;
+    valueRow = (
+      <DefaultRow label={label} value={value || ""} onUpdate={updateFunction} />
+    );
   }
 
   return (
