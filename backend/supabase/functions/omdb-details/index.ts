@@ -73,7 +73,7 @@ Deno.serve(async (req: Request) => {
   }
 
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}&type=${mediaType}`
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}&type=${mediaType}&plot=full`
   );
   const resBody = await res.json();
   if (resBody.Error) {
