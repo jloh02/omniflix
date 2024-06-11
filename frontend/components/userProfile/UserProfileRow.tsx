@@ -38,11 +38,12 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
 
   const validateInput = (value: string) => {
     if (label === "Username") {
-      // Add your validation logic here. For example:
       const isValid = /^[a-zA-Z0-9]+$/.test(value);
       setError(
         isValid ? null : "Username can only contain letters and numbers.",
       );
+
+      // TODO: Handle username must be unique
     }
   };
 
