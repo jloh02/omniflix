@@ -2,7 +2,10 @@ import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
-async function updateUserInfo(column: string, value: string): Promise<boolean> {
+async function updateUserInfo(
+  column: string,
+  value: string,
+): Promise<string | null> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -21,7 +24,7 @@ async function updateUserInfo(column: string, value: string): Promise<boolean> {
     .eq("user_id", user.id)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
-  return !error;
+  return error?.message || null;
 }
 
 export default updateUserInfo;

@@ -5,6 +5,7 @@ import React from "react";
 import UserPageTemplate from "@/components/userPages/UserPageTemplate";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
+import updateEmail from "@/utils/updateEmail";
 
 export default async function UserProfile() {
   const userInfo = await getUserInfo();
@@ -12,7 +13,6 @@ export default async function UserProfile() {
   return (
     <UserPageTemplate>
       <Typography variant="h5">Basic Info</Typography>
-      <Typography>*In development</Typography>
       <UserProfileRow
         label="Name"
         value={userInfo.name || ""}
@@ -42,8 +42,7 @@ export default async function UserProfile() {
         value="email"
         updateFunction={async (value) => {
           "use server";
-          //TODO
-          return false;
+          return await updateEmail(value);
         }}
       />
       <UserProfileRow
@@ -52,7 +51,7 @@ export default async function UserProfile() {
         updateFunction={async (value) => {
           "use server";
           //TODO
-          return false;
+          return null;
         }}
       />
     </UserPageTemplate>

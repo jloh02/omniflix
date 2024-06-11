@@ -1,7 +1,7 @@
 "use server";
 import { createClient } from "@/utils/supabase/server";
 
-async function updatePassword(newPassword: string): Promise<boolean> {
+async function updatePassword(newPassword: string): Promise<string | null> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -18,7 +18,7 @@ async function updatePassword(newPassword: string): Promise<boolean> {
     password: newPassword,
   });
 
-  return !error;
+  return error?.message || null;
 }
 
 export default updatePassword;

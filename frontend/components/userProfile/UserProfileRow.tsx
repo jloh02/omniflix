@@ -32,13 +32,14 @@ const Label: React.FC<LabelProps> = ({ label }) => {
 interface DefaultRowProps {
   label: string;
   value: string;
-  onUpdate: (newValue: string) => Promise<boolean>;
+  onUpdate: (newValue: string) => Promise<string | null>;
 }
 
 const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
   const [error, setError] = useState<string | null>(null);
+  const [updateError, setUpdateError] = useState<string | null>(null);
   const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
@@ -132,22 +133,24 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
     </Snackbar>
   );
 
-  const ErrorSnackbar = (
-    <Snackbar
-      open={openErrorSnackbar}
-      autoHideDuration={5000}
-      onClose={handleCloseSnackbar}
-    >
-      <Alert
+  const ErrorSnackbar = (errorMessage: string) => {
+    return (
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={5000}
         onClose={handleCloseSnackbar}
-        severity="error"
-        sx={{ width: "100%" }}
       >
-        <AlertTitle>Update failed!</AlertTitle>
-        An error occurred. Please try again later.
-      </Alert>
-    </Snackbar>
-  );
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          <AlertTitle>Update failed!</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+    );
+  };
 
   return (
     <>
@@ -171,11 +174,13 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
             variant="contained"
             disabled={Boolean(error)}
             onClick={async () => {
-              if (await onUpdate(newValue)) {
+              const errorMessage = await onUpdate(newValue);
+              if (errorMessage) {
+                setUpdateError(errorMessage);
+                setOpenErrorSnackbar(true);
+              } else {
                 setOpenSuccessSnackbar(true);
                 setIsEditing(!isEditing);
-              } else {
-                setOpenErrorSnackbar(true);
               }
             }}
             sx={{
@@ -211,7 +216,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
         </>
       )}
       {SuccessSnackbar}
-      {ErrorSnackbar}
+      {updateError && ErrorSnackbar(updateError)}
     </>
   );
 };
@@ -233,7 +238,7 @@ const PasswordRow: React.FC = () => {
 interface UserProfileRowProps {
   label: string;
   value?: string;
-  updateFunction: (newValue: string) => Promise<boolean>;
+  updateFunction: (newValue: string) => Promise<string | null>;
 }
 
 const UserProfileRow: React.FC<UserProfileRowProps> = ({
