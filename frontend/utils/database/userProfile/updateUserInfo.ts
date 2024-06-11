@@ -24,7 +24,12 @@ async function updateUserInfo(
     .eq("user_id", user.id)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
-  return error?.message || null;
+  let errorMessage = error?.message;
+  if (error?.code === "23505" && column === "username") {
+    errorMessage = "The username is taken. Please select a different username.";
+  }
+
+  return errorMessage || null;
 }
 
 export default updateUserInfo;
