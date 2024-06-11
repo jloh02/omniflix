@@ -34,8 +34,15 @@ export const MINIMUM_SEARCH_LENGTH = 2;
 export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
+// User Info constants
+export const NAME_MAX_CHAR_LENGTH = 50;
+export const USERNAME_MAX_CHAR_LENGTH = 30;
+export const BIO_MAX_CHAR_LENGTH = 150;
+export const PASSWORD_MIN_CHAR_LENGTH = 6;
+
 // Database table names
 export enum TableNames {
+  USERS_INFO = "users_info",
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",

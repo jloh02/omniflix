@@ -1,48 +1,59 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+"use server";
+import { Typography } from "@mui/material";
 import UserProfileRow from "@/components/userProfile/UserProfileRow";
 import React from "react";
 import UserPageTemplate from "@/components/userPages/UserPageTemplate";
-
-const PasswordRow: React.FC = () => {
-  return (
-    <>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 1,
-        }}
-      >
-        <Box sx={{ width: 110 }}>
-          <Typography>Password</Typography>
-        </Box>
-        <Box
-          sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
-        >
-          <Button
-            sx={{
-              color: "#0088cc !important",
-            }}
-          >
-            Change Password
-          </Button>
-        </Box>
-      </Box>
-      <Divider />
-    </>
-  );
-};
+import getUserInfo from "@/utils/database/userProfile/getUserInfo";
+import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
+import updateEmail from "@/utils/updateEmail";
+import updatePassword from "@/utils/updatePassword";
 
 export default async function UserProfile() {
+  const userInfo = await getUserInfo();
+
   return (
     <UserPageTemplate>
       <Typography variant="h5">Basic Info</Typography>
-      <Typography>*In development</Typography>
-      <UserProfileRow name="Name" value="John Smith" />
-      <UserProfileRow name="Username" value="@johnsmith" />
-      <UserProfileRow name="Email" value="johnsmith@gmail.com" />
-      <PasswordRow />
+      <UserProfileRow
+        label="Name"
+        value={userInfo.name || ""}
+        onUpdate={async (value) => {
+          "use server";
+          return await updateUserInfo("name", value);
+        }}
+      />
+      <UserProfileRow
+        label="Username"
+        value={userInfo.username}
+        onUpdate={async (value) => {
+          "use server";
+          return await updateUserInfo("username", value);
+        }}
+      />
+      <UserProfileRow
+        label="Bio"
+        value={userInfo.bio || ""}
+        onUpdate={async (value) => {
+          "use server";
+          return await updateUserInfo("bio", value);
+        }}
+      />
+      <UserProfileRow
+        label="Email"
+        value="email"
+        onUpdate={async (value) => {
+          "use server";
+          return await updateEmail(value);
+        }}
+      />
+      <UserProfileRow
+        label="Password"
+        value=""
+        onUpdate={async (value) => {
+          "use server";
+          return await updatePassword(value);
+        }}
+      />
     </UserPageTemplate>
   );
 }

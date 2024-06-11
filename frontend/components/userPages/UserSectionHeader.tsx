@@ -1,6 +1,9 @@
+import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import { Avatar, Box, Typography } from "@mui/material";
 
-export default async function UserSectionHeader() {
+const UserSectionHeader: React.FC = async () => {
+  const userInfo = await getUserInfo();
+
   return (
     <Box
       sx={{
@@ -17,9 +20,13 @@ export default async function UserSectionHeader() {
         sx={{ width: "15vh", height: "15vh", margin: "5vh" }}
       />
       <Box>
-        <Typography variant="h4">Name</Typography>
-        <Typography sx={{ fontStyle: "italic" }}>@Username</Typography>
+        <Typography variant="h4">{userInfo.name}</Typography>
+        <Typography sx={{ fontStyle: "italic" }}>
+          @{userInfo.username}
+        </Typography>
       </Box>
     </Box>
   );
-}
+};
+
+export default UserSectionHeader;
