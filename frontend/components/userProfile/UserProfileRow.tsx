@@ -34,7 +34,8 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
   const [error, setError] = useState<string | null>(null);
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
   const validateInput = (value: string) => {
     if (label === "Username") {
@@ -54,12 +55,12 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
     if (reason === "clickaway") {
       return;
     }
-    setOpenSnackbar(false);
+    setOpenSuccessSnackbar(false);
   };
 
   const SuccessSnackbar = (
     <Snackbar
-      open={openSnackbar}
+      open={openSuccessSnackbar}
       autoHideDuration={5000}
       onClose={handleCloseSnackbar}
     >
@@ -70,6 +71,23 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
       >
         <AlertTitle>Update successful!</AlertTitle>
         Please reload to see the changes.
+      </Alert>
+    </Snackbar>
+  );
+
+  const ErrorSnackbar = (
+    <Snackbar
+      open={openErrorSnackbar}
+      autoHideDuration={5000}
+      onClose={handleCloseSnackbar}
+    >
+      <Alert
+        onClose={handleCloseSnackbar}
+        severity="error"
+        sx={{ width: "100%" }}
+      >
+        <AlertTitle>Update failed!</AlertTitle>
+        An error occurred. Please try again.
       </Alert>
     </Snackbar>
   );
@@ -95,7 +113,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
             variant="contained"
             onClick={() => {
               if (onUpdate(newValue)) {
-                setOpenSnackbar(true);
+                setOpenSuccessSnackbar(true);
                 setIsEditing(!isEditing);
               }
             }}
@@ -132,6 +150,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
         </>
       )}
       {SuccessSnackbar}
+      {ErrorSnackbar}
     </>
   );
 };
@@ -153,7 +172,7 @@ const PasswordRow: React.FC = () => {
 interface UserProfileRowProps {
   label: string;
   value?: string;
-  updateFunction: (newValue: string) => void;
+  updateFunction: (newValue: string) => boolean;
 }
 
 export default function UserProfileRow({
