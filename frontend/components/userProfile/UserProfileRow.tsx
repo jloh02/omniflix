@@ -29,13 +29,11 @@ const Label: React.FC<LabelProps> = ({ label }) => {
   );
 };
 
-interface DefaultRowProps {
-  label: string;
-  value: string;
-  onUpdate: (newValue: string) => Promise<string | null>;
-}
-
-const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
+const DefaultRow: React.FC<UserProfileRowProps> = ({
+  label,
+  value,
+  onUpdate,
+}) => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
   const [error, setError] = useState<string | null>(null);
@@ -221,37 +219,193 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
   );
 };
 
-const PasswordRow: React.FC = () => {
-  return (
-    <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}>
-      <Button
-        sx={{
-          color: "#0088cc !important",
-        }}
+const PasswordRow: React.FC<UserProfileRowProps> = ({
+  label,
+  value,
+  onUpdate,
+}) => {
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [newValue, setNewValue] = useState<string | null>(null);
+  const [confirmValue, setConfirmValue] = useState<string | null>(null);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [confirmError, setConfirmError] = useState<string | null>(null);
+  const [updateError, setUpdateError] = useState<string | null>(null);
+  const [openSuccessSnackbar, setOpenSuccessSnackbar] = useState(false);
+  const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
+
+  const validatePasswordInput = (value: string) => {
+    setPasswordError(null);
+
+    // TODO: Input Validation for Password field
+  };
+
+  const validateConfirmInput = (value: string) => {
+    setPasswordError(null);
+
+    // TODO: Input Validation for Confirm field
+  };
+
+  const handleCloseSnackbar = (
+    event: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpenSuccessSnackbar(false);
+    setOpenErrorSnackbar(false);
+  };
+
+  const SuccessSnackbar = (
+    <Snackbar
+      open={openSuccessSnackbar}
+      autoHideDuration={5000}
+      onClose={handleCloseSnackbar}
+    >
+      <Alert
+        onClose={handleCloseSnackbar}
+        severity="success"
+        sx={{ width: "100%" }}
       >
-        Change Password
-      </Button>
-    </Box>
+        <AlertTitle>Update successful!</AlertTitle>
+        Please reload to see the changes.
+      </Alert>
+    </Snackbar>
+  );
+
+  const ErrorSnackbar = (errorMessage: string) => {
+    return (
+      <Snackbar
+        open={openErrorSnackbar}
+        autoHideDuration={5000}
+        onClose={handleCloseSnackbar}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          <AlertTitle>Update failed!</AlertTitle>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
+    );
+  };
+
+  return (
+    <>
+      {isEditing ? (
+        <Box
+          width="100%"
+          display="flex"
+          flexDirection="column"
+          alignItems="start"
+          padding={1}
+          gap={2}
+        >
+          <TextField
+            required
+            label="New Password"
+            type="password"
+            value={newValue}
+            onChange={(e) => {
+              setNewValue(e.target.value);
+              validatePasswordInput(e.target.value);
+            }}
+            error={Boolean(passwordError)}
+            helperText={passwordError}
+            size="small"
+          />
+          <TextField
+            required
+            label="Confirm New Password"
+            type="password"
+            value={confirmValue}
+            onChange={(e) => {
+              setConfirmValue(e.target.value);
+              validateConfirmInput(e.target.value);
+              if (e.target.value !== newValue) {
+                setConfirmError("Passwords do not match");
+              } else {
+                setConfirmError("");
+              }
+            }}
+            error={Boolean(confirmError)}
+            helperText={confirmError}
+            size="small"
+          />
+          <Box>
+            <Button
+              variant="contained"
+              disabled={Boolean(passwordError) || Boolean(confirmError)}
+              onClick={async () => {
+                const errorMessage = await onUpdate(newValue || "");
+                if (errorMessage) {
+                  setUpdateError(errorMessage);
+                  setOpenErrorSnackbar(true);
+                } else {
+                  setOpenSuccessSnackbar(true);
+                  setIsEditing(!isEditing);
+                }
+              }}
+              sx={{
+                color: "#0088cc !important",
+              }}
+            >
+              Update
+            </Button>
+            <Button
+              onClick={() => {
+                setNewValue(value);
+                setIsEditing(!isEditing);
+              }}
+              sx={{
+                color: "#0088cc !important",
+              }}
+            >
+              Cancel
+            </Button>
+          </Box>
+        </Box>
+      ) : (
+        <Box
+          sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
+        >
+          <Button
+            onClick={() => setIsEditing(!isEditing)}
+            sx={{
+              color: "#0088cc !important",
+            }}
+          >
+            Change Password
+          </Button>
+        </Box>
+      )}
+      {SuccessSnackbar}
+      {updateError && ErrorSnackbar(updateError)}
+    </>
   );
 };
 
 interface UserProfileRowProps {
   label: string;
-  value?: string;
-  updateFunction: (newValue: string) => Promise<string | null>;
+  value: string;
+  onUpdate: (newValue: string) => Promise<string | null>;
 }
 
 const UserProfileRow: React.FC<UserProfileRowProps> = ({
   label,
   value,
-  updateFunction,
+  onUpdate: updateFunction,
 }: UserProfileRowProps) => {
   let valueRow;
   if (label === "Password") {
-    valueRow = <PasswordRow />;
+    valueRow = (
+      <PasswordRow label={label} value={value} onUpdate={updateFunction} />
+    );
   } else {
     valueRow = (
-      <DefaultRow label={label} value={value || ""} onUpdate={updateFunction} />
+      <DefaultRow label={label} value={value} onUpdate={updateFunction} />
     );
   }
 

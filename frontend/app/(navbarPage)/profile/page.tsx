@@ -6,6 +6,7 @@ import UserPageTemplate from "@/components/userPages/UserPageTemplate";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
 import updateEmail from "@/utils/updateEmail";
+import updatePassword from "@/utils/updatePassword";
 
 export default async function UserProfile() {
   const userInfo = await getUserInfo();
@@ -16,7 +17,7 @@ export default async function UserProfile() {
       <UserProfileRow
         label="Name"
         value={userInfo.name || ""}
-        updateFunction={async (value) => {
+        onUpdate={async (value) => {
           "use server";
           return await updateUserInfo("name", value);
         }}
@@ -24,7 +25,7 @@ export default async function UserProfile() {
       <UserProfileRow
         label="Username"
         value={userInfo.username}
-        updateFunction={async (value) => {
+        onUpdate={async (value) => {
           "use server";
           return await updateUserInfo("username", value);
         }}
@@ -32,7 +33,7 @@ export default async function UserProfile() {
       <UserProfileRow
         label="Bio"
         value={userInfo.bio || ""}
-        updateFunction={async (value) => {
+        onUpdate={async (value) => {
           "use server";
           return await updateUserInfo("bio", value);
         }}
@@ -40,18 +41,17 @@ export default async function UserProfile() {
       <UserProfileRow
         label="Email"
         value="email"
-        updateFunction={async (value) => {
+        onUpdate={async (value) => {
           "use server";
           return await updateEmail(value);
         }}
       />
       <UserProfileRow
         label="Password"
-        value="password"
-        updateFunction={async (value) => {
+        value=""
+        onUpdate={async (value) => {
           "use server";
-          //TODO
-          return null;
+          return await updatePassword(value);
         }}
       />
     </UserPageTemplate>
