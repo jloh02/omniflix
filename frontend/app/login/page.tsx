@@ -1,102 +1,74 @@
-import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
-import { HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from "@/utils/constants";
-import { Typography } from "@mui/material";
+"use client";
 
-export default function Login({
-  searchParams,
-}: {
-  searchParams: { message: string };
-}) {
-  const signIn = async (formData: FormData) => {
-    "use server";
+import { Box, Card, CardContent, CardHeader, Divider } from "@mui/material";
+import React, { useMemo, useState } from "react";
+import SignInForm from "./SignInForm";
+import { LoginPageState } from "./LoginPageState";
+import ForgotPasswordForm from "./ForgotPasswordForm";
+import SignUpForm from "./SignUpForm";
 
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
+export const MINIMUM_PASSWORD_LENGTH = 6;
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+const Login: React.FC = () => {
+  const [pageState, setPageState] = useState<LoginPageState>(
+    LoginPageState.SIGN_IN,
+  );
 
-    if (error) {
-      console.error(error);
-      return redirect(
-        LOGIN_PAGE_ROUTE + "?message=Could not authenticate user",
-      );
+  const page = useMemo(() => {
+    switch (pageState) {
+      case LoginPageState.SIGN_IN:
+        return <SignInForm setPageState={setPageState} />;
+      case LoginPageState.SIGN_UP:
+        return <SignUpForm setPageState={setPageState} />;
+      case LoginPageState.FORGOT_PASSWORD:
+        return <ForgotPasswordForm setPageState={setPageState} />;
+      default:
+        throw new Error("Invalid page state " + pageState);
     }
-
-    return redirect(HOME_PAGE_ROUTE);
-  };
-
-  const signUp = async (formData: FormData) => {
-    "use server";
-
-    const origin = headers().get("origin");
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const supabase = createClient();
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${origin}/auth/callback`,
-      },
-    });
-
-    if (error) {
-      return redirect(
-        LOGIN_PAGE_ROUTE + "?message=Could not authenticate user",
-      );
-    }
-
-    return redirect(
-      LOGIN_PAGE_ROUTE + "?message=Check email to continue sign in process",
-    );
-  };
+  }, [pageState]);
 
   return (
-    <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
-      <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
-        <Typography color="white">Email</Typography>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6 border-white text-white"
-          name="email"
-          placeholder="you@example.com"
-          required
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      className="h-full w-full"
+      p={2}
+    >
+      <Card
+        sx={{
+          backgroundColor: (theme) => theme.palette.background.default,
+          width: "40%",
+          minWidth: "300px",
+          maxWidth: "450px",
+          maxHeight: "95%",
+          overflow: "auto",
+          "&::-webkit-scrollbar": {
+            width: "2px",
+          },
+          "&::-webkit-scrollbar-track": {
+            my: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            borderRadius: "1px",
+            backgroundColor: (theme) => theme.palette.secondary.main,
+          },
+        }}
+      >
+        <CardHeader title={pageState.toString()} sx={{ textAlign: "center" }} />
+        <Divider
+          sx={{
+            width: "3em",
+            mx: "auto",
+            borderWidth: "1px",
+            backgroundColor: "secondary.main",
+            borderRadius: "1px",
+          }}
         />
-        <Typography color="white">Password</Typography>
-        <input
-          className="rounded-md px-4 py-2 bg-inherit border mb-6 border-white text-white"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-          required
-        />
-        <SubmitButton
-          formAction={signIn}
-          className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-          pendingText="Signing In..."
-        >
-          Sign In
-        </SubmitButton>
-        <SubmitButton
-          formAction={signUp}
-          className="border border-white/20 rounded-md px-4 py-2 text-white mb-2"
-          pendingText="Signing Up..."
-        >
-          Sign Up
-        </SubmitButton>
-        {searchParams?.message && (
-          <p className="mt-4 p-4 bg-white/10 text-white text-center">
-            {searchParams.message}
-          </p>
-        )}
-      </form>
-    </div>
+        <CardContent>{page}</CardContent>
+      </Card>
+    </Box>
   );
-}
+};
+
+export default Login;

@@ -23,11 +23,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={GeistSans.className}>
+    <html lang="en" className={"h-full w-full " + GeistSans.className}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <body>
-          <main className="min-h-screen flex flex-col items-center">
+        <body className="h-full w-full">
+          <main className="flex flex-col items-center h-full w-full">
             {children}
           </main>
         </body>
