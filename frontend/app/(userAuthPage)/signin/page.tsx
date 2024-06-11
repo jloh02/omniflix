@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Box,
   Button,
@@ -6,13 +8,21 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
-import { LoginPageState } from "./LoginPageState";
+import {
+  DASHBOARD_PAGE_ROUTE,
+  FORGOT_PASSWORD_PAGE_ROUTE,
+  SIGNUP_PAGE_ROUTE,
+} from "@/utils/constants";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/utils/supabase/auth";
 
-const SignInForm: React.FC<{
-  setPageState: React.Dispatch<React.SetStateAction<LoginPageState>>;
-}> = ({ setPageState }) => {
+const SignInForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+  const [error, setError] = useState("");
+
+  const router = useRouter();
 
   return (
     <>
@@ -25,7 +35,10 @@ const SignInForm: React.FC<{
             color="text.primary"
             component="span"
             sx={{ cursor: "pointer" }}
-            onClick={() => setPageState(LoginPageState.SIGN_UP)}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(SIGNUP_PAGE_ROUTE);
+            }}
           >
             Sign Up here
           </MuiLink>
@@ -51,9 +64,29 @@ const SignInForm: React.FC<{
             onChange={(ev) => setPassword(ev.target.value)}
           />
         </Box>
-        <Button fullWidth color="secondary" variant="outlined">
-          Sign In
+        <Button
+          fullWidth
+          color="secondary"
+          variant="outlined"
+          disabled={isLoadingAuth}
+          onClick={async (e) => {
+            e.preventDefault();
+            setIsLoadingAuth(true);
+            const { success, error } = await signIn(email, password);
+            setIsLoadingAuth(false);
+            setError(error ?? "");
+            if (success) {
+              router.push(DASHBOARD_PAGE_ROUTE);
+            }
+          }}
+        >
+          {isLoadingAuth ? "Trying to Sign In..." : "Sign In"}
         </Button>
+        {error && (
+          <Typography width="100%" textAlign="center" color="error">
+            {error}
+          </Typography>
+        )}
       </Box>
       <Box display="flex" justifyContent="center" width="100%" my={1}>
         <MuiLink
@@ -61,7 +94,10 @@ const SignInForm: React.FC<{
           color="text.primary"
           component="span"
           sx={{ cursor: "pointer" }}
-          onClick={() => setPageState(LoginPageState.FORGOT_PASSWORD)}
+          onClick={(e) => {
+            e.preventDefault();
+            router.push(FORGOT_PASSWORD_PAGE_ROUTE);
+          }}
         >
           Forgot password?
         </MuiLink>

@@ -2,8 +2,10 @@ export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
 
 // Web URL paths
 export const HOME_PAGE_ROUTE = "/";
-export const LOGIN_PAGE_ROUTE = "/login";
-export const AUTH_PAGE_ROUTE = "/auth";
+export const LOGIN_PAGE_ROUTE = "/signin";
+export const SIGNUP_PAGE_ROUTE = "/signup";
+export const FORGOT_PASSWORD_PAGE_ROUTE = "/forgot-password";
+export const AUTH_PAGE_ROUTE = "/auth/callback";
 export const PROFILE_PAGE_ROUTE = "/profile";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
@@ -20,6 +22,8 @@ export const OMDB_ROUTE = API_PREFIX + "/omdb";
 export const PUBLIC_ROUTES = [
   HOME_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
+  SIGNUP_PAGE_ROUTE,
+  FORGOT_PASSWORD_PAGE_ROUTE,
   AUTH_PAGE_ROUTE,
 ];
 

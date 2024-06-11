@@ -2,10 +2,13 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE } from "@/utils/constants";
 
-const signIn = async (email: string, password: string) => {
+type AuthResponse = { success: boolean; error?: string };
+
+const signIn = async (
+  email: string,
+  password: string,
+): Promise<AuthResponse> => {
   const supabase = createClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -15,13 +18,16 @@ const signIn = async (email: string, password: string) => {
 
   if (error) {
     console.error(error);
-    return false;
+    return { success: false, error: error.message };
   }
 
-  return true;
+  return { success: true };
 };
 
-const signUp = async (email: string, password: string) => {
+const signUp = async (
+  email: string,
+  password: string,
+): Promise<AuthResponse> => {
   const origin = headers().get("origin");
   const supabase = createClient();
 
@@ -35,23 +41,23 @@ const signUp = async (email: string, password: string) => {
 
   if (error) {
     console.error(error);
-    return false;
+    return { success: false, error: error.message };
   }
 
-  return true;
+  return { success: true };
 };
 
-const sendPasswordResetLink = async (email: string) => {
+const sendPasswordResetLink = async (email: string): Promise<AuthResponse> => {
   const supabase = createClient();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email);
 
   if (error) {
     console.error(error);
-    return false;
+    return { success: false, error: error.message };
   }
 
-  return true;
+  return { success: true };
 };
 
-export { signIn, signUp, sendPasswordResetLink as forgotPassword };
+export { signIn, signUp, sendPasswordResetLink };

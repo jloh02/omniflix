@@ -1,23 +1,28 @@
+"use client";
+
 import {
   Box,
   Button,
+  Dialog,
+  DialogContent,
   Link as MuiLink,
   TextField,
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { LoginPageState } from "./LoginPageState";
-import { MINIMUM_PASSWORD_LENGTH } from "@/utils/constants";
+import { LOGIN_PAGE_ROUTE, MINIMUM_PASSWORD_LENGTH } from "@/utils/constants";
+import { useRouter } from "next/navigation";
+import { signUp } from "@/utils/supabase/auth";
 
-const SignUpForm: React.FC<{
-  setPageState: React.Dispatch<React.SetStateAction<LoginPageState>>;
-}> = ({ setPageState }) => {
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
+const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [error, setError] = useState("");
+  const [showDialog, setShowDialog] = useState(false);
+
+  const router = useRouter();
 
   // Password must be at least 6 characters
   const isInvalidPassword = useMemo(() => {
@@ -29,12 +34,6 @@ const SignUpForm: React.FC<{
     return confirmPassword.length > 0 && password !== confirmPassword;
   }, [password, confirmPassword]);
 
-  // Username must be between 5 and 20 characters
-  // and only contain alphanumeric characters and _
-  const isValidUsername = useMemo(() => {
-    return /^[a-zA-Z0-9_]{5,20}$/.test(username);
-  }, [username]);
-
   return (
     <>
       <Box display="flex" justifyContent="center" width="100%" mb={1}>
@@ -45,38 +44,16 @@ const SignUpForm: React.FC<{
             color="text.primary"
             component="span"
             sx={{ cursor: "pointer" }}
-            onClick={() => setPageState(LoginPageState.SIGN_IN)}
+            onClick={(e) => {
+              e.preventDefault();
+              router.push(LOGIN_PAGE_ROUTE);
+            }}
           >
             Already have an account?
           </MuiLink>
         </Typography>
       </Box>
       <Box display="flex" flexDirection="column" gap={2}>
-        <Box>
-          <Typography ml={1}>Name</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            value={name}
-            onChange={(ev) => setName(ev.target.value)}
-          />
-        </Box>
-        <Box>
-          <Typography ml={1}>Username</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            value={username}
-            error={username.length > 0 && !isValidUsername}
-            onChange={(ev) => setUsername(ev.target.value)}
-          />
-          {username.length > 0 && !isValidUsername && (
-            <Typography component="div" variant="caption" ml={1} color="error">
-              Usernames must be between 5 and 20 characters and only contain
-              letters, numbers or "_"
-            </Typography>
-          )}
-        </Box>
         <Box>
           <Typography ml={1}>Email</Typography>
           <TextField
@@ -119,7 +96,21 @@ const SignUpForm: React.FC<{
             Passwords do not match
           </Typography>
         </Box>
-        <Button fullWidth color="secondary" variant="outlined">
+        <Button
+          fullWidth
+          color="secondary"
+          variant="outlined"
+          onClick={async (e) => {
+            e.preventDefault();
+            if (isInvalidPassword || isPasswordMismatch) return;
+
+            setIsLoadingAuth(true);
+            const { success, error } = await signUp(email, password);
+            setIsLoadingAuth(false);
+            setError(error ?? "");
+            if (success) setShowDialog(true);
+          }}
+        >
           Sign Up
         </Button>
         {error && (
@@ -128,8 +119,18 @@ const SignUpForm: React.FC<{
           </Typography>
         )}
       </Box>
+      <Dialog open={showDialog}>
+        <DialogContent sx={{ p: 4 }}>
+          <Typography mb={2} variant="h6">
+            Omniflix Account Created
+          </Typography>
+          <Typography>
+            Check your email and click on the link to verify!
+          </Typography>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
 
-export default SignUpForm;
+export default SignUpPage;
