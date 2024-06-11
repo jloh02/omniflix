@@ -7,8 +7,6 @@ import { LoginPageState } from "./LoginPageState";
 import ForgotPasswordForm from "./ForgotPasswordForm";
 import SignUpForm from "./SignUpForm";
 
-export const MINIMUM_PASSWORD_LENGTH = 6;
-
 const Login: React.FC = () => {
   const [pageState, setPageState] = useState<LoginPageState>(
     LoginPageState.SIGN_IN,

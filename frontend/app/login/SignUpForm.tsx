@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { LoginPageState } from "./LoginPageState";
-import { MINIMUM_PASSWORD_LENGTH } from "./page";
+import { MINIMUM_PASSWORD_LENGTH } from "@/utils/constants";
 
 const SignUpForm: React.FC<{
   setPageState: React.Dispatch<React.SetStateAction<LoginPageState>>;
