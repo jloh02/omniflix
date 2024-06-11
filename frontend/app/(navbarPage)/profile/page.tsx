@@ -16,41 +16,43 @@ export default async function UserProfile() {
       <UserProfileRow
         label="Name"
         value={userInfo.name || ""}
-        updateFunction={(value) => {
+        updateFunction={async (value) => {
           "use server";
-          updateUserInfo("name", value);
+          return await updateUserInfo("name", value);
         }}
       />
       <UserProfileRow
         label="Username"
         value={userInfo.username}
-        updateFunction={(value) => {
+        updateFunction={async (value) => {
           "use server";
-          updateUserInfo("username", value);
+          return await updateUserInfo("username", value);
         }}
       />
       <UserProfileRow
         label="Bio"
         value={userInfo.bio || ""}
-        updateFunction={(value) => {
+        updateFunction={async (value) => {
           "use server";
-          updateUserInfo("bio", value);
+          return await updateUserInfo("bio", value);
         }}
       />
       <UserProfileRow
         label="Email"
         value="email"
-        updateFunction={(value) => {
+        updateFunction={async (value) => {
           "use server";
           //TODO
+          return false;
         }}
       />
       <UserProfileRow
         label="Password"
         value="password"
-        updateFunction={(value) => {
+        updateFunction={async (value) => {
           "use server";
           //TODO
+          return false;
         }}
       />
     </UserPageTemplate>

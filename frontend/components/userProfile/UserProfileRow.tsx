@@ -32,7 +32,7 @@ const Label: React.FC<LabelProps> = ({ label }) => {
 interface DefaultRowProps {
   label: string;
   value: string;
-  onUpdate: (newValue: string) => boolean;
+  onUpdate: (newValue: string) => Promise<boolean>;
 }
 
 const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
@@ -77,7 +77,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
         return;
       }
 
-      // TODO: Handle username must be unique
+      // TODO: Check if username is not already associated with a user
     }
 
     // Input Validation for Bio field
@@ -112,6 +112,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
       return;
     }
     setOpenSuccessSnackbar(false);
+    setOpenErrorSnackbar(false);
   };
 
   const SuccessSnackbar = (
@@ -143,7 +144,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
         sx={{ width: "100%" }}
       >
         <AlertTitle>Update failed!</AlertTitle>
-        An error occurred. Please try again.
+        An error occurred. Please try again later.
       </Alert>
     </Snackbar>
   );
@@ -169,8 +170,8 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
           <Button
             variant="contained"
             disabled={Boolean(error)}
-            onClick={() => {
-              if (onUpdate(newValue)) {
+            onClick={async () => {
+              if (await onUpdate(newValue)) {
                 setOpenSuccessSnackbar(true);
                 setIsEditing(!isEditing);
               } else {
@@ -232,7 +233,7 @@ const PasswordRow: React.FC = () => {
 interface UserProfileRowProps {
   label: string;
   value?: string;
-  updateFunction: (newValue: string) => boolean;
+  updateFunction: (newValue: string) => Promise<boolean>;
 }
 
 const UserProfileRow: React.FC<UserProfileRowProps> = ({
