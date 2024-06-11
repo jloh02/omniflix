@@ -10,7 +10,12 @@ import {
   Typography,
 } from "@mui/material";
 import { Edit } from "@mui/icons-material";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+  BIO_MAX_CHAR_LENGTH,
+  NAME_MAX_CHAR_LENGTH,
+  USERNAME_MAX_CHAR_LENGTH,
+} from "@/utils/constants";
 
 interface LabelProps {
   label: string;
@@ -38,13 +43,64 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
   const [openErrorSnackbar, setOpenErrorSnackbar] = useState(false);
 
   const validateInput = (value: string) => {
-    if (label === "Username") {
-      const isValid = /^[a-zA-Z0-9]+$/.test(value);
-      setError(
-        isValid ? null : "Username can only contain letters and numbers.",
-      );
+    setError(null);
+
+    // Input Validation for Name field
+    if (label == "Name") {
+      if (!value) {
+        setError("Name is required.");
+        return;
+      }
+
+      if (value.length > NAME_MAX_CHAR_LENGTH) {
+        setError(`Name can only be ${NAME_MAX_CHAR_LENGTH} characters long.`);
+        return;
+      }
+    }
+
+    // Input Validation for Username field
+    if (label == "Username") {
+      if (!value) {
+        setError("Username is required.");
+        return;
+      }
+
+      if (value.length > USERNAME_MAX_CHAR_LENGTH) {
+        setError(
+          `Username can only be ${USERNAME_MAX_CHAR_LENGTH} characters long.`,
+        );
+        return;
+      }
+
+      if (/\s/.test(value)) {
+        setError("Username cannot contain spaces.");
+        return;
+      }
 
       // TODO: Handle username must be unique
+    }
+
+    // Input Validation for Bio field
+    if (label == "Bio") {
+      if (value.length > BIO_MAX_CHAR_LENGTH) {
+        setError(`Bio can only be ${BIO_MAX_CHAR_LENGTH} characters long.`);
+        return;
+      }
+    }
+
+    // Input Validation for Email field
+    if (label == "Email") {
+      if (!value) {
+        setError("Email is required.");
+        return;
+      }
+
+      // Check input contains exactly one @ symbol and at least one . symbol
+      // and neither should be the first or last character
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        setError("Please enter a valid email address.");
+        return;
+      }
     }
   };
 
@@ -98,6 +154,7 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
         <Box width="100%" display="flex" alignItems="center" gap={1}>
           <TextField
             required
+            type={label === "Email" ? "email" : "text"}
             value={newValue}
             onChange={(e) => {
               setNewValue(e.target.value);
@@ -111,10 +168,13 @@ const DefaultRow: React.FC<DefaultRowProps> = ({ label, value, onUpdate }) => {
           />
           <Button
             variant="contained"
+            disabled={Boolean(error)}
             onClick={() => {
               if (onUpdate(newValue)) {
                 setOpenSuccessSnackbar(true);
                 setIsEditing(!isEditing);
+              } else {
+                setOpenErrorSnackbar(true);
               }
             }}
             sx={{
@@ -175,11 +235,11 @@ interface UserProfileRowProps {
   updateFunction: (newValue: string) => boolean;
 }
 
-export default function UserProfileRow({
+const UserProfileRow: React.FC<UserProfileRowProps> = ({
   label,
   value,
   updateFunction,
-}: UserProfileRowProps) {
+}: UserProfileRowProps) => {
   let valueRow;
   if (label === "Password") {
     valueRow = <PasswordRow />;
@@ -205,4 +265,6 @@ export default function UserProfileRow({
       <Divider />
     </>
   );
-}
+};
+
+export default UserProfileRow;
