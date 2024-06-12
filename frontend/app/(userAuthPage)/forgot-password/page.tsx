@@ -46,6 +46,7 @@ const ForgotPasswordForm: React.FC = () => {
               fullWidth
               color="secondary"
               type="email"
+              placeholder="example@email.com"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
             />

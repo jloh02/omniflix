@@ -73,6 +73,7 @@ const SignUpPage: React.FC = () => {
               fullWidth
               color="secondary"
               type="email"
+              placeholder="example@email.com"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
             />
@@ -83,6 +84,7 @@ const SignUpPage: React.FC = () => {
               fullWidth
               color="secondary"
               type="password"
+              placeholder="Password must be 6 characters or more"
               error={isInvalidPassword}
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
@@ -98,8 +100,9 @@ const SignUpPage: React.FC = () => {
             <TextField
               fullWidth
               color="secondary"
-              error={isPasswordMismatch}
               type="password"
+              placeholder="Re-enter your password"
+              error={isPasswordMismatch}
               onChange={(ev) => setConfirmPassword(ev.target.value)}
             />
             <Typography

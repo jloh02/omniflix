@@ -63,6 +63,7 @@ const SignInForm: React.FC = () => {
               fullWidth
               color="secondary"
               type="email"
+              placeholder="example@email.com"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
             />
@@ -73,6 +74,7 @@ const SignInForm: React.FC = () => {
               fullWidth
               color="secondary"
               type="password"
+              placeholder="Enter password"
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
             />
