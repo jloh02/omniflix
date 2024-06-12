@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   Link as MuiLink,
   TextField,
@@ -128,6 +129,14 @@ const SignUpPage: React.FC = () => {
             Check your email and click on the link to verify!
           </Typography>
         </DialogContent>
+        <DialogActions>
+          <Button
+            color="secondary"
+            onClick={() => router.push(LOGIN_PAGE_ROUTE)}
+          >
+            Back to Sign In
+          </Button>
+        </DialogActions>
       </Dialog>
     </>
   );
