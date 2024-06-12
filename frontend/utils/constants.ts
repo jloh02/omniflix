@@ -6,6 +6,7 @@ export const LOGIN_PAGE_ROUTE = "/signin";
 export const SIGNUP_PAGE_ROUTE = "/signup";
 export const FORGOT_PASSWORD_PAGE_ROUTE = "/forgot-password";
 export const AUTH_PAGE_ROUTE = "/auth/callback";
+export const ONBOARDING_PAGE_ROUTE = "/getting-started";
 export const PROFILE_PAGE_ROUTE = "/profile";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
