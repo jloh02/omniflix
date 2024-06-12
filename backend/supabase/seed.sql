@@ -44,7 +44,7 @@ INSERT INTO
       generate_series(1, 10)
   );
 
--- test user email identities
+-- user email identities
 INSERT INTO
   auth.identities (
     id,
@@ -67,6 +67,25 @@ INSERT INTO
       current_timestamp
     from
       auth.users
+  );
+
+-- users info
+INSERT INTO
+  public.users_info(
+    user_id,
+    name,
+    username,
+    bio
+  ) (
+    select
+      (
+        '00000000-0000-0000-0000-' || RIGHT('000000000000' || (ROW_NUMBER() OVER()), 12)
+      ) :: uuid,
+      'Name' || (ROW_NUMBER() OVER()),
+      'username' ||(ROW_NUMBER() OVER()),
+      'Bio for user' ||(ROW_NUMBER() OVER())
+    FROM
+      generate_series(1, 10)
   );
 
 -- generate movies
