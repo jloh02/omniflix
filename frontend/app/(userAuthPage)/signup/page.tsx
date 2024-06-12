@@ -27,12 +27,12 @@ const SignUpPage: React.FC = () => {
 
   // Password must be at least 6 characters
   const isInvalidPassword = useMemo(() => {
-    return password.length > 0 && password.length < PASSWORD_MIN_CHAR_LENGTH;
+    return password.length < PASSWORD_MIN_CHAR_LENGTH;
   }, [password]);
 
   // Passwords must match
   const isPasswordMismatch = useMemo(() => {
-    return confirmPassword.length > 0 && password !== confirmPassword;
+    return password !== confirmPassword;
   }, [password, confirmPassword]);
 
   return (
