@@ -54,72 +54,72 @@ const SignUpPage: React.FC = () => {
           </MuiLink>
         </Typography>
       </Box>
-      <Box display="flex" flexDirection="column" gap={2}>
-        <Box>
-          <Typography ml={1}>Email</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            value={email}
-            onChange={(ev) => setEmail(ev.target.value)}
-          />
-        </Box>
-        <Box>
-          <Typography ml={1}>Password</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            type="password"
-            error={isInvalidPassword}
-            value={password}
-            onChange={(ev) => setPassword(ev.target.value)}
-          />
-          {isInvalidPassword && (
-            <Typography variant="caption" ml={1} color="error">
-              Passwords must be minimum 6 characters
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          if (isInvalidPassword || isPasswordMismatch) return;
+
+          setIsLoadingAuth(true);
+          const { success, error } = await signUp(email, password);
+          setIsLoadingAuth(false);
+          setError(error ?? "");
+          if (success) setShowDialog(true);
+        }}
+      >
+        <Box display="flex" flexDirection="column" gap={2}>
+          <Box>
+            <Typography ml={1}>Email</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              type="email"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+            />
+          </Box>
+          <Box>
+            <Typography ml={1}>Password</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              type="password"
+              error={isInvalidPassword}
+              value={password}
+              onChange={(ev) => setPassword(ev.target.value)}
+            />
+            {isInvalidPassword && (
+              <Typography variant="caption" ml={1} color="error">
+                Passwords must be minimum 6 characters
+              </Typography>
+            )}
+          </Box>
+          <Box>
+            <Typography ml={1}>Confirm Password</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              error={isPasswordMismatch}
+              type="password"
+              onChange={(ev) => setConfirmPassword(ev.target.value)}
+            />
+            <Typography
+              variant="caption"
+              ml={1}
+              color={isPasswordMismatch ? "error" : "transparent"}
+            >
+              Passwords do not match
+            </Typography>
+          </Box>
+          <Button fullWidth color="secondary" type="submit" variant="outlined">
+            {isLoadingAuth ? "Trying to create account..." : "Sign Up"}
+          </Button>
+          {error && (
+            <Typography width="100%" textAlign="center" color="error">
+              {error}
             </Typography>
           )}
         </Box>
-        <Box>
-          <Typography ml={1}>Confirm Password</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            error={isPasswordMismatch}
-            type="password"
-            onChange={(ev) => setConfirmPassword(ev.target.value)}
-          />
-          <Typography
-            variant="caption"
-            ml={1}
-            color={isPasswordMismatch ? "error" : "transparent"}
-          >
-            Passwords do not match
-          </Typography>
-        </Box>
-        <Button
-          fullWidth
-          color="secondary"
-          variant="outlined"
-          onClick={async (e) => {
-            e.preventDefault();
-            if (isInvalidPassword || isPasswordMismatch) return;
-
-            setIsLoadingAuth(true);
-            const { success, error } = await signUp(email, password);
-            setIsLoadingAuth(false);
-            setError(error ?? "");
-            if (success) setShowDialog(true);
-          }}
-        >
-          Sign Up
-        </Button>
-        {error && (
-          <Typography width="100%" textAlign="center" color="error">
-            {error}
-          </Typography>
-        )}
-      </Box>
+      </form>
       <Dialog open={showDialog}>
         <DialogContent sx={{ p: 4 }}>
           <Typography mb={2} variant="h6">

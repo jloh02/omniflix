@@ -6,6 +6,7 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
+  FormControl,
   Link as MuiLink,
   TextField,
   Typography,
@@ -30,30 +31,30 @@ const ForgotPasswordForm: React.FC = () => {
           password
         </Typography>
       </Box>
-      <Box display="flex" flexDirection="column" gap={2}>
-        <Box>
-          <Typography ml={1}>Email</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            value={email}
-            onChange={(ev) => setEmail(ev.target.value)}
-          />
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const { success, error } = await sendPasswordResetLink(email);
+          setError(error ?? "");
+          if (success) setShowDialog(true);
+        }}
+      >
+        <Box display="flex" flexDirection="column" gap={2}>
+          <Box>
+            <Typography ml={1}>Email</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              type="email"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+            />
+          </Box>
+          <Button fullWidth color="secondary" variant="outlined" type="submit">
+            Send Reset Link
+          </Button>
         </Box>
-        <Button
-          fullWidth
-          color="secondary"
-          variant="outlined"
-          onClick={async (e) => {
-            e.preventDefault();
-            const { success, error } = await sendPasswordResetLink(email);
-            setError(error ?? "");
-            if (success) setShowDialog(true);
-          }}
-        >
-          Send Reset Link
-        </Button>
-      </Box>
+      </form>
       <Box display="flex" justifyContent="center" width="100%" my={1}>
         <MuiLink
           variant="caption"

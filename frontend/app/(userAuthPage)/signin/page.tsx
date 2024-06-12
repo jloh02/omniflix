@@ -44,50 +44,55 @@ const SignInForm: React.FC = () => {
           </MuiLink>
         </Typography>
       </Box>
-      <Box display="flex" flexDirection="column" gap={2}>
-        <Box>
-          <Typography ml={1}>Email</Typography>
-          <TextField
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setIsLoadingAuth(true);
+          const { success, error } = await signIn(email, password);
+          setIsLoadingAuth(false);
+          setError(error ?? "");
+          if (success) {
+            router.push(DASHBOARD_PAGE_ROUTE);
+          }
+        }}
+      >
+        <Box display="flex" flexDirection="column" gap={2}>
+          <Box>
+            <Typography ml={1}>Email</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              type="email"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+            />
+          </Box>
+          <Box>
+            <Typography ml={1}>Password</Typography>
+            <TextField
+              fullWidth
+              color="secondary"
+              type="password"
+              value={password}
+              onChange={(ev) => setPassword(ev.target.value)}
+            />
+          </Box>
+          <Button
             fullWidth
             color="secondary"
-            value={email}
-            onChange={(ev) => setEmail(ev.target.value)}
-          />
+            variant="outlined"
+            type="submit"
+            disabled={isLoadingAuth}
+          >
+            {isLoadingAuth ? "Trying to Sign In..." : "Sign In"}
+          </Button>
+          {error && (
+            <Typography width="100%" textAlign="center" color="error">
+              {error}
+            </Typography>
+          )}
         </Box>
-        <Box>
-          <Typography ml={1}>Password</Typography>
-          <TextField
-            fullWidth
-            color="secondary"
-            type="password"
-            value={password}
-            onChange={(ev) => setPassword(ev.target.value)}
-          />
-        </Box>
-        <Button
-          fullWidth
-          color="secondary"
-          variant="outlined"
-          disabled={isLoadingAuth}
-          onClick={async (e) => {
-            e.preventDefault();
-            setIsLoadingAuth(true);
-            const { success, error } = await signIn(email, password);
-            setIsLoadingAuth(false);
-            setError(error ?? "");
-            if (success) {
-              router.push(DASHBOARD_PAGE_ROUTE);
-            }
-          }}
-        >
-          {isLoadingAuth ? "Trying to Sign In..." : "Sign In"}
-        </Button>
-        {error && (
-          <Typography width="100%" textAlign="center" color="error">
-            {error}
-          </Typography>
-        )}
-      </Box>
+      </form>
       <Box display="flex" justifyContent="center" width="100%" my={1}>
         <MuiLink
           variant="caption"
