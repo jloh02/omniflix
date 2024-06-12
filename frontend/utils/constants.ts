@@ -27,9 +27,6 @@ export const PUBLIC_ROUTES = [
   AUTH_PAGE_ROUTE,
 ];
 
-// Authentication related
-export const MINIMUM_PASSWORD_LENGTH = 6;
-
 // Constants for OMDB API
 export const OMDB_API_URL = "http://www.omdbapi.com/";
 export const OMDB_API_KEY = process.env.NEXT_OMDB_API_KEY;

@@ -11,7 +11,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
-import { LOGIN_PAGE_ROUTE, MINIMUM_PASSWORD_LENGTH } from "@/utils/constants";
+import { LOGIN_PAGE_ROUTE, PASSWORD_MIN_CHAR_LENGTH } from "@/utils/constants";
 import { useRouter } from "next/navigation";
 import { signUp } from "@/utils/supabase/auth";
 
@@ -27,7 +27,7 @@ const SignUpPage: React.FC = () => {
 
   // Password must be at least 6 characters
   const isInvalidPassword = useMemo(() => {
-    return password.length > 0 && password.length < MINIMUM_PASSWORD_LENGTH;
+    return password.length > 0 && password.length < PASSWORD_MIN_CHAR_LENGTH;
   }, [password]);
 
   // Passwords must match

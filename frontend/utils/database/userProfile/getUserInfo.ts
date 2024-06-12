@@ -1,4 +1,5 @@
 "use server";
+
 import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
