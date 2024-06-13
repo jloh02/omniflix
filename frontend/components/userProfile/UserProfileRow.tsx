@@ -14,6 +14,7 @@ import React, { useState } from "react";
 import {
   BIO_MAX_CHAR_LENGTH,
   NAME_MAX_CHAR_LENGTH,
+  PASSWORD_MIN_CHAR_LENGTH,
   USERNAME_MAX_CHAR_LENGTH,
 } from "@/utils/constants";
 
@@ -75,8 +76,6 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
         setError("Username cannot contain spaces.");
         return;
       }
-
-      // TODO: Check if username is not already associated with a user
     }
 
     // Input Validation for Bio field
@@ -156,6 +155,7 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
         <Box width="100%" display="flex" alignItems="center" gap={1}>
           <TextField
             required
+            color="secondary"
             type={label === "Email" ? "email" : "text"}
             value={newValue}
             onChange={(e) => {
@@ -190,6 +190,7 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
           <Button
             onClick={() => {
               setNewValue(value);
+              setError(null);
               setIsEditing(!isEditing);
             }}
             sx={{
@@ -236,13 +237,11 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
   const validatePasswordInput = (value: string) => {
     setPasswordError(null);
 
-    // TODO: Input Validation for Password field
-  };
-
-  const validateConfirmInput = (value: string) => {
-    setPasswordError(null);
-
-    // TODO: Input Validation for Confirm field
+    if (value.length < PASSWORD_MIN_CHAR_LENGTH) {
+      setPasswordError(
+        `Password must be at least ${PASSWORD_MIN_CHAR_LENGTH} characters long.`,
+      );
+    }
   };
 
   const handleCloseSnackbar = (
@@ -305,6 +304,7 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
         >
           <TextField
             required
+            color="secondary"
             label="New Password"
             type="password"
             value={newValue}
@@ -318,12 +318,12 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
           />
           <TextField
             required
+            color="secondary"
             label="Confirm New Password"
             type="password"
             value={confirmValue}
             onChange={(e) => {
               setConfirmValue(e.target.value);
-              validateConfirmInput(e.target.value);
               if (e.target.value !== newValue) {
                 setConfirmError("Passwords do not match");
               } else {
@@ -357,6 +357,9 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
             <Button
               onClick={() => {
                 setNewValue(value);
+                setConfirmValue(value);
+                setPasswordError(null);
+                setConfirmError(null);
                 setIsEditing(!isEditing);
               }}
               sx={{

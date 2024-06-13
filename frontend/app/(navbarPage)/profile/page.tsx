@@ -7,9 +7,16 @@ import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
 import updateEmail from "@/utils/updateEmail";
 import updatePassword from "@/utils/updatePassword";
+import { createClient } from "@/utils/supabase/server";
 
 export default async function UserProfile() {
   const userInfo = await getUserInfo();
+
+  // Fetch user
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <UserPageTemplate>
@@ -40,7 +47,7 @@ export default async function UserProfile() {
       />
       <UserProfileRow
         label="Email"
-        value="email"
+        value={user?.email || ""}
         onUpdate={async (value) => {
           "use server";
           return await updateEmail(value);
