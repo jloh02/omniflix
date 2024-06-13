@@ -153,19 +153,19 @@ export type Database = {
       users_info: {
         Row: {
           bio: string | null
-          name: string | null
+          name: string
           user_id: string
           username: string
         }
         Insert: {
           bio?: string | null
-          name?: string | null
+          name: string
           user_id: string
           username: string
         }
         Update: {
           bio?: string | null
-          name?: string | null
+          name?: string
           user_id?: string
           username?: string
         }
