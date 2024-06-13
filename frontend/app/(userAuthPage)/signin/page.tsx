@@ -74,7 +74,7 @@ const SignInForm: React.FC = () => {
               fullWidth
               color="secondary"
               type="password"
-              placeholder="Enter password"
+              placeholder="Enter your password"
               value={password}
               onChange={(ev) => setPassword(ev.target.value)}
             />
@@ -86,7 +86,7 @@ const SignInForm: React.FC = () => {
             type="submit"
             disabled={isLoadingAuth}
           >
-            {isLoadingAuth ? "Trying to Sign In..." : "Sign In"}
+            {isLoadingAuth ? "Signing In..." : "Sign In"}
           </Button>
           {error && (
             <Typography width="100%" textAlign="center" color="error">

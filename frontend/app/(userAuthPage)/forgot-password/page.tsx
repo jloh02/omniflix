@@ -49,6 +49,8 @@ const ForgotPasswordForm: React.FC = () => {
               placeholder="example@email.com"
               value={email}
               onChange={(ev) => setEmail(ev.target.value)}
+              error={Boolean(error)}
+              helperText={error}
             />
           </Box>
           <Button fullWidth color="secondary" variant="outlined" type="submit">
@@ -66,11 +68,6 @@ const ForgotPasswordForm: React.FC = () => {
         >
           Back to Sign In
         </MuiLink>
-        {error && (
-          <Typography width="100%" textAlign="center" color="error">
-            {error}
-          </Typography>
-        )}
       </Box>
       <Dialog open={showDialog}>
         <DialogContent sx={{ p: 4 }}>
@@ -78,7 +75,8 @@ const ForgotPasswordForm: React.FC = () => {
             Password Reset Link Sent
           </Typography>
           <Typography>
-            Check your email and click on the link to reset password! <br />
+            Check your email and click on the link to reset your password!
+            <br />
             Emails will only be sent if an account with that email exists.
           </Typography>
         </DialogContent>
