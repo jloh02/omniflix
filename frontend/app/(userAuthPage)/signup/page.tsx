@@ -19,21 +19,25 @@ const SignUpPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [confirmPasswordError, setConfirmPasswordError] = useState<
+    string | null
+  >(null);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
-  const [error, setError] = useState("");
+  const [signUpError, setSignUpError] = useState("");
   const [showDialog, setShowDialog] = useState(false);
 
   const router = useRouter();
 
-  // Password must be at least 6 characters
-  const isInvalidPassword = useMemo(() => {
-    return password.length < PASSWORD_MIN_CHAR_LENGTH;
-  }, [password]);
+  const validatePasswordInput = (value: string) => {
+    setPasswordError(null);
 
-  // Passwords must match
-  const isPasswordMismatch = useMemo(() => {
-    return password !== confirmPassword;
-  }, [password, confirmPassword]);
+    if (value.length < PASSWORD_MIN_CHAR_LENGTH) {
+      setPasswordError(
+        `Password must be at least ${PASSWORD_MIN_CHAR_LENGTH} characters long.`,
+      );
+    }
+  };
 
   return (
     <>
@@ -57,12 +61,17 @@ const SignUpPage: React.FC = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
-          if (isInvalidPassword || isPasswordMismatch) return;
+          if (
+            passwordError ||
+            confirmPasswordError ||
+            password != confirmPassword
+          )
+            return;
 
           setIsLoadingAuth(true);
           const { success, error } = await signUp(email, password);
           setIsLoadingAuth(false);
-          setError(error ?? "");
+          setSignUpError(error ?? "");
           if (success) setShowDialog(true);
         }}
       >
@@ -84,16 +93,15 @@ const SignUpPage: React.FC = () => {
               fullWidth
               color="secondary"
               type="password"
-              placeholder="Password must be 6 characters or more"
-              error={isInvalidPassword}
+              placeholder="Enter your password"
+              error={Boolean(passwordError)}
+              helperText={passwordError}
               value={password}
-              onChange={(ev) => setPassword(ev.target.value)}
+              onChange={(ev) => {
+                validatePasswordInput(ev.target.value);
+                setPassword(ev.target.value);
+              }}
             />
-            {isInvalidPassword && (
-              <Typography variant="caption" ml={1} color="error">
-                Passwords must be minimum 6 characters
-              </Typography>
-            )}
           </Box>
           <Box>
             <Typography ml={1}>Confirm Password</Typography>
@@ -102,23 +110,24 @@ const SignUpPage: React.FC = () => {
               color="secondary"
               type="password"
               placeholder="Re-enter your password"
-              error={isPasswordMismatch}
-              onChange={(ev) => setConfirmPassword(ev.target.value)}
+              error={Boolean(confirmPasswordError)}
+              helperText={confirmPasswordError}
+              onChange={(ev) => {
+                setConfirmPassword(ev.target.value);
+                if (ev.target.value !== password) {
+                  setConfirmPasswordError("Passwords do not match");
+                } else {
+                  setConfirmPasswordError("");
+                }
+              }}
             />
-            <Typography
-              variant="caption"
-              ml={1}
-              color={isPasswordMismatch ? "error" : "transparent"}
-            >
-              Passwords do not match
-            </Typography>
           </Box>
           <Button fullWidth color="secondary" type="submit" variant="outlined">
-            {isLoadingAuth ? "Trying to create account..." : "Sign Up"}
+            {isLoadingAuth ? "Creating account..." : "Sign Up"}
           </Button>
-          {error && (
+          {signUpError && (
             <Typography width="100%" textAlign="center" color="error">
-              {error}
+              {signUpError}
             </Typography>
           )}
         </Box>
