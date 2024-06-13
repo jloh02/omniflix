@@ -15,7 +15,7 @@ export default async function Index() {
         sx={{
           position: "relative",
           width: "100%",
-          height: "calc(100vh - 64px)", // viewport height minus navigation bar height
+          height: "100vh",
         }}
       >
         <CardMedia
