@@ -169,7 +169,8 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
             multiline={label === "Bio"}
           />
           <Button
-            variant="contained"
+            // variant="contained"
+            color="info"
             disabled={Boolean(error)}
             onClick={async () => {
               const errorMessage = await onUpdate(newValue);
@@ -181,20 +182,15 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
                 setIsEditing(!isEditing);
               }
             }}
-            sx={{
-              color: "#0088cc !important",
-            }}
           >
             Update
           </Button>
           <Button
+            color="info"
             onClick={() => {
               setNewValue(value);
               setError(null);
               setIsEditing(!isEditing);
-            }}
-            sx={{
-              color: "#0088cc !important",
             }}
           >
             Cancel
@@ -204,11 +200,9 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
         <>
           <Typography sx={{ flexGrow: 1 }}>{newValue}</Typography>
           <Button
+            color="info"
             endIcon={<Edit />}
             onClick={() => setIsEditing(!isEditing)}
-            sx={{
-              color: "#0088cc !important",
-            }}
           >
             Edit
           </Button>
@@ -336,7 +330,8 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
           />
           <Box>
             <Button
-              variant="contained"
+              // variant="contained"
+              color="info"
               disabled={Boolean(passwordError) || Boolean(confirmError)}
               onClick={async () => {
                 const errorMessage = await onUpdate(newValue || "");
@@ -348,22 +343,17 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
                   setIsEditing(!isEditing);
                 }
               }}
-              sx={{
-                color: "#0088cc !important",
-              }}
             >
               Update
             </Button>
             <Button
+              color="info"
               onClick={() => {
                 setNewValue(value);
                 setConfirmValue(value);
                 setPasswordError(null);
                 setConfirmError(null);
                 setIsEditing(!isEditing);
-              }}
-              sx={{
-                color: "#0088cc !important",
               }}
             >
               Cancel
@@ -374,12 +364,7 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
         <Box
           sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-start" }}
         >
-          <Button
-            onClick={() => setIsEditing(!isEditing)}
-            sx={{
-              color: "#0088cc !important",
-            }}
-          >
+          <Button color="info" onClick={() => setIsEditing(!isEditing)}>
             Change Password
           </Button>
         </Box>

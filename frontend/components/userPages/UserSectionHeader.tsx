@@ -7,7 +7,7 @@ const UserSectionHeader: React.FC = async () => {
   return (
     <Box
       width="100%"
-      height="30vh"
+      minHeight="30vh"
       display="flex"
       alignItems="center"
       justifyContent="center"
