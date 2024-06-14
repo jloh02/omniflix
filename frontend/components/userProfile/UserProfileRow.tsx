@@ -24,7 +24,7 @@ interface LabelProps {
 
 const Label: React.FC<LabelProps> = ({ label }) => {
   return (
-    <Box width="100px">
+    <Box minWidth="100px">
       <Typography>{label}</Typography>
     </Box>
   );
