@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { Suspense, useEffect, useMemo, useState } from "react";
 import { LOGIN_PAGE_ROUTE, PASSWORD_MIN_CHAR_LENGTH } from "@/utils/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "@/utils/supabase/auth";
@@ -65,7 +65,7 @@ const ResetPasswordPage: React.FC = () => {
   }, [searchParams]);
 
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Box display="flex" justifyContent="center" width="100%" mb={1}>
         <Typography variant="caption" textAlign="center">
           Looks like someone forgot their password? Let's help you change it!
@@ -159,7 +159,7 @@ const ResetPasswordPage: React.FC = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Suspense>
   );
 };
 
