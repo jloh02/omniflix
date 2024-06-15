@@ -28,7 +28,6 @@ export default async function middleware(request: NextRequest) {
   // User authenticated
   if (user) {
     const userInfo = await getUserInfo();
-    console.log(userInfo);
 
     // Authenticated users should complete onboarding
     if (!userInfo && path !== ONBOARDING_PAGE_ROUTE) {
