@@ -5,6 +5,7 @@ export const HOME_PAGE_ROUTE = "/";
 export const LOGIN_PAGE_ROUTE = "/signin";
 export const SIGNUP_PAGE_ROUTE = "/signup";
 export const FORGOT_PASSWORD_PAGE_ROUTE = "/forgot-password";
+export const RESET_PASSWORD_PAGE_ROUTE = "/reset-password";
 export const AUTH_PAGE_ROUTE = "/auth/callback";
 export const ONBOARDING_PAGE_ROUTE = "/getting-started";
 export const PROFILE_PAGE_ROUTE = "/profile";
@@ -25,6 +26,7 @@ export const PUBLIC_ROUTES = [
   LOGIN_PAGE_ROUTE,
   SIGNUP_PAGE_ROUTE,
   FORGOT_PASSWORD_PAGE_ROUTE,
+  RESET_PASSWORD_PAGE_ROUTE,
   AUTH_PAGE_ROUTE,
 ];
 

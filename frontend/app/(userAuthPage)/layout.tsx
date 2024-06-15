@@ -3,6 +3,7 @@
 import {
   FORGOT_PASSWORD_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
+  RESET_PASSWORD_PAGE_ROUTE,
   SIGNUP_PAGE_ROUTE,
 } from "@/utils/constants";
 import { Box, Card, CardContent, CardHeader, Divider } from "@mui/material";
@@ -22,6 +23,8 @@ const AuthPageLayout: React.FC<{ children: React.ReactNode }> = ({
         return "Sign Up";
       case FORGOT_PASSWORD_PAGE_ROUTE:
         return "Forgot Password";
+      case RESET_PASSWORD_PAGE_ROUTE:
+        return "Reset Password";
       default:
         throw new Error("Invalid page path " + path);
     }

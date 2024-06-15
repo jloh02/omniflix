@@ -50,7 +50,9 @@ const signUp = async (
 const sendPasswordResetLink = async (email: string): Promise<AuthResponse> => {
   const supabase = createClient();
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email);
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: "/reset-password",
+  });
 
   if (error) {
     console.error(error);
@@ -60,4 +62,17 @@ const sendPasswordResetLink = async (email: string): Promise<AuthResponse> => {
   return { success: true };
 };
 
-export { signIn, signUp, sendPasswordResetLink };
+const resetPassword = async (password: string): Promise<AuthResponse> => {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.updateUser({ password });
+
+  if (error) {
+    console.error(error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+};
+
+export { signIn, signUp, sendPasswordResetLink, resetPassword };
