@@ -5,10 +5,9 @@ import React from "react";
 import UserPageTemplate from "@/components/userPages/UserPageTemplate";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
-import updateEmail from "@/utils/updateEmail";
-import updatePassword from "@/utils/updatePassword";
 import { createClient } from "@/utils/supabase/server";
 import DeleteAccountButton from "./deleteAccountButton";
+import { resetPassword, updateEmail } from "@/utils/supabase/auth";
 
 export default async function UserProfile() {
   const userInfo = await getUserInfo();
@@ -58,8 +57,7 @@ export default async function UserProfile() {
         label="Password"
         value=""
         onUpdate={async (value) => {
-          "use server";
-          return await updatePassword(value);
+          return await resetPassword(value);
         }}
       />
       {/* <DeleteAccountButton /> */}

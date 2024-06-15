@@ -17,6 +17,7 @@ import {
   PASSWORD_MIN_CHAR_LENGTH,
   USERNAME_MAX_CHAR_LENGTH,
 } from "@/utils/constants";
+import { AuthResponse } from "@/utils/supabase/auth";
 
 interface LabelProps {
   label: string;
@@ -173,9 +174,9 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
             color="info"
             disabled={Boolean(error)}
             onClick={async () => {
-              const errorMessage = await onUpdate(newValue);
-              if (errorMessage) {
-                setUpdateError(errorMessage);
+              const { error } = await onUpdate(newValue);
+              if (error) {
+                setUpdateError(error);
                 setOpenErrorSnackbar(true);
               } else {
                 setOpenSuccessSnackbar(true);
@@ -334,9 +335,9 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
               color="info"
               disabled={Boolean(passwordError) || Boolean(confirmError)}
               onClick={async () => {
-                const errorMessage = await onUpdate(newValue || "");
-                if (errorMessage) {
-                  setUpdateError(errorMessage);
+                const { error } = await onUpdate(newValue || "");
+                if (error) {
+                  setUpdateError(error);
                   setOpenErrorSnackbar(true);
                 } else {
                   setOpenSuccessSnackbar(true);
@@ -378,7 +379,7 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
 interface UserProfileRowProps {
   label: string;
   value: string;
-  onUpdate: (newValue: string) => Promise<string | null>;
+  onUpdate: (newValue: string) => Promise<AuthResponse>;
 }
 
 const UserProfileRow: React.FC<UserProfileRowProps> = ({

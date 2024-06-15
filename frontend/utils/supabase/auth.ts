@@ -1,9 +1,7 @@
-"use server";
+("use server");
 
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { HOME_PAGE_ROUTE } from "../constants";
 
 type AuthResponse = { success: boolean; error?: string };
 
@@ -82,4 +80,25 @@ const resetPassword = async (password: string): Promise<AuthResponse> => {
   return { success: true };
 };
 
-export { signIn, signOut, signUp, sendPasswordResetLink, resetPassword };
+const updateEmail = async (email: string): Promise<AuthResponse> => {
+  const supabase = createClient();
+
+  const { error } = await supabase.auth.updateUser({ email });
+
+  if (error) {
+    console.error(error);
+    return { success: false, error: error.message };
+  }
+
+  return { success: true };
+};
+
+export type { AuthResponse };
+export {
+  signIn,
+  signOut,
+  signUp,
+  sendPasswordResetLink,
+  resetPassword,
+  updateEmail,
+};
