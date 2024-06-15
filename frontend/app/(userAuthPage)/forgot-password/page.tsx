@@ -56,8 +56,14 @@ const ForgotPasswordForm: React.FC = () => {
               helperText={error}
             />
           </Box>
-          <Button fullWidth color="secondary" variant="outlined" type="submit">
-            Send Reset Link
+          <Button
+            fullWidth
+            color="secondary"
+            variant="outlined"
+            type="submit"
+            disabled={isLoadingAuth}
+          >
+            {isLoadingAuth ? "Sending link..." : "Send Reset Link"}
           </Button>
         </Box>
       </form>
