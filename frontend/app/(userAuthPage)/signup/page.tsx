@@ -70,9 +70,9 @@ const SignUpPage: React.FC = () => {
 
           setIsLoadingAuth(true);
           const { success, error } = await signUp(email, password);
-          setIsLoadingAuth(false);
           setSignUpError(error ?? "");
           if (success) setShowDialog(true);
+          setIsLoadingAuth(false);
         }}
       >
         <Box display="flex" flexDirection="column" gap={2}>

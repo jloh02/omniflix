@@ -19,6 +19,7 @@ import { sendPasswordResetLink } from "@/utils/supabase/auth";
 const ForgotPasswordForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
   const router = useRouter();
@@ -34,9 +35,11 @@ const ForgotPasswordForm: React.FC = () => {
       <form
         onSubmit={async (e) => {
           e.preventDefault();
+          setIsLoadingAuth(true);
           const { success, error } = await sendPasswordResetLink(email);
           setError(error ?? "");
           if (success) setShowDialog(true);
+          setIsLoadingAuth(false);
         }}
       >
         <Box display="flex" flexDirection="column" gap={2}>

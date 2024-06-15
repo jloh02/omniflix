@@ -49,11 +49,11 @@ const SignInForm: React.FC = () => {
           e.preventDefault();
           setIsLoadingAuth(true);
           const { success, error } = await signIn(email, password);
-          setIsLoadingAuth(false);
           setError(error ?? "");
           if (success) {
             router.push(DASHBOARD_PAGE_ROUTE);
           }
+          setIsLoadingAuth(false);
         }}
       >
         <Box display="flex" flexDirection="column" gap={2}>

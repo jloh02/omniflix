@@ -60,9 +60,9 @@ const ResetPasswordPage: React.FC = () => {
 
           setIsLoadingAuth(true);
           const { success, error } = await resetPassword(password);
-          setIsLoadingAuth(false);
           setError(error ?? "");
           if (success) setShowDialog(true);
+          setIsLoadingAuth(false);
         }}
       >
         <Box display="flex" flexDirection="column" gap={2}>
