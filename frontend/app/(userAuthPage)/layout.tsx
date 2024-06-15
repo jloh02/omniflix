@@ -8,7 +8,7 @@ import {
 } from "@/utils/constants";
 import { Box, Card, CardContent, CardHeader, Divider } from "@mui/material";
 import { usePathname } from "next/navigation";
-import React, { useMemo } from "react";
+import React, { Suspense, useMemo } from "react";
 
 const AuthPageLayout: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -63,7 +63,9 @@ const AuthPageLayout: React.FC<{ children: React.ReactNode }> = ({
             borderRadius: "1px",
           }}
         />
-        <CardContent>{children}</CardContent>
+        <CardContent>
+          <Suspense fallback={<div>Loading...</div>}>{children}</Suspense>
+        </CardContent>
       </Card>
     </Box>
   );
