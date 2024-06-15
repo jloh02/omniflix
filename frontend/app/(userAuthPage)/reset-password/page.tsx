@@ -9,7 +9,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { LOGIN_PAGE_ROUTE, PASSWORD_MIN_CHAR_LENGTH } from "@/utils/constants";
 import { useRouter, useSearchParams } from "next/navigation";
 import { resetPassword } from "@/utils/supabase/auth";
@@ -24,13 +24,7 @@ const ResetPasswordPage: React.FC = () => {
   const [showDialog, setShowDialog] = useState(false);
 
   const router = useRouter();
-
-  // Check if there was an error loading the page
   const searchParams = useSearchParams();
-  const loadError = useMemo(
-    () => searchParams.get("error_description") ?? "",
-    [searchParams],
-  );
 
   // Password must be at least 6 characters
   const isInvalidPassword = useMemo(() => {
@@ -47,6 +41,28 @@ const ResetPasswordPage: React.FC = () => {
   supabaseClient.auth
     .getUser()
     .then(({ data: { user } }) => setEmail(user?.email ?? "unknown"));
+
+  // Check if there was an error loading the code or there is a error_description
+  const [loadError, setLoadError] = useState("");
+  useEffect(() => {
+    const errorDescription = searchParams.get("error_description") ?? "";
+    if (errorDescription) {
+      setLoadError(errorDescription);
+      return;
+    }
+
+    const code = searchParams.get("code") ?? "";
+    if (!code) {
+      setLoadError("No code found");
+      return;
+    }
+
+    supabaseClient.auth.exchangeCodeForSession(code).then(({ error }) => {
+      if (error) {
+        setLoadError(error.message);
+      }
+    });
+  }, [searchParams]);
 
   return (
     <>
