@@ -53,10 +53,11 @@ const signUp = async (
 };
 
 const sendPasswordResetLink = async (email: string): Promise<AuthResponse> => {
+  const origin = headers().get("origin");
   const supabase = createClient();
 
   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: "/reset-password",
+    redirectTo: `${origin}/reset-password`,
   });
 
   if (error) {
