@@ -2,6 +2,8 @@
 
 import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
+import { HOME_PAGE_ROUTE } from "../constants";
 
 type AuthResponse = { success: boolean; error?: string };
 
@@ -22,6 +24,11 @@ const signIn = async (
   }
 
   return { success: true };
+};
+
+const signOut = async () => {
+  const supabase = createClient();
+  await supabase.auth.signOut();
 };
 
 const signUp = async (
@@ -75,4 +82,4 @@ const resetPassword = async (password: string): Promise<AuthResponse> => {
   return { success: true };
 };
 
-export { signIn, signUp, sendPasswordResetLink, resetPassword };
+export { signIn, signOut, signUp, sendPasswordResetLink, resetPassword };

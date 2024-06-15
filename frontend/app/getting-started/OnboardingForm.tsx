@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   Button,
@@ -17,7 +17,7 @@ import {
 } from "@/utils/constants";
 import addUserInfo from "@/utils/database/userProfile/addUserInfo";
 import { useRouter } from "next/navigation";
-import signOut from "@/utils/signOut";
+import { signOut } from "@/utils/supabase/auth";
 
 const OnboardingForm: React.FC<{ email: string }> = ({ email }) => {
   const [username, setUsername] = useState("");
