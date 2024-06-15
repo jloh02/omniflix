@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { LOGIN_PAGE_ROUTE, PASSWORD_MIN_CHAR_LENGTH } from "@/utils/constants";
-import { useRouter } from "next/navigation";
-import { resetPassword, signUp } from "@/utils/supabase/auth";
+import { useRouter, useSearchParams } from "next/navigation";
+import { resetPassword } from "@/utils/supabase/auth";
 import { createClient } from "@/utils/supabase/client";
 
 const ResetPasswordPage: React.FC = () => {
@@ -25,6 +25,13 @@ const ResetPasswordPage: React.FC = () => {
 
   const router = useRouter();
 
+  // Check if there was an error loading the page
+  const searchParams = useSearchParams();
+  const loadError = useMemo(
+    () => searchParams.get("error_description") ?? "",
+    [searchParams],
+  );
+
   // Password must be at least 6 characters
   const isInvalidPassword = useMemo(() => {
     return password.length < PASSWORD_MIN_CHAR_LENGTH;
@@ -35,11 +42,8 @@ const ResetPasswordPage: React.FC = () => {
     return password !== confirmPassword;
   }, [password, confirmPassword]);
 
+  // Get current email
   const supabaseClient = createClient();
-  supabaseClient.auth.onAuthStateChange((event, session) => {
-    console.log(event, session);
-  });
-
   supabaseClient.auth
     .getUser()
     .then(({ data: { user } }) => setEmail(user?.email ?? "unknown"));
@@ -50,7 +54,7 @@ const ResetPasswordPage: React.FC = () => {
         <Typography variant="caption" textAlign="center">
           Looks like someone forgot their password? Let's help you change it!
           <br />
-          Email:
+          Email: {email}
         </Typography>
       </Box>
       <form
@@ -116,6 +120,19 @@ const ResetPasswordPage: React.FC = () => {
           <Typography mb={2} variant="h6">
             Password Resetted!
           </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            color="secondary"
+            onClick={() => router.push(LOGIN_PAGE_ROUTE)}
+          >
+            Back to Sign In
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={loadError.length > 0}>
+        <DialogContent sx={{ p: 4 }}>
+          <Typography mb={2} variant="h6"></Typography>
         </DialogContent>
         <DialogActions>
           <Button
