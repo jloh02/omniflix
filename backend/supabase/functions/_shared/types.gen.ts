@@ -150,6 +150,54 @@ export type Database = {
         }
         Relationships: []
       }
+      reviews: {
+        Row: {
+          created_at: string
+          description: string
+          id: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          rating: number
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: number
+          media_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          rating: number
+          title: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: number
+          media_id?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+          rating?: number
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "movies"
+            referencedColumns: ["imdb_id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       users_info: {
         Row: {
           bio: string | null

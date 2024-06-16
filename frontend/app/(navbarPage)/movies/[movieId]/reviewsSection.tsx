@@ -1,13 +1,11 @@
 "use client";
-import InfoSummaryHeader from "@/components/moviePage/InfoSummaryHeader";
 import ReviewCard from "@/components/reviews/ReviewCard";
 import ReviewForm from "@/components/reviews/ReviewForm";
 import { MediaType } from "@/utils/constants";
-import getMovieDetails from "@/utils/database/movies/getMovieDetails";
-import IMovieDetails from "@/utils/types/IMovieDetails";
+import addReview from "@/utils/database/reviews/addReview";
 import { Add } from "@mui/icons-material";
-import { Box, Button, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { Alert, Box, Button, Snackbar, Typography } from "@mui/material";
+import { useState } from "react";
 
 interface ReviewsSectionProps {
   mediaType: MediaType;
@@ -19,70 +17,69 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   mediaId,
 }) => {
   const [showReviewForm, setShowReviewForm] = useState(false);
+  const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
+  const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
 
-  const handleAddReviewClick = () => {
-    setShowReviewForm(!showReviewForm);
+  const handleCloseErrorSnackbar = () => {
+    setShowErrorSnackbar(false);
   };
-  // const [movieDetails, setMovieDetails] = useState<IMovieDetails | null>(null);
-  // const [error, setError] = useState<Error | null>(null);
 
-  // useEffect(() => {
-  //   const fetchMovieDetails = async () => {
-  //     try {
-  //       const details = await getMovieDetails(params.movieId);
-  //       setMovieDetails(details || null);
-  //     } catch (err) {
-  //       setError(err as Error);
-  //     }
-  //   };
+  const handleAddReview = async (
+    rating: number,
+    title: string,
+    description: string,
+  ) => {
+    const error = await addReview(
+      mediaType,
+      mediaId,
+      rating,
+      title,
+      description,
+    );
 
-  //   fetchMovieDetails();
-  // }, [params.movieId]);
-
-  // if (error) {
-  //   return (
-  //     <Typography>Error loading reviews. Please try again later!</Typography>
-  //   );
-  // }
-
-  // if (!movieDetails) {
-  //   return <Typography sx={{ padding: 1 }}>Loading reviews...</Typography>;
-  // }
+    if (error) {
+      setErrorSnackbarMessage(error.message);
+      setShowErrorSnackbar(true);
+    } else {
+      setShowReviewForm(!showReviewForm);
+    }
+  };
 
   return (
-    <Box
-      maxWidth="1000px"
-      marginX={2}
-      marginBottom={2}
-      paddingX={2}
-      flexDirection="column"
-    >
-      <Box display="flex" justifyContent="start" marginBottom={2}>
-        <Typography flex={1} variant="h5">
-          Reviews
-        </Typography>
-        <Button
-          startIcon={<Add />}
-          color="info"
-          onClick={() => setShowReviewForm(!showReviewForm)}
-        >
-          Add review
-        </Button>
-      </Box>
-      {showReviewForm && (
-        <ReviewForm
-          handleSubmit={() => {}}
-          handleClose={() => setShowReviewForm(false)}
+    <>
+      <Box
+        maxWidth="1000px"
+        marginX={2}
+        marginBottom={2}
+        paddingX={2}
+        flexDirection="column"
+      >
+        <Box display="flex" justifyContent="start" marginBottom={2}>
+          <Typography flex={1} variant="h5">
+            Reviews
+          </Typography>
+          <Button
+            startIcon={<Add />}
+            color="info"
+            onClick={() => setShowReviewForm(!showReviewForm)}
+          >
+            Add review
+          </Button>
+        </Box>
+        {showReviewForm && (
+          <ReviewForm
+            handleSubmit={handleAddReview}
+            handleClose={() => setShowReviewForm(false)}
+          />
+        )}
+        <ReviewCard
+          title="Review Title"
+          rating={4}
+          username="John Doe"
+          datetime="2021-12-31"
+          description="This is a review description"
         />
-      )}
-      <ReviewCard
-        title="Review Title"
-        rating={4}
-        username="John Doe"
-        datetime="2021-12-31"
-        description="This is a review description"
-      />
-      {/* {movieDetails.reviews.map((review) => (
+        {/* {movieDetails.reviews.map((review) => (
         <ReviewCard
           key={review.id}
           title={review.title}
@@ -92,7 +89,21 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           description={review.description}
         />
       ))} */}
-    </Box>
+      </Box>
+      <Snackbar
+        open={showErrorSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseErrorSnackbar}
+      >
+        <Alert
+          onClose={handleCloseErrorSnackbar}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {errorSnackbarMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

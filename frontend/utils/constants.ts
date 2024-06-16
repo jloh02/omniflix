@@ -31,6 +31,7 @@ export enum TableNames {
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",
+  REVIEWS = "reviews",
   MOVIES_CACHE = "movies",
 }
 

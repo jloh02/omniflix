@@ -1,8 +1,15 @@
 import React, { useState } from "react";
-import { TextField, Button, Typography, Box, Rating } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Rating,
+  FormHelperText,
+} from "@mui/material";
 
 interface ReviewFormProps {
-  handleSubmit: () => void;
+  handleSubmit: (rating: number, title: string, description: string) => void;
   handleClose: () => void;
 }
 
@@ -14,8 +21,67 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
 
+  // States for error messages
+  const [ratingError, setRatingError] = useState("");
+  const [titleError, setTitleError] = useState("");
+  const [descriptionError, setDescriptionError] = useState("");
+
+  const validateRating = (newValue: number | null) => {
+    // Reset error message
+    setRatingError("");
+
+    if (!newValue) {
+      setRatingError("Rating is required.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateTitle = (newTitle: string) => {
+    // Reset error message
+    setTitleError("");
+
+    if (newTitle.trim() === "") {
+      setTitleError("Title is required.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateDescription = (newDescription: string) => {
+    // Reset error message
+    setDescriptionError("");
+
+    if (newDescription.trim() === "") {
+      setDescriptionError("Description is required.");
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateForm = () => {
+    const isValidRating = validateRating(rating);
+    const isValidTitle = validateTitle(title);
+    const isValidDescription = validateDescription(description);
+
+    return isValidRating && isValidTitle && isValidDescription;
+  };
+
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+    <Box
+      component="form"
+      onSubmit={(e) => {
+        e.preventDefault();
+        if (validateForm()) {
+          handleSubmit(rating ?? 0, title, description);
+        }
+      }}
+      noValidate
+      sx={{ mt: 1 }}
+    >
       <Typography variant="h6" marginBottom={2}>
         Add a Review
       </Typography>
@@ -24,34 +90,41 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
         value={rating}
         onChange={(event, newValue) => {
           setRating(newValue);
+          validateRating(newValue);
         }}
       />
+      {ratingError && (
+        <FormHelperText error={true}>{ratingError}</FormHelperText>
+      )}
       <TextField
         margin="normal"
         required
         fullWidth
         color="secondary"
-        id="title"
         label="Title"
-        name="title"
-        autoComplete="title"
-        autoFocus
         value={title}
-        onChange={(e) => setTitle(e.target.value)}
+        onChange={(e) => {
+          setTitle(e.target.value);
+          validateTitle(e.target.value);
+        }}
+        error={Boolean(titleError)}
+        helperText={titleError}
       />
       <TextField
         margin="normal"
         required
         fullWidth
-        color="secondary"
-        name="description"
-        label="Description"
-        type="text"
-        id="description"
         multiline
         minRows={4}
+        color="secondary"
+        label="Description"
         value={description}
-        onChange={(e) => setDescription(e.target.value)}
+        onChange={(e) => {
+          setDescription(e.target.value);
+          validateDescription(e.target.value);
+        }}
+        error={Boolean(descriptionError)}
+        helperText={descriptionError}
       />
       <Box marginTop={2} marginBottom={4} display="flex" gap={1}>
         <Button type="submit" variant="outlined" color="secondary">
