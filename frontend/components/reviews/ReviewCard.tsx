@@ -24,7 +24,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   description,
 }) => {
   return (
-    <Card raised sx={{ backgroundColor: "transparent" }}>
+    <Card raised sx={{ marginY: 2, backgroundColor: "transparent" }}>
       <CardContent>
         <Box display="flex" alignItems="center" marginBottom={1}>
           <Avatar />

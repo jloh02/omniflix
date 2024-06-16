@@ -36,6 +36,10 @@ alter table "public"."reviews" add constraint "reviews_user_id_fkey" FOREIGN KEY
 
 alter table "public"."reviews" validate constraint "reviews_user_id_fkey";
 
+alter table "public"."reviews" add constraint "reviews_user_id_fkey1" FOREIGN KEY (user_id) REFERENCES users_info(user_id) not valid;
+
+alter table "public"."reviews" validate constraint "reviews_user_id_fkey1";
+
 grant delete on table "public"."reviews" to "anon";
 
 grant insert on table "public"."reviews" to "anon";

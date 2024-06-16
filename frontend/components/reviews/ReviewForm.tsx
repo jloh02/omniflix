@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   TextField,
   Button,
@@ -7,13 +7,16 @@ import {
   Rating,
   FormHelperText,
 } from "@mui/material";
+import IReview from "@/utils/types/IReview";
 
 interface ReviewFormProps {
+  reviewData: IReview | null;
   handleSubmit: (rating: number, title: string, description: string) => void;
   handleClose: () => void;
 }
 
 const ReviewForm: React.FC<ReviewFormProps> = ({
+  reviewData,
   handleSubmit,
   handleClose,
 }) => {
@@ -69,6 +72,15 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
 
     return isValidRating && isValidTitle && isValidDescription;
   };
+
+  // Populate form fields when reviewData changes
+  useEffect(() => {
+    if (reviewData) {
+      setTitle(reviewData.title);
+      setRating(reviewData.rating);
+      setDescription(reviewData.description);
+    }
+  }, [reviewData]);
 
   return (
     <Box
