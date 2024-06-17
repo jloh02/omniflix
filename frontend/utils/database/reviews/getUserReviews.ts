@@ -4,15 +4,15 @@ import { createClient } from "@/utils/supabase/server";
 import { MediaType, TableNames } from "../../constants";
 import { TablesInsert } from "@/utils/supabase/types.gen";
 import IReview from "@/utils/types/IReview";
+import IReviewWithMediaDetails from "@/utils/types/IReviewWithMediaDetails";
 
-export interface ReviewWithUserInfo extends TablesInsert<TableNames.REVIEWS> {
+export interface ReviewWithMovieDetails
+  extends TablesInsert<TableNames.REVIEWS> {
   users_info: { username: string };
+  movies: { title: string; poster_url: string };
 }
 
-async function getReviews(
-  mediaType: MediaType,
-  mediaId: string,
-): Promise<IReview[]> {
+async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -32,20 +32,25 @@ async function getReviews(
       *,
       users_info:user_id (
         username
+      ),
+      movies (
+        title,
+        poster_url
       )
     `,
     )
-    .eq("media_type", mediaType)
-    .eq("media_id", mediaId)
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false })
-    .returns<ReviewWithUserInfo[]>();
+    .returns<ReviewWithMovieDetails[]>();
+
+  console.log(data);
 
   if (error) {
     throw new Error(error.message);
   }
 
   return data.map(
-    (review: ReviewWithUserInfo): IReview => ({
+    (review: ReviewWithMovieDetails): IReviewWithMediaDetails => ({
       createdAt: new Date(review.created_at ?? "").toLocaleString(undefined, {
         day: "2-digit",
         month: "short",
@@ -56,8 +61,10 @@ async function getReviews(
       }),
       userId: review.user_id ?? "",
       username: review.users_info.username,
-      mediaType: mediaType,
-      mediaId: mediaId,
+      mediaType: review.media_type,
+      mediaId: review.media_id,
+      mediaTitle: review.movies.title,
+      mediaPoster: review.movies.poster_url,
       rating: review.rating,
       title: review.title,
       description: review.description,
@@ -65,4 +72,4 @@ async function getReviews(
   );
 }
 
-export default getReviews;
+export default getUserReviews;

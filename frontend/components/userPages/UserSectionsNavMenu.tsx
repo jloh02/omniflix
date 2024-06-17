@@ -2,7 +2,11 @@
 import { usePathname } from "next/navigation";
 import { ListItemText, MenuItem, MenuList } from "@mui/material";
 import Link from "next/link";
-import { FRIENDS_ROUTE, PROFILE_PAGE_ROUTE } from "@/utils/constants";
+import {
+  FRIENDS_ROUTE,
+  PROFILE_PAGE_ROUTE,
+  USER_REVIEWS_ROUTE,
+} from "@/utils/constants";
 
 export default function UserSectionsNavMenu() {
   const pathname = usePathname();
@@ -23,6 +27,11 @@ export default function UserSectionsNavMenu() {
       <Link href={FRIENDS_ROUTE}>
         <MenuItem selected={pathname === FRIENDS_ROUTE}>
           <ListItemText>Friends</ListItemText>
+        </MenuItem>
+      </Link>
+      <Link href={USER_REVIEWS_ROUTE}>
+        <MenuItem selected={pathname === USER_REVIEWS_ROUTE}>
+          <ListItemText>Reviews</ListItemText>
         </MenuItem>
       </Link>
     </MenuList>

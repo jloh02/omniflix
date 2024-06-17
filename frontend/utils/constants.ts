@@ -4,6 +4,7 @@ export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
 export const HOME_PAGE_ROUTE = "/";
 export const LOGIN_PAGE_ROUTE = "/login";
 export const PROFILE_PAGE_ROUTE = "/profile";
+export const USER_REVIEWS_ROUTE = "/profile/reviews";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
 export const MOVIES_PAGE_ROUTE = "/movies";

@@ -8,7 +8,7 @@ import getReviews from "@/utils/database/reviews/getReviews";
 import updateReview from "@/utils/database/reviews/updateReview";
 import { createClient } from "@/utils/supabase/client";
 import IReview from "@/utils/types/IReview";
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -205,7 +205,7 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
             Reviews
           </Typography>
           <Button
-            startIcon={<Add />}
+            startIcon={userReview ? <Edit /> : <Add />}
             color="info"
             onClick={() => setShowReviewForm(!showReviewForm)}
           >
