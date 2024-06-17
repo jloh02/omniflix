@@ -8,7 +8,7 @@ import {
   Box,
 } from "@mui/material";
 import IMovie from "@/utils/types/IMovie";
-import { MediaType } from "@/utils/constants";
+import { MOVIES_PAGE_ROUTE, MediaType } from "@/utils/constants";
 import FavoriteButton from "./FavoriteButton";
 import AddToWatchlistButton from "./AddToWatchlistButton";
 import LikeDislikeButtons from "./LikeDislikeButtons";
@@ -22,19 +22,19 @@ type MovieCardProps = {
 const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <Card className="relative w-52 h-full">
-      <Link href={`/movies/${movie.imdb_id}`}>
-        <CardMedia component="img" src={movie.poster_url} className="h-72" />
+      <Link href={`${MOVIES_PAGE_ROUTE}/${movie.imdbId}`}>
+        <CardMedia component="img" src={movie.posterUrl} className="h-72" />
       </Link>
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
           <Box display="flex" gap={1}>
             <FavoriteButton
               mediaType={MediaType.MOVIE}
-              mediaId={movie.imdb_id}
+              mediaId={movie.imdbId}
             />
             <AddToWatchlistButton
               mediaType={MediaType.MOVIE}
-              mediaId={movie.imdb_id}
+              mediaId={movie.imdbId}
             />
           </Box>
           {showLabel ? (
@@ -74,7 +74,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
         >
           <LikeDislikeButtons
             mediaType={MediaType.MOVIE}
-            mediaId={movie.imdb_id}
+            mediaId={movie.imdbId}
           />
         </Box>
       </CardContent>
