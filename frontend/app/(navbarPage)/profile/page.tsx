@@ -57,6 +57,7 @@ export default async function UserProfile() {
         label="Password"
         value=""
         onUpdate={async (value) => {
+          "use server";
           return await resetPassword(value);
         }}
       />
