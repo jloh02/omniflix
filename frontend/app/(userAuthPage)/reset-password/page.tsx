@@ -134,7 +134,7 @@ const ResetPasswordPage: React.FC = () => {
       <Dialog open={showDialog}>
         <DialogContent sx={{ p: 4 }}>
           <Typography mb={2} variant="h6">
-            Password Resetted!
+            Password has been successfully reset!
           </Typography>
         </DialogContent>
         <DialogActions>
@@ -142,7 +142,7 @@ const ResetPasswordPage: React.FC = () => {
             color="secondary"
             onClick={() => router.push(LOGIN_PAGE_ROUTE)}
           >
-            Back to Sign In
+            Proceed
           </Button>
         </DialogActions>
       </Dialog>
