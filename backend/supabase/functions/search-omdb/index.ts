@@ -8,25 +8,7 @@ import {
   TableNames,
 } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
-
-// Mapping of OMDB key names to usable key name
-type KeyValueMap = { [key: string]: any };
-const KEY_MAP: KeyValueMap = {
-  Title: "title",
-  Year: "year",
-  imdbID: "imdb_id",
-  Poster: "poster_url",
-};
-
-function mapKeys(omdbResult: KeyValueMap) {
-  const newObj: KeyValueMap = {};
-  for (const key in KEY_MAP) {
-    if (key in omdbResult) {
-      newObj[KEY_MAP[key]] = omdbResult[key];
-    }
-  }
-  return newObj;
-}
+import { mapMovieKeys } from "../_shared/movieKeys.ts";
 
 //TODO handle type for various movies, series, episodes
 async function cacheItems(
@@ -34,7 +16,7 @@ async function cacheItems(
   items: any[],
   type: OMDBType
 ) {
-  const entriesToUpsert = items.map(mapKeys);
+  const entriesToUpsert = items.map(mapMovieKeys);
 
   const { error } = await client
     .from(TableNames.MOVIES_CACHE_TABLE)
@@ -103,7 +85,7 @@ Deno.serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         ...resBody,
-        Search: resBody.Search.map(mapKeys),
+        Search: resBody.Search.map(mapMovieKeys),
       })
     );
   }
@@ -120,5 +102,5 @@ Deno.serve(async (req: Request) => {
 
   // Format data so it matches the search API
   await cacheItems(adminSupabaseClient, [titleResBody], type);
-  return new Response(JSON.stringify({ Search: [mapKeys(titleResBody)] }));
+  return new Response(JSON.stringify({ Search: [mapMovieKeys(titleResBody)] }));
 });

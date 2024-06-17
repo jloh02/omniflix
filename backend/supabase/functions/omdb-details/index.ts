@@ -2,13 +2,13 @@ import {
   createClient,
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
-import { objectKeysToLowerCase } from "../_shared/objectKeysToLowerCase.ts";
 import {
   ALLOWED_OMDB_TYPES,
   OMDBType,
   TableNames,
 } from "../_shared/constants.ts";
 import { Tables, TablesInsert } from "../_shared/types.gen.ts";
+import { mapMovieKeys } from "../_shared/movieKeys.ts";
 
 const CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
 
@@ -82,18 +82,18 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const processBody = objectKeysToLowerCase(resBody);
+  const processBody = mapMovieKeys(resBody);
 
   const returnResult: Tables<TableNames.MOVIES_CACHE_TABLE> = {
     created_at: new Date().toISOString(),
     imdb_id: processBody.imdb_id,
     data: processBody,
-    genre: processBody.genre.split(", "),
-    imdb_rating: processBody.imdbRating,
+    genre: (processBody.genre ?? "").split(", "),
+    imdb_rating: processBody.imdb_rating,
     poster_url: processBody.poster_url,
     rated: processBody.rated,
     released: processBody.released,
-    runtime: processBody.runtime.replace(" min", ""),
+    runtime: (processBody.runtime ?? "0").replace(" min", ""),
     title: processBody.title,
     year: processBody.year,
   };

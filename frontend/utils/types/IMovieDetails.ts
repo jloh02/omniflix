@@ -14,11 +14,11 @@ interface IMovieDetails extends IMovie {
   language: string;
   country: string;
   awards: string;
-  poster: string;
+  poster_url: string;
   ratings: { Source: string; Value: string }[];
   metascore: string;
-  imdbRating: string;
-  imdbVotes: string;
+  imdb_rating: string;
+  imdb_votes: string;
   imdbID: string;
   type: string;
   dVD: string;
