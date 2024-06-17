@@ -196,6 +196,13 @@ export type Database = {
             referencedRelation: "users"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "reviews_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
         ]
       }
       users_info: {
