@@ -1,13 +1,44 @@
 "use client";
-import { Avatar, IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import { useCallback, useState } from "react";
 import Link from "next/link";
 import LogoutMenuItem from "./LogoutMenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Person from "@mui/icons-material/Person";
-import { PROFILE_PAGE_ROUTE } from "@/utils/constants";
+import {
+  FRIENDS_ROUTE,
+  PROFILE_PAGE_ROUTE,
+  USER_REVIEWS_ROUTE,
+} from "@/utils/constants";
+import { Group, RateReview } from "@mui/icons-material";
+import { usePathname } from "next/navigation";
+
+const menuItems = [
+  { route: PROFILE_PAGE_ROUTE, label: "Profile", icon: <Person /> },
+  { route: FRIENDS_ROUTE, label: "My Friends", icon: <Group /> },
+  { route: USER_REVIEWS_ROUTE, label: "My Reviews", icon: <RateReview /> },
+];
 
 export default function UserMenu() {
+  const UserNavMenuItem: React.FC<{
+    route: string;
+    label: string;
+    icon: JSX.Element;
+  }> = ({ route, label, icon }) => (
+    <Link href={route}>
+      <MenuItem>
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText>{label}</ListItemText>
+      </MenuItem>
+    </Link>
+  );
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -31,14 +62,14 @@ export default function UserMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Link href={PROFILE_PAGE_ROUTE}>
-          <MenuItem>
-            <ListItemIcon>
-              <Person fontSize="small" />
-            </ListItemIcon>
-            Profile
-          </MenuItem>
-        </Link>
+        {menuItems.map((item) => (
+          <UserNavMenuItem
+            key={item.route}
+            route={item.route}
+            label={item.label}
+            icon={item.icon}
+          />
+        ))}
         <LogoutMenuItem />
       </Menu>
     </>
