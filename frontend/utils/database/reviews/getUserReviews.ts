@@ -43,8 +43,6 @@ async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
     .order("created_at", { ascending: false })
     .returns<ReviewWithMovieDetails[]>();
 
-  console.log(data);
-
   if (error) {
     throw new Error(error.message);
   }
