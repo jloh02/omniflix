@@ -15,7 +15,7 @@ import {
 } from "@/utils/constants";
 import { Group, Person, RateReview } from "@mui/icons-material";
 
-const menuItems = [
+const MENU_ITEMS = [
   { route: PROFILE_PAGE_ROUTE, label: "Basic Info", icon: <Person /> },
   { route: FRIENDS_ROUTE, label: "Friends", icon: <Group /> },
   { route: USER_REVIEWS_ROUTE, label: "Reviews", icon: <RateReview /> },
@@ -45,7 +45,7 @@ export default function UserSectionsNavMenu() {
         width: 200,
       }}
     >
-      {menuItems.map((item) => (
+      {MENU_ITEMS.map((item) => (
         <UserSectionsNavMenuItem
           key={item.route}
           route={item.route}

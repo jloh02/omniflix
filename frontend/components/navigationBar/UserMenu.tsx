@@ -19,7 +19,7 @@ import {
 import { Group, RateReview } from "@mui/icons-material";
 import { usePathname } from "next/navigation";
 
-const menuItems = [
+const MENU_ITEMS = [
   { route: PROFILE_PAGE_ROUTE, label: "Profile", icon: <Person /> },
   { route: FRIENDS_ROUTE, label: "My Friends", icon: <Group /> },
   { route: USER_REVIEWS_ROUTE, label: "My Reviews", icon: <RateReview /> },
@@ -62,7 +62,7 @@ export default function UserMenu() {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        {menuItems.map((item) => (
+        {MENU_ITEMS.map((item) => (
           <UserNavMenuItem
             key={item.route}
             route={item.route}
