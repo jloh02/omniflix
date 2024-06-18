@@ -85,7 +85,7 @@ INSERT INTO
       'username' ||(ROW_NUMBER() OVER()),
       'Bio for user' ||(ROW_NUMBER() OVER())
     FROM
-      generate_series(1, 10)
+      generate_series(1, 8)
   );
 
 -- generate movies

@@ -5,8 +5,10 @@ import {
   DASHBOARD_PAGE_ROUTE,
   HOME_PAGE_ROUTE,
   LOGIN_PAGE_ROUTE,
+  ONBOARDING_PAGE_ROUTE,
   PUBLIC_ROUTES,
 } from "@/utils/constants";
+import getUserInfo from "./utils/database/userProfile/getUserInfo";
 
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -23,11 +25,30 @@ export default async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL(LOGIN_PAGE_ROUTE, request.nextUrl));
   }
 
-  // Redirect logged in users to dashboard
-  if (user && (path === LOGIN_PAGE_ROUTE || path === HOME_PAGE_ROUTE)) {
-    return NextResponse.redirect(
-      new URL(DASHBOARD_PAGE_ROUTE, request.nextUrl),
-    );
+  // User authenticated
+  if (user) {
+    const userInfo = await getUserInfo();
+
+    // Authenticated users should complete onboarding
+    if (!userInfo && path !== ONBOARDING_PAGE_ROUTE) {
+      return NextResponse.redirect(
+        new URL(ONBOARDING_PAGE_ROUTE, request.nextUrl),
+      );
+    }
+
+    // Redirect users who have completed onboarding to dashboard
+    if (userInfo && path === ONBOARDING_PAGE_ROUTE) {
+      return NextResponse.redirect(
+        new URL(DASHBOARD_PAGE_ROUTE, request.nextUrl),
+      );
+    }
+
+    // Redirect logged in users to dashboard when accessing auth pages
+    if (path === LOGIN_PAGE_ROUTE || path === HOME_PAGE_ROUTE) {
+      return NextResponse.redirect(
+        new URL(DASHBOARD_PAGE_ROUTE, request.nextUrl),
+      );
+    }
   }
 
   return res;

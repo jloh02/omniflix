@@ -2,7 +2,12 @@ export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
 
 // Web URL paths
 export const HOME_PAGE_ROUTE = "/";
-export const LOGIN_PAGE_ROUTE = "/login";
+export const LOGIN_PAGE_ROUTE = "/signin";
+export const SIGNUP_PAGE_ROUTE = "/signup";
+export const FORGOT_PASSWORD_PAGE_ROUTE = "/forgot-password";
+export const RESET_PASSWORD_PAGE_ROUTE = "/reset-password";
+export const AUTH_PAGE_ROUTE = "/auth/callback";
+export const ONBOARDING_PAGE_ROUTE = "/getting-started";
 export const PROFILE_PAGE_ROUTE = "/profile";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
@@ -16,7 +21,14 @@ export const API_PREFIX = API_ROUTE + "/v1";
 export const OMDB_ROUTE = API_PREFIX + "/omdb";
 
 // Assume all paths are protected
-export const PUBLIC_ROUTES = [HOME_PAGE_ROUTE, LOGIN_PAGE_ROUTE];
+export const PUBLIC_ROUTES = [
+  HOME_PAGE_ROUTE,
+  LOGIN_PAGE_ROUTE,
+  SIGNUP_PAGE_ROUTE,
+  FORGOT_PASSWORD_PAGE_ROUTE,
+  RESET_PASSWORD_PAGE_ROUTE,
+  AUTH_PAGE_ROUTE,
+];
 
 // Constants for OMDB API
 export const OMDB_API_URL = "http://www.omdbapi.com/";
@@ -26,8 +38,15 @@ export const MINIMUM_SEARCH_LENGTH = 2;
 export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
+// User Info constants
+export const NAME_MAX_CHAR_LENGTH = 30;
+export const USERNAME_MAX_CHAR_LENGTH = 30;
+export const BIO_MAX_CHAR_LENGTH = 150;
+export const PASSWORD_MIN_CHAR_LENGTH = 6;
+
 // Database table names
 export enum TableNames {
+  USERS_INFO = "users_info",
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",
