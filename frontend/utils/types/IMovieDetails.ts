@@ -1,8 +1,6 @@
 import IMovie from "@/utils/types/IMovie";
 
 interface IMovieDetails extends IMovie {
-  title: string;
-  year: string;
   rated: string;
   released: string;
   runtime: string;
@@ -14,12 +12,10 @@ interface IMovieDetails extends IMovie {
   language: string;
   country: string;
   awards: string;
-  poster: string;
   ratings: { Source: string; Value: string }[];
   metascore: string;
   imdbRating: string;
   imdbVotes: string;
-  imdbID: string;
   type: string;
   dVD: string;
   boxOffice: string;
