@@ -98,7 +98,7 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
                 color="info"
                 onClick={(event) => {
                   event.stopPropagation();
-                  router.push(mediaPagePath);
+                  router.push(`${mediaPagePath}#edit`);
                 }}
               >
                 Edit Review

@@ -191,6 +191,27 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
     fetchReviews();
   }, [mediaType, mediaId, reviewSubmitted]);
 
+  useEffect(() => {
+    const checkHash = () => {
+      if (window.location.hash === "#edit") {
+        setShowReviewForm(true);
+      } else {
+        setShowReviewForm(false);
+      }
+    };
+
+    // Check the hash initially in case the user navigates directly with it
+    checkHash();
+
+    // Listen for hash changes
+    window.addEventListener("hashchange", checkHash, false);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("hashchange", checkHash, false);
+    };
+  }, []);
+
   return (
     <>
       <Box marginX={2} marginBottom={2} paddingX={2} flexDirection="column">
