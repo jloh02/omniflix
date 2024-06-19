@@ -193,31 +193,18 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
 
   return (
     <>
-      <Box
-        maxWidth="1000px"
-        marginX={2}
-        marginBottom={2}
-        paddingX={2}
-        flexDirection="column"
-      >
+      <Box marginX={2} marginBottom={2} paddingX={2} flexDirection="column">
         <Box display="flex" justifyContent="start" marginBottom={2} gap={1}>
           <Typography flex={1} variant="h5">
             Reviews
           </Typography>
-          <Button
-            startIcon={userReview ? <Edit /> : <Add />}
-            color="info"
-            onClick={() => setShowReviewForm(!showReviewForm)}
-          >
-            {userReview ? "Edit Review" : "Add Review"}
-          </Button>
-          {userReview && (
+          {!userReview && !showReviewForm && (
             <Button
-              startIcon={<Delete />}
-              color="error"
-              onClick={() => setShowDeleteConfirm(true)}
+              startIcon={<Add />}
+              color="info"
+              onClick={() => setShowReviewForm(!showReviewForm)}
             >
-              Delete Review
+              Add Review
             </Button>
           )}
         </Box>
@@ -230,7 +217,25 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         )}
         {userReview && !showReviewForm && (
           <Box>
-            <Typography variant="h6">Your Review</Typography>
+            <Box display="flex" justifyContent="start">
+              <Typography variant="h6" flex={1}>
+                Your Review
+              </Typography>
+              <Button
+                startIcon={<Edit />}
+                color="info"
+                onClick={() => setShowReviewForm(!showReviewForm)}
+              >
+                Edit Review
+              </Button>
+              <Button
+                startIcon={<Delete />}
+                color="error"
+                onClick={() => setShowDeleteConfirm(true)}
+              >
+                Delete Review
+              </Button>
+            </Box>
             <ReviewCard
               key={userReview.userId}
               title={userReview.title}
