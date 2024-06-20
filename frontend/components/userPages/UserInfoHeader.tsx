@@ -1,9 +1,13 @@
-import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
+"use server";
 import { Avatar, Box, Typography } from "@mui/material";
 
-const UserSectionHeader: React.FC = async () => {
-  const userInfo = await getUserAccountInfo();
+interface UserInfoHeaderProps {
+  name: string;
+  username: string;
+  bio: string;
+}
 
+const UserInfoHeader: React.FC<UserInfoHeaderProps> = async (userInfo) => {
   return (
     <Box
       width="100%"
@@ -38,4 +42,4 @@ const UserSectionHeader: React.FC = async () => {
   );
 };
 
-export default UserSectionHeader;
+export default UserInfoHeader;

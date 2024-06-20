@@ -1,15 +1,21 @@
 import { Box } from "@mui/system";
-import UserSectionHeader from "./UserSectionHeader";
+import UserInfoHeader from "./UserInfoHeader";
 import UserSectionsNavMenu from "./UserSectionsNavMenu";
+import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
 
-export default function UserPageTemplate({
-  children,
-}: {
+interface UserPageTemplateProps {
   children: React.ReactNode;
-}) {
+}
+
+const UserPageTemplate: React.FC<UserPageTemplateProps> = async (props) => {
+  const userInfo = await getUserAccountInfo();
   return (
     <>
-      <UserSectionHeader />
+      <UserInfoHeader
+        name={userInfo.name}
+        username={userInfo.username}
+        bio={userInfo.bio ?? ""}
+      />
       <Box sx={{ width: "100%", display: "flex", alignItems: "flex-start" }}>
         <UserSectionsNavMenu />
         <Box
@@ -21,9 +27,11 @@ export default function UserPageTemplate({
             boxShadow: "0px 3px 5px 2px rgba(128, 128, 128, 0.5)",
           }}
         >
-          {children}
+          {props.children}
         </Box>
       </Box>
     </>
   );
-}
+};
+
+export default UserPageTemplate;

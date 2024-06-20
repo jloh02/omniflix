@@ -1,3 +1,4 @@
+import UserInfoHeader from "@/components/userPages/UserInfoHeader";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import { Box, Button, Typography } from "@mui/material";
 
@@ -55,9 +56,11 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
       flexDirection="column"
       justifyContent="center"
     >
-      <Typography>{params.username}</Typography>
-      <Typography>{data.toString()}</Typography>
-      <Typography>{error}</Typography>
+      <UserInfoHeader
+        name={data.name}
+        username={data.username}
+        bio={data.bio ?? ""}
+      />
     </Box>
   );
 };
