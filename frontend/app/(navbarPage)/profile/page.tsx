@@ -3,14 +3,13 @@ import { Typography } from "@mui/material";
 import UserProfileRow from "@/components/userProfile/UserProfileRow";
 import React from "react";
 import UserPageTemplate from "@/components/userPages/UserPageTemplate";
-import getUserInfo from "@/utils/database/userProfile/getUserInfo";
-import updateUserInfo from "@/utils/database/userProfile/updateUserInfo";
+import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
+import updateUserAccountInfo from "@/utils/database/userProfile/updateUserAccountInfo";
 import { createClient } from "@/utils/supabase/server";
-import DeleteAccountButton from "./deleteAccountButton";
 import { resetPassword, updateEmail } from "@/utils/supabase/auth";
 
 export default async function UserProfile() {
-  const userInfo = await getUserInfo();
+  const userInfo = await getUserAccountInfo();
 
   // Fetch user
   const supabase = createClient();
@@ -26,7 +25,7 @@ export default async function UserProfile() {
         value={userInfo.name || ""}
         onUpdate={async (value) => {
           "use server";
-          return await updateUserInfo("name", value);
+          return await updateUserAccountInfo("name", value);
         }}
       />
       <UserProfileRow
@@ -34,7 +33,7 @@ export default async function UserProfile() {
         value={userInfo.username}
         onUpdate={async (value) => {
           "use server";
-          return await updateUserInfo("username", value);
+          return await updateUserAccountInfo("username", value);
         }}
       />
       <UserProfileRow
@@ -42,7 +41,7 @@ export default async function UserProfile() {
         value={userInfo.bio || ""}
         onUpdate={async (value) => {
           "use server";
-          return await updateUserInfo("bio", value);
+          return await updateUserAccountInfo("bio", value);
         }}
       />
       <UserProfileRow

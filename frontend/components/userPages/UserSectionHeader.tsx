@@ -1,8 +1,8 @@
-import getUserInfo from "@/utils/database/userProfile/getUserInfo";
+import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
 import { Avatar, Box, Typography } from "@mui/material";
 
 const UserSectionHeader: React.FC = async () => {
-  const userInfo = await getUserInfo();
+  const userInfo = await getUserAccountInfo();
 
   return (
     <Box

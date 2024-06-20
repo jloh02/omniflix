@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
 
-async function getUserInfo(): Promise<Tables<TableNames.USERS_INFO>> {
+async function getUserAccountInfo(): Promise<Tables<TableNames.USERS_INFO>> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -33,4 +33,4 @@ async function getUserInfo(): Promise<Tables<TableNames.USERS_INFO>> {
   return data[0];
 }
 
-export default getUserInfo;
+export default getUserAccountInfo;
