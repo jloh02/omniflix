@@ -44,12 +44,17 @@ const ShareDialogIconButton: React.FC<ShareDialogIconButtonProps> = ({
   );
 };
 
-const CopyLinkIconButton: React.FC = () => {
+interface ShareIconButtonProps {
+  text: string;
+  link: string;
+}
+
+const CopyLinkIconButton: React.FC<ShareIconButtonProps> = ({ link }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleCopyLink = async () => {
     try {
-      await navigator.clipboard.writeText(window.location.href);
+      await navigator.clipboard.writeText(link);
       setSnackbarOpen(true);
     } catch (err) {
       console.error("Failed to copy: ", err);
@@ -102,17 +107,16 @@ const CopyLinkIconButton: React.FC = () => {
   );
 };
 
-interface ShareIconButtonProps {
-  text: string;
-}
-
-const NativeShareIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const NativeShareIconButton: React.FC<ShareIconButtonProps> = ({
+  text,
+  link,
+}) => {
   const handleShare = async () => {
     try {
       await navigator.share({
         title: "Omniflix",
         text: text,
-        url: window.location.href,
+        url: link,
       });
     } catch (err) {
       console.error("Failed to share: ", err);
@@ -128,13 +132,10 @@ const NativeShareIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const MailIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const MailIconButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
-      window.open(
-        `mailto:?subject=${text}&body=${window.location.href}`,
-        "_blank",
-      );
+      window.open(`mailto:?subject=${text}&body=${link}`, "_blank");
     } catch (err) {
       console.error("Failed to share: ", err);
     }
@@ -149,13 +150,10 @@ const MailIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const FacebookIconButton: React.FC = () => {
+const FacebookIconButton: React.FC<ShareIconButtonProps> = ({ link }) => {
   const handleShare = async () => {
     try {
-      window.open(
-        `https://facebook.com/sharer/sharer.php?u=${window.location.href}`,
-        "_blank",
-      );
+      window.open(`https://facebook.com/sharer/sharer.php?u=${link}`, "_blank");
     } catch (err) {
       console.error("Failed to share: ", err);
     }
@@ -170,11 +168,11 @@ const FacebookIconButton: React.FC = () => {
   );
 };
 
-const LinkedInIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const LinkedInIconButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
       window.open(
-        `https://www.linkedin.com/shareArticle?mini=true&url=${window.location.href}&title=${text}&summary=${text}&source=${window.location.href}`,
+        `https://www.linkedin.com/shareArticle?mini=true&url=${link}&title=${text}&summary=${text}&source=${link}`,
         "_blank",
       );
     } catch (err) {
@@ -191,11 +189,11 @@ const LinkedInIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const RedditIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const RedditIconButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
       window.open(
-        `https://www.reddit.com/submit?url=${window.location.href}&title=${text}`,
+        `https://www.reddit.com/submit?url=${link}&title=${text}`,
         "_blank",
       );
     } catch (err) {
@@ -212,13 +210,10 @@ const RedditIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const TelegramIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const TelegramIconButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
-      window.open(
-        `https://t.me/share/url?text=${text}&url=${window.location.href}`,
-        "_blank",
-      );
+      window.open(`https://t.me/share/url?text=${text}&url=${link}`, "_blank");
     } catch (err) {
       console.error("Failed to share: ", err);
     }
@@ -233,13 +228,10 @@ const TelegramIconButton: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const WhatsAppIcon: React.FC<ShareIconButtonProps> = ({ text }) => {
+const WhatsAppIcon: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
-      window.open(
-        `https://wa.me/?text=${text} ${window.location.href}`,
-        "_blank",
-      );
+      window.open(`https://wa.me/?text=${text} ${link}`, "_blank");
     } catch (err) {
       console.error("Failed to share: ", err);
     }
@@ -254,11 +246,11 @@ const WhatsAppIcon: React.FC<ShareIconButtonProps> = ({ text }) => {
   );
 };
 
-const XTwitterIcon: React.FC<ShareIconButtonProps> = ({ text }) => {
+const XTwitterIcon: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const handleShare = async () => {
     try {
       window.open(
-        `https://twitter.com/intent/tweet?text=${text} ${window.location.href}`,
+        `https://twitter.com/intent/tweet?text=${text} ${link}`,
         "_blank",
       );
     } catch (err) {
@@ -279,9 +271,15 @@ interface ShareDialogProps {
   open: boolean;
   onClose: () => void;
   text: string;
+  link: string;
 }
 
-const ShareDialog: React.FC<ShareDialogProps> = ({ open, onClose, text }) => {
+const ShareDialog: React.FC<ShareDialogProps> = ({
+  open,
+  onClose,
+  text,
+  link,
+}) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle
@@ -307,15 +305,15 @@ const ShareDialog: React.FC<ShareDialogProps> = ({ open, onClose, text }) => {
             padding: 0,
           }}
         >
-          <CopyLinkIconButton />
-          <NativeShareIconButton text={text} />
-          <MailIconButton text={text} />
-          <WhatsAppIcon text={text} />
-          <TelegramIconButton text={text} />
-          <FacebookIconButton />
-          <XTwitterIcon text={text} />
-          <LinkedInIconButton text={text} />
-          <RedditIconButton text={text} />
+          <CopyLinkIconButton text={text} link={link} />
+          <NativeShareIconButton text={text} link={link} />
+          <MailIconButton text={text} link={link} />
+          <WhatsAppIcon text={text} link={link} />
+          <TelegramIconButton text={text} link={link} />
+          <FacebookIconButton text={text} link={link} />
+          <XTwitterIcon text={text} link={link} />
+          <LinkedInIconButton text={text} link={link} />
+          <RedditIconButton text={text} link={link} />
           {/* Add more share options as needed */}
         </List>
       </DialogContent>

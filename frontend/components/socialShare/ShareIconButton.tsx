@@ -6,9 +6,10 @@ import ShareDialog from "./ShareDialog";
 
 interface ShareIconButtonProps {
   text: string;
+  link?: string;
 }
 
-const ShareButton: React.FC<ShareIconButtonProps> = ({ text }) => {
+const ShareButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const [open, setOpen] = useState(false);
 
   const toggleDialog = () => {
@@ -39,7 +40,12 @@ const ShareButton: React.FC<ShareIconButtonProps> = ({ text }) => {
           Share
         </Button>
       </Tooltip>
-      <ShareDialog open={open} onClose={toggleDialog} text={text} />
+      <ShareDialog
+        open={open}
+        onClose={toggleDialog}
+        text={text}
+        link={link ?? window.location.href}
+      />
     </>
   );
 };
