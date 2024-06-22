@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  FormControl,
   Link as MuiLink,
   TextField,
   Typography,

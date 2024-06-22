@@ -53,7 +53,11 @@ const SignInForm: React.FC = () => {
           if (success) {
             router.push(DASHBOARD_PAGE_ROUTE);
           }
-          setIsLoadingAuth(false);
+          // Although we can stop loading after pushing the router,
+          // we should prevent the user from interacting until navigated away
+          else {
+            setIsLoadingAuth(false);
+          }
         }}
       >
         <Box display="flex" flexDirection="column" gap={2}>
