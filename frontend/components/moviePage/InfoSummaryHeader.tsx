@@ -5,7 +5,7 @@ import { MediaType } from "@/utils/constants";
 import AddToWatchlistButton from "../cards/AddToWatchlistButton";
 import LikeDislikeButtons from "../cards/LikeDislikeButtons";
 import { StarOutlined } from "@mui/icons-material";
-import ShareIconButton from "../socialShare/ShareIconButton";
+import ShareButton from "../socialShare/ShareIconButton";
 
 interface ButtonsRowProps {
   mediaType: MediaType;
@@ -23,7 +23,7 @@ const ButtonsRow: React.FC<ButtonsRowProps> = ({
       <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
       <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
       <LikeDislikeButtons mediaType={mediaType} mediaId={mediaId} />
-      <ShareIconButton text={`Check out ${mediaTitle} on Omniflix!`} />
+      <ShareButton text={`Check out ${mediaTitle} on Omniflix!`} />
     </Box>
   );
 };
