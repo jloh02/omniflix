@@ -20,8 +20,8 @@ import {
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovie from "@/utils/types/IMovie";
-import { objectKeysToLowerCase } from "@/utils/objectKeysToLowerCase";
 import searchOmdb from "@/utils/database/movies/searchOmdb";
+import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
 const Movies: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -34,6 +34,7 @@ const Movies: React.FC = () => {
     DEBOUNCE_DURATION_IN_MS,
   );
 
+  // Handle search event
   useEffect(() => {
     setSearchResult([]);
     setError("");
@@ -46,6 +47,7 @@ const Movies: React.FC = () => {
     setIsLoading(true);
   }, [searchInput]);
 
+  // Handle search
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
 
@@ -64,7 +66,7 @@ const Movies: React.FC = () => {
 
       setSearchResult(
         (response["Search"] as object[]).map(
-          (movie: object) => objectKeysToLowerCase(movie) as IMovie,
+          (movie: object) => objectKeysSnakeCaseToCamelCase(movie) as IMovie,
         ),
       );
       setIsLoading(false);
@@ -76,6 +78,8 @@ const Movies: React.FC = () => {
       <Typography align="left" variant="h4" className="!my-4">
         Movies
       </Typography>
+
+      {/* Search bar */}
       <TextField
         InputProps={{
           startAdornment: (

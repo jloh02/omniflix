@@ -64,7 +64,7 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
       <Box display="flex" alignItems="start">
         <CardMedia
           component="img"
-          image={movie.poster}
+          image={movie.posterUrl}
           alt={movie.title}
           sx={{ height: "30vh", width: "auto", objectFit: "contain", mr: 2 }}
         />
@@ -77,7 +77,7 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
             {movie.genre}
           </Typography>
           <RatingsRow imdbRating={movie.imdbRating} />
-          <ButtonsRow mediaType={MediaType.MOVIE} mediaId={movie.imdbID} />
+          <ButtonsRow mediaType={MediaType.MOVIE} mediaId={movie.imdbId} />
         </Box>
       </Box>
       <Typography variant="body2" align="justify" marginTop={1}>
