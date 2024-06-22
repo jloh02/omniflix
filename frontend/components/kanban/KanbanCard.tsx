@@ -141,6 +141,12 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
         </DialogContent>
         <DialogActions>
           <Button
+            sx={{ color: "white" }}
+            onClick={() => setIsConfirmationDialogOpen(false)}
+          >
+            Cancel
+          </Button>
+          <Button
             color="secondary"
             onClick={() => {
               removeItem(item.id);
@@ -149,12 +155,6 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
             autoFocus
           >
             Confirm
-          </Button>
-          <Button
-            sx={{ color: "white" }}
-            onClick={() => setIsConfirmationDialogOpen(false)}
-          >
-            Cancel
           </Button>
         </DialogActions>
       </Dialog>
