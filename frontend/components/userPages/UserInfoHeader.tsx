@@ -35,7 +35,7 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async (userInfo) => {
             <Typography sx={{ fontStyle: "italic" }}>
               @{userInfo.username}
             </Typography>
-            <Box margin={1}>
+            <Box marginY={1}>
               <ShareIconButton
                 text={`Check out ${userInfo.name}'s profile on Omniflix!`}
               />
