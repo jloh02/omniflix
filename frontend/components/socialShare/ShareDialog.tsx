@@ -284,7 +284,20 @@ interface ShareDialogProps {
 const ShareDialog: React.FC<ShareDialogProps> = ({ open, onClose, text }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Share</DialogTitle>
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          Share
+        </Typography>
+        <IconButton aria-label="close" onClick={onClose} size="small">
+          <Close />
+        </IconButton>
+      </DialogTitle>
       <DialogContent>
         <List
           style={{
