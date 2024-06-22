@@ -4,6 +4,8 @@ import getMovieDetails from "@/utils/database/movies/getMovieDetails";
 import IMovieDetails from "@/utils/types/IMovieDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
+import ReviewsSection from "./reviewsSection";
+import { MediaType } from "@/utils/constants";
 
 interface MoviePageProps {
   params: {
@@ -66,6 +68,7 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
       justifyContent="center"
     >
       <InfoSummaryHeader movie={movieDetails} />
+      <ReviewsSection mediaType={MediaType.MOVIE} mediaId={params.movieId} />
     </Box>
   );
 };
