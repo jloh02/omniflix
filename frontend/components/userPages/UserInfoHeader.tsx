@@ -1,5 +1,6 @@
 "use server";
 import { Avatar, Box, Typography } from "@mui/material";
+import ShareIconButton from "../socialShare/ShareIconButton";
 
 interface UserInfoHeaderProps {
   name: string;
@@ -34,6 +35,11 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async (userInfo) => {
             <Typography sx={{ fontStyle: "italic" }}>
               @{userInfo.username}
             </Typography>
+            <Box margin={1}>
+              <ShareIconButton
+                text={`Check out ${userInfo.name}'s profile on Omniflix!`}
+              />
+            </Box>
           </Box>
         </Box>
         <Typography>{userInfo.bio}</Typography>
