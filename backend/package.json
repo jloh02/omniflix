@@ -6,7 +6,8 @@
     "db:status": "supabase status",
     "db:stop": "supabase stop",
     "db:reset": "supabase db reset",
-    "db:migrate": "supabase db diff --use-migra -f output"
+    "db:migrate": "supabase db diff --use-migra -f output",
+    "test": "deno test --allow-read --allow-env --allow-net"
   },
   "devDependencies": {
     "supabase": "^1.167.4"
