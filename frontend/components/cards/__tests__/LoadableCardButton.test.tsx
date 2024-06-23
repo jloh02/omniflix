@@ -17,15 +17,44 @@ describe("LoadableCardButton", () => {
     loadingText: "Loading...",
     enabledText: "Enabled",
     disabledText: "Disabled",
-    childIcon: <span>Icon</span>, // Simplified for testing
+    childIcon: (isEnabled: boolean) =>
+      isEnabled ? <div>Icon Enabled</div> : <div>Icon Disabled</div>, // Simplified for testing
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test("renders without crashing", () => {
+  it("renders without crashing", () => {
     const { getByText } = render(<LoadableCardButton {...defaultProps} />);
-    expect(getByText("Icon")).toBeInTheDocument();
+    expect(getByText(/Icon/)).toBeInTheDocument();
+  });
+
+  it("renders loading state initially", () => {
+    const { getByRole } = render(<LoadableCardButton {...defaultProps} />);
+    expect(getByRole("progressbar")).toBeInTheDocument();
+  });
+
+  it("calls checkEnabledFn on mount with correct arguments", () => {
+    render(<LoadableCardButton {...defaultProps} />);
+    expect(mockCheckEnabledFn).toHaveBeenCalledWith("movie", "123");
+    expect(mockCheckEnabledFn).toHaveBeenCalledTimes(1);
+  });
+
+  it("changes IconButton opacity during loading", async () => {
+    const { getByRole } = render(<LoadableCardButton {...defaultProps} />);
+    fireEvent.click(getByRole("button"));
+    await waitFor(() => {
+      expect(getByRole("progressbar")).toHaveStyle({ opacity: 1 });
+      expect(getByRole("button")).toHaveStyle({ opacity: 0 });
+    });
+  });
+
+  it("properly cleans up on unmount", () => {
+    const { unmount } = render(<LoadableCardButton {...defaultProps} />);
+    unmount();
+    expect(mockCheckEnabledFn).toHaveBeenCalledTimes(1);
+    expect(mockDisableFn).not.toHaveBeenCalled();
+    expect(mockEnableFn).not.toHaveBeenCalled();
   });
 });
