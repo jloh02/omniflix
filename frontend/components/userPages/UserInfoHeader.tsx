@@ -1,6 +1,11 @@
-"use server";
+"use client";
 import { Avatar, Box, Typography } from "@mui/material";
-import ShareButton from "../socialShare/ShareIconButton";
+import ShareButton from "../socialShare/ShareButton";
+import {
+  PROFILE_PAGE_ROUTE,
+  USER_PUBLIC_PROFILE_PAGE_ROUTE,
+} from "@/utils/constants";
+import { useEffect, useState } from "react";
 
 interface UserInfoHeaderProps {
   name: string;
@@ -8,7 +13,24 @@ interface UserInfoHeaderProps {
   bio: string;
 }
 
-const UserInfoHeader: React.FC<UserInfoHeaderProps> = async (userInfo) => {
+const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
+  name,
+  username,
+  bio,
+}) => {
+  const [shareRoute, setShareRoute] = useState<string | undefined>();
+
+  useEffect(() => {
+    // This runs on the client side, where window is defined
+    const isProfilePageRoute = window.location.pathname == PROFILE_PAGE_ROUTE;
+    const newShareRoute = isProfilePageRoute
+      ? `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`
+      : undefined;
+    console.log(isProfilePageRoute);
+    console.log(window.location);
+    setShareRoute(newShareRoute);
+  }, [username]);
+
   return (
     <Box
       width="100%"
@@ -31,18 +53,17 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async (userInfo) => {
         <Box display="flex" alignItems="center" justifyContent="center" gap={3}>
           <Avatar sx={{ width: "15vh", height: "15vh" }} />
           <Box>
-            <Typography variant="h4">{userInfo.name}</Typography>
-            <Typography sx={{ fontStyle: "italic" }}>
-              @{userInfo.username}
-            </Typography>
+            <Typography variant="h4">{name}</Typography>
+            <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
             <Box marginY={1}>
               <ShareButton
-                text={`Check out ${userInfo.name}'s profile on Omniflix!`}
+                text={`Check out ${name}'s profile on Omniflix!`}
+                link={shareRoute}
               />
             </Box>
           </Box>
         </Box>
-        <Typography>{userInfo.bio}</Typography>
+        <Typography>{bio}</Typography>
       </Box>
     </Box>
   );

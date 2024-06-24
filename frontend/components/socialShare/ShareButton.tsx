@@ -1,20 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Tooltip, Button } from "@mui/material";
 import { Reply } from "@mui/icons-material";
 import ShareDialog from "./ShareDialog";
 
-interface ShareIconButtonProps {
+interface ShareButtonProps {
   text: string;
   link?: string;
 }
 
-const ShareButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
+const ShareButton: React.FC<ShareButtonProps> = ({ text, link }) => {
   const [open, setOpen] = useState(false);
+  const [shareLink, setComputedLink] = useState("");
 
   const toggleDialog = () => {
     setOpen(!open);
   };
+
+  useEffect(() => {
+    // This runs on the client side, where window is defined
+    setComputedLink(link ?? window.location.href);
+  }, [link]);
 
   return (
     <>
@@ -44,7 +50,7 @@ const ShareButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
         open={open}
         onClose={toggleDialog}
         text={text}
-        link={link ?? window.location.href}
+        link={shareLink}
       />
     </>
   );

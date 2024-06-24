@@ -5,7 +5,7 @@ import { MediaType } from "@/utils/constants";
 import AddToWatchlistButton from "../cards/AddToWatchlistButton";
 import LikeDislikeButtons from "../cards/LikeDislikeButtons";
 import { StarOutlined } from "@mui/icons-material";
-import ShareButton from "../socialShare/ShareIconButton";
+import ShareButton from "../socialShare/ShareButton";
 
 interface ButtonsRowProps {
   mediaType: MediaType;
