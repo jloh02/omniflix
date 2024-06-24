@@ -7,7 +7,9 @@ interface UserPageTemplateProps {
   children: React.ReactNode;
 }
 
-const UserPageTemplate: React.FC<UserPageTemplateProps> = async (props) => {
+const UserPageTemplate: React.FC<UserPageTemplateProps> = async ({
+  children,
+}) => {
   const userInfo = await getUserAccountInfo();
   return (
     <>
@@ -27,7 +29,7 @@ const UserPageTemplate: React.FC<UserPageTemplateProps> = async (props) => {
             boxShadow: "0px 3px 5px 2px rgba(128, 128, 128, 0.5)",
           }}
         >
-          {props.children}
+          {children}
         </Box>
       </Box>
     </>
