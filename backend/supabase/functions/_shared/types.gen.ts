@@ -205,6 +205,56 @@ export type Database = {
           },
         ]
       }
+      user_following: {
+        Row: {
+          created_at: string
+          following_id: string
+          id: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          following_id: string
+          id?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          following_id?: string
+          id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_following_following_id_fkey"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_following_following_id_fkey1"
+            columns: ["following_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "user_following_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "user_following_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       users_info: {
         Row: {
           bio: string | null
