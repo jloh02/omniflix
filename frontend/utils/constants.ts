@@ -10,6 +10,7 @@ export const AUTH_PAGE_ROUTE = "/auth/callback";
 export const ONBOARDING_PAGE_ROUTE = "/getting-started";
 export const PROFILE_PAGE_ROUTE = "/profile";
 export const USER_PUBLIC_PROFILE_PAGE_ROUTE = "/user";
+export const USER_REVIEWS_ROUTE = "/profile/reviews";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
 export const MOVIES_PAGE_ROUTE = "/movies";
@@ -51,6 +52,7 @@ export enum TableNames {
   WATCHLIST = "watchlist_entries",
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",
+  REVIEWS = "reviews",
   MOVIES_CACHE = "movies",
 }
 

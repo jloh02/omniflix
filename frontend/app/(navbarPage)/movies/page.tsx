@@ -34,6 +34,7 @@ const Movies: React.FC = () => {
     DEBOUNCE_DURATION_IN_MS,
   );
 
+  // Handle search event
   useEffect(() => {
     setSearchResult([]);
     setError("");
@@ -46,6 +47,7 @@ const Movies: React.FC = () => {
     setIsLoading(true);
   }, [searchInput]);
 
+  // Handle search
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
 
@@ -76,6 +78,8 @@ const Movies: React.FC = () => {
       <Typography align="left" variant="h4" className="!my-4">
         Movies
       </Typography>
+
+      {/* Search bar */}
       <TextField
         InputProps={{
           startAdornment: (
