@@ -14,7 +14,10 @@ export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isPublicRoute = PUBLIC_ROUTES.includes(path);
 
+  // Refresh expired Auth tokens and store them.
   const res: NextResponse = await updateSession(request);
+
+  // Fetch current user
   const supabase = createClient();
   const {
     data: { user },

@@ -53,6 +53,7 @@ export enum TableNames {
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",
   REVIEWS = "reviews",
+  USER_FOLLOWING = "user_following",
   MOVIES_CACHE = "movies",
 }
 
