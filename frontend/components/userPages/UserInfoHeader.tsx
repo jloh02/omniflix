@@ -1,18 +1,25 @@
 "use server";
 import { Avatar, Box, Typography } from "@mui/material";
 import ShareButton from "../socialShare/ShareButton";
+import FollowButton from "../following/FollowButton";
+import isFollowingUser from "@/utils/database/followers/isFollowingUser";
 
 interface UserInfoHeaderProps {
+  userId: string;
   name: string;
   username: string;
   bio: string;
 }
 
-const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
+const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
+  userId,
   name,
   username,
   bio,
 }) => {
+  const { data: isFollowing, error: isFollowingError } =
+    (await isFollowingUser(userId)) || {};
+
   return (
     <Box
       width="100%"
@@ -37,7 +44,11 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
           <Box>
             <Typography variant="h4">{name}</Typography>
             <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
-            <Box marginY={1}>
+            <Box display="flex" marginY={1} gap={1}>
+              <FollowButton
+                userId={userId}
+                isFollowingUser={isFollowing ?? false}
+              />
               <ShareButton text={`Check out ${name}'s profile on Omniflix!`} />
             </Box>
           </Box>

@@ -57,6 +57,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
       justifyContent="center"
     >
       <UserInfoHeader
+        userId={data.user_id}
         name={data.name}
         username={data.username}
         bio={data.bio ?? ""}
