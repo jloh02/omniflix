@@ -2,13 +2,13 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "../../constants";
-import { TablesInsert } from "@/utils/supabase/types.gen";
+import { Tables } from "@/utils/supabase/types.gen";
+import { AuthResponse } from "@/utils/supabase/auth";
 
-async function addUserInfo(
-  name: string,
-  username: string,
-  bio: string,
-): Promise<string> {
+async function updateUserAccountInfo(
+  column: string,
+  value: string,
+): Promise<AuthResponse> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -20,18 +20,19 @@ async function addUserInfo(
     throw new Error("Please login again.");
   }
 
-  // Add user info
+  // Update user info
   const { error } = await supabase
     .from(TableNames.USERS_INFO)
-    .insert({ user_id: user.id, name, username, bio })
-    .returns<TablesInsert<TableNames.USERS_INFO>[]>();
+    .update({ [column]: value })
+    .eq("user_id", user.id)
+    .returns<Tables<TableNames.USERS_INFO>[]>();
 
   let errorMessage = error?.message;
-  if (error?.code === "23505" && error?.message.includes("username")) {
+  if (error?.code === "23505" && column === "username") {
     errorMessage = "The username is taken. Please select a different username.";
   }
 
-  return errorMessage || "";
+  return { success: Boolean(errorMessage), error: errorMessage };
 }
 
-export default addUserInfo;
+export default updateUserAccountInfo;

@@ -8,7 +8,7 @@ import {
   ONBOARDING_PAGE_ROUTE,
   PUBLIC_ROUTES,
 } from "@/utils/constants";
-import getUserInfo from "./utils/database/userProfile/getUserInfo";
+import getUserAccountInfo from "./utils/database/userProfile/getUserAccountInfo";
 
 export default async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
@@ -27,7 +27,7 @@ export default async function middleware(request: NextRequest) {
 
   // User authenticated
   if (user) {
-    const userInfo = await getUserInfo();
+    const userInfo = await getUserAccountInfo();
 
     // Authenticated users should complete onboarding
     if (!userInfo && path !== ONBOARDING_PAGE_ROUTE) {

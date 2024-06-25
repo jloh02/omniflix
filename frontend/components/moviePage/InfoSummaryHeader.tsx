@@ -5,18 +5,25 @@ import { MediaType } from "@/utils/constants";
 import AddToWatchlistButton from "../cards/AddToWatchlistButton";
 import LikeDislikeButtons from "../cards/LikeDislikeButtons";
 import { StarOutlined } from "@mui/icons-material";
+import ShareButton from "../socialShare/ShareButton";
 
 interface ButtonsRowProps {
   mediaType: MediaType;
   mediaId: string;
+  mediaTitle: string;
 }
 
-const ButtonsRow: React.FC<ButtonsRowProps> = ({ mediaType, mediaId }) => {
+const ButtonsRow: React.FC<ButtonsRowProps> = ({
+  mediaType,
+  mediaId,
+  mediaTitle,
+}) => {
   return (
     <Box display="flex" alignItems="center" gap={1}>
       <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
       <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
       <LikeDislikeButtons mediaType={mediaType} mediaId={mediaId} />
+      <ShareButton text={`Check out ${mediaTitle} on Omniflix!`} />
     </Box>
   );
 };
@@ -77,7 +84,11 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
             {movie.genre}
           </Typography>
           <RatingsRow imdbRating={movie.imdbRating} />
-          <ButtonsRow mediaType={MediaType.MOVIE} mediaId={movie.imdbId} />
+          <ButtonsRow
+            mediaType={MediaType.MOVIE}
+            mediaId={movie.imdbId}
+            mediaTitle={movie.title}
+          />
         </Box>
       </Box>
       <Typography variant="body2" align="justify" marginTop={1}>

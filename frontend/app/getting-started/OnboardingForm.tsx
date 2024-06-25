@@ -15,7 +15,7 @@ import {
   NAME_MAX_CHAR_LENGTH,
   USERNAME_MAX_CHAR_LENGTH,
 } from "@/utils/constants";
-import addUserInfo from "@/utils/database/userProfile/addUserInfo";
+import addUserAccountInfo from "@/utils/database/userProfile/addUserAccountInfo";
 import { useRouter } from "next/navigation";
 import { signOut } from "@/utils/supabase/auth";
 
@@ -110,7 +110,7 @@ const OnboardingForm: React.FC<{ email: string }> = ({ email }) => {
           )
             return;
           setIsLoading(true);
-          const error = await addUserInfo(name, username, bio);
+          const error = await addUserAccountInfo(name, username, bio);
           setError(error);
           if (!error) {
             router.push(DASHBOARD_PAGE_ROUTE);

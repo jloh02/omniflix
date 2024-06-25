@@ -3,15 +3,8 @@
 import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
-import { PostgrestError } from "@supabase/supabase-js";
 
-async function getUserInfo(username: string): Promise<
-  | {
-      data: Tables<TableNames.USERS_INFO> | null;
-      error: PostgrestError | null;
-    }
-  | undefined
-> {
+async function getUserAccountInfo(): Promise<Tables<TableNames.USERS_INFO>> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -27,12 +20,17 @@ async function getUserInfo(username: string): Promise<
   const { data, error } = await supabase
     .from(TableNames.USERS_INFO)
     .select("*")
-    .eq("username", username)
+    .eq("user_id", user.id)
     .limit(1)
-    .returns<Tables<TableNames.USERS_INFO>>()
-    .single();
+    .returns<Tables<TableNames.USERS_INFO>[]>();
 
-  return { data, error };
+  if (error) {
+    throw new Error(
+      "Error encountered when getting user info. Please try again later.",
+    );
+  }
+
+  return data[0];
 }
 
-export default getUserInfo;
+export default getUserAccountInfo;
