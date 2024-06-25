@@ -1,18 +1,28 @@
-"use server";
+"use client";
 import { Avatar, Box, Typography } from "@mui/material";
 import ShareButton from "../socialShare/ShareButton";
+import { USER_PUBLIC_PROFILE_PAGE_ROUTE } from "@/utils/constants";
+import { useEffect, useState } from "react";
 
-interface UserInfoHeaderProps {
+interface UserInfoHeaderPersonalProps {
   name: string;
   username: string;
   bio: string;
 }
 
-const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
+const UserInfoHeaderPersonal: React.FC<UserInfoHeaderPersonalProps> = ({
   name,
   username,
   bio,
 }) => {
+  const [shareRoute, setShareRoute] = useState<string | undefined>();
+
+  useEffect(() => {
+    // This runs on the client side, where window is defined
+    const shareRoute = `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`;
+    setShareRoute(shareRoute);
+  }, [username]);
+
   return (
     <Box
       width="100%"
@@ -38,7 +48,10 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
             <Typography variant="h4">{name}</Typography>
             <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
             <Box marginY={1}>
-              <ShareButton text={`Check out ${name}'s profile on Omniflix!`} />
+              <ShareButton
+                text={`Check out ${name}'s profile on Omniflix!`}
+                link={shareRoute}
+              />
             </Box>
           </Box>
         </Box>
@@ -48,4 +61,4 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
   );
 };
 
-export default UserInfoHeader;
+export default UserInfoHeaderPersonal;
