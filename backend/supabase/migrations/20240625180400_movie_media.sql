@@ -17,7 +17,7 @@ CREATE TABLE "public".media (
 alter table
   "public"."media" enable row level security;
 
-CREATE UNIQUE INDEX media_pkey ON public.media USING btree (media_id, media_type, media_specific_id);
+CREATE UNIQUE INDEX media_pkey ON public.media USING btree (media_id);
 
 CREATE UNIQUE INDEX media_items ON public.media USING btree (media_type, media_specific_id);
 
