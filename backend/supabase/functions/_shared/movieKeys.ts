@@ -17,7 +17,6 @@ const mapMovieKeys = (omdbResult: KeyValueMap) => {
   for (const key in KEY_MAP) {
     if (key in omdbResult) {
       newObj[KEY_MAP[key]] = omdbResult[key];
-      if (key === "Genre") newObj[KEY_MAP[key]] = `{${newObj[KEY_MAP[key]]}}`;
     }
   }
   return newObj;

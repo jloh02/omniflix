@@ -81,7 +81,7 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
             {movie.rated} · {movie.released} · {movie.runtime}
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.genre}
+            {movie.genre.join(", ")}
           </Typography>
           <RatingsRow imdbRating={movie.imdbRating} />
           <ButtonsRow
