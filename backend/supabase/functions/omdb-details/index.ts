@@ -57,7 +57,9 @@ Deno.serve(async (req: Request) => {
 
   if (typeof id !== "number" || id <= 0) {
     return new Response(
-      JSON.stringify({ error: `Invalid id ${id}. Must be a number > 0.` }),
+      JSON.stringify({
+        error: `Invalid id ${id} (${typeof id}). Must be a number > 0.`,
+      }),
       { status: 400 }
     );
   }

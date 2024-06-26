@@ -5,11 +5,11 @@ import IMovieDetails from "@/utils/types/IMovieDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";
-import { MediaType } from "@/utils/constants";
+import { HOME_PAGE_ROUTE, MediaType } from "@/utils/constants";
 
 interface MoviePageProps {
   params: {
-    movieId: number;
+    movieId: string;
   };
 }
 
@@ -29,7 +29,12 @@ const ErrorPage = () => (
     <Typography variant="body1" component="p" gutterBottom>
       The movie you're looking for could not be found.
     </Typography>
-    <Button variant="contained" color="primary" href="/" sx={{ margin: 1 }}>
+    <Button
+      variant="contained"
+      color="primary"
+      href={HOME_PAGE_ROUTE}
+      sx={{ margin: 1 }}
+    >
       Return to homepage
     </Button>
   </Box>
