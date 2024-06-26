@@ -1,5 +1,5 @@
 type KanbanItem = {
-  id: string;
+  id: number;
   columnOrder: string;
   title: string;
   year: string;

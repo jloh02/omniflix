@@ -74,7 +74,7 @@ async function getWatchlist(
     }
     const itemData = data.get(item.media_id);
     acc[columnNames[item.status_column]].push({
-      id: item.media_id.toString(),
+      id: item.media_id,
       columnOrder: item.column_order,
       title: itemData?.title ?? "",
       year: itemData?.year ?? "",

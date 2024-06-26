@@ -14,7 +14,7 @@ interface KanbanColumnProps {
   instanceId: symbol;
   items: KanbanItemWithKeyIndex[];
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
-  removeItem: (id: string) => void;
+  removeItem: (id: number) => void;
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
