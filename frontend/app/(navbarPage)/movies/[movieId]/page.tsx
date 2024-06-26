@@ -42,7 +42,7 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const details = await getMovieDetails(params.movieId);
+        const details = await getMovieDetails(parseInt(params.movieId));
         setMovieDetails(details || null);
       } catch (err) {
         setError(err as Error);
@@ -68,7 +68,10 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
       justifyContent="center"
     >
       <InfoSummaryHeader movie={movieDetails} />
-      <ReviewsSection mediaType={MediaType.MOVIE} mediaId={params.movieId} />
+      <ReviewsSection
+        mediaType={MediaType.MOVIE}
+        mediaId={parseInt(params.movieId)}
+      />
     </Box>
   );
 };
