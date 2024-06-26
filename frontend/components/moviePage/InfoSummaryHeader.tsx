@@ -78,7 +78,7 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
         <Box flex={1}>
           <Typography variant="h6">{movie.title}</Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.rated} · {movie.released} · {movie.runtime}
+            {movie.rated} · {movie.released} · {movie.runtime} mins
           </Typography>
           <Typography variant="body1" color="text.secondary">
             {movie.genre.join(", ")}
