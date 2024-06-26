@@ -6,7 +6,7 @@ import IMovieDetails from "../../types/IMovieDetails";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
 async function getMovieDetails(
-  movieId: string,
+  mediaId: number,
 ): Promise<IMovieDetails | undefined> {
   const supabase = createClient();
   const {
@@ -22,16 +22,16 @@ async function getMovieDetails(
     {
       body: {
         type: MediaType.MOVIE,
-        id: movieId,
+        id: mediaId,
       },
     },
   );
 
   if (error) {
-    throw new Error(await error.context.json());
+    throw new Error(await error.context.text());
   }
 
-  return objectKeysSnakeCaseToCamelCase(JSON.parse(data).data) as IMovieDetails;
+  return objectKeysSnakeCaseToCamelCase(JSON.parse(data)) as IMovieDetails;
 }
 
 export default getMovieDetails;

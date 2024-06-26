@@ -7,7 +7,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 
 async function updateReview(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
   rating: number,
   title: string,
   description: string,
@@ -27,7 +27,6 @@ async function updateReview(
   const { error } = await supabase
     .from(TableNames.REVIEWS)
     .update({
-      media_type: mediaType,
       media_id: mediaId,
       rating,
       title,

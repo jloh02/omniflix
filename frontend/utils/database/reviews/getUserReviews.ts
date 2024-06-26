@@ -3,13 +3,15 @@
 import { createClient } from "@/utils/supabase/server";
 import { MediaType, TableNames } from "../../constants";
 import { TablesInsert } from "@/utils/supabase/types.gen";
-import IReview from "@/utils/types/IReview";
 import IReviewWithMediaDetails from "@/utils/types/IReviewWithMediaDetails";
 
 export interface ReviewWithMovieDetails
   extends TablesInsert<TableNames.REVIEWS> {
   users_info: { username: string };
-  movies: { title: string; poster_url: string };
+  media: {
+    media_type: MediaType;
+    movies: { title: string; poster_url: string }[];
+  };
 }
 
 async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
@@ -25,25 +27,28 @@ async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
   }
 
   // Fetch reviews
-  const { data, error } = await supabase
-    .from(TableNames.REVIEWS)
-    .select(
-      `
+  const query = supabase.from(TableNames.REVIEWS).select(
+    `
       *,
-      users_info:user_id (
+      ${TableNames.USERS_INFO}:user_id (
         username
       ),
-      movies (
-        title,
-        poster_url
+      ${TableNames.MEDIA}:media_id (     
+        media_type,   
+        ${TableNames.MOVIES_CACHE}!inner (
+          title,
+          poster_url
+        )
       )
     `,
-    )
+  );
+
+  const { data, error } = await query
     .eq("user_id", user.id)
-    .order("created_at", { ascending: false })
-    .returns<ReviewWithMovieDetails[]>();
+    .order("created_at", { ascending: false });
 
   if (error) {
+    console.error(error);
     throw new Error(error.message);
   }
 
@@ -59,10 +64,10 @@ async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
       }),
       userId: review.user_id ?? "",
       username: review.users_info.username,
-      mediaType: review.media_type,
+      mediaType: review.media.media_type,
       mediaId: review.media_id,
-      mediaTitle: review.movies.title,
-      mediaPoster: review.movies.poster_url,
+      mediaTitle: review.media.movies[0].title,
+      mediaPoster: review.media.movies[0].poster_url,
       rating: review.rating,
       title: review.title,
       description: review.description,

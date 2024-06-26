@@ -7,7 +7,7 @@ import {
   WatchlistFunctionAction,
 } from "../../constants";
 
-async function removeFromWatchlist(mediaType: MediaType, mediaId: string) {
+async function removeFromWatchlist(mediaType: MediaType, mediaId: number) {
   const supabase = createClient();
   const {
     data: { user },

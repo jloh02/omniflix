@@ -58,8 +58,8 @@ Deno.serve(async (req: Request) => {
   const cacheLimit = Date.now() - CACHE_DURATION_MS;
   const { data, error } = await adminSupabaseClient
     .from(TableNames.MOVIES_CACHE_TABLE)
-    .select("*")
-    .eq("imdb_id", id)
+    .select(`*, ${TableNames.MEDIA}!inner(media_id)`)
+    .eq(`${TableNames.MEDIA}.media_id`, id)
     .returns<Tables<TableNames.MOVIES_CACHE_TABLE>[]>()
     .single();
 
@@ -69,14 +69,15 @@ Deno.serve(async (req: Request) => {
     data.created_at &&
     new Date(data.created_at).getTime() > cacheLimit
   ) {
-    return new Response(JSON.stringify(data));
+    return new Response(JSON.stringify({ ...data, media_id: id }));
   }
 
   const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${id}&type=${mediaType}&plot=full`
+    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${data?.imdb_id}&type=${mediaType}&plot=full`
   );
   const resBody = await res.json();
   if (resBody.Error) {
+    console.error(resBody.Error);
     return new Response(JSON.stringify({ error: resBody.Error }), {
       status: 404,
     });
@@ -84,7 +85,7 @@ Deno.serve(async (req: Request) => {
 
   const processBody = mapMovieKeys(resBody);
 
-  const returnResult: Tables<TableNames.MOVIES_CACHE_TABLE> = {
+  const returnResult = {
     created_at: new Date().toISOString(),
     imdb_id: processBody.imdb_id,
     data: processBody,
@@ -101,12 +102,12 @@ Deno.serve(async (req: Request) => {
   const { error: cacheError } = await adminSupabaseClient
     .from(TableNames.MOVIES_CACHE_TABLE)
     .update([returnResult])
-    .eq("imdb_id", id)
+    .eq("imdb_id", returnResult.imdb_id)
     .returns<TablesInsert<TableNames.MOVIES_CACHE_TABLE>[]>();
 
   if (cacheError) {
     console.error("Error inserting data", cacheError);
   }
 
-  return new Response(JSON.stringify(returnResult));
+  return new Response(JSON.stringify({ ...returnResult, media_id: id }));
 });

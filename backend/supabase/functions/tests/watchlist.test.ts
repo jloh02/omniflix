@@ -7,7 +7,7 @@ import {
   SupabaseClient,
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import "https://deno.land/std@0.224.0/dotenv/load.ts";
-import { WatchlistAction } from "../_shared/constants.ts";
+import { TableNames, WatchlistAction } from "../_shared/constants.ts";
 import { Tables } from "../_shared/types.gen.ts";
 import fs from "node:fs";
 
@@ -17,9 +17,10 @@ const NUMBER_OF_INSERT_UPDATES = 100;
 
 const INSERT_SPAM_NUM = 25;
 
-const MOVIE_IDS: string[] = fs
-  .readFileSync("./supabase/movieIds.txt", "utf-8")
-  .split("\n");
+const MOVIE_IDS = new Array(100).fill(0).map((_, i) => i + 1);
+// const MOVIE_IDS: string[] = fs
+//   .readFileSync("./supabase/movieIds.txt", "utf-8")
+//   .split("\n");
 
 const supabaseUrl = Deno.env.get("SUPABASE_URL") ?? "";
 const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY") ?? "";
@@ -39,7 +40,7 @@ async function testInsertWatchlist(
   client: SupabaseClient,
   action: WatchlistAction,
   status_column: number,
-  media_id: string
+  media_id: number
 ) {
   const { data: func_data, error: func_error } = await client.functions.invoke(
     "watchlist",
@@ -70,20 +71,21 @@ async function testInsertWatchlist(
 
 async function getWatchlistEntries(
   client: SupabaseClient
-): Promise<[string, string][][]> {
+): Promise<[number, string][][]> {
   return await Promise.all(
-    Array.from<unknown, Promise<[string, string][]>>(
+    Array.from<unknown, Promise<[number, string][]>>(
       { length: NUMBER_COLUMNS },
       async (_, status_column) => {
         return (
           (
             await client
               .from("watchlist_entries")
-              .select("*")
-              .match({ media_type: "movie", status_column })
+              .select(`*, ${TableNames.MEDIA}:media_id(media_type)`)
+              .match({ status_column })
+              .eq(`${TableNames.MEDIA}.media_type`, "movie")
               .order("column_order", { ascending: true })
               .returns<Tables<"watchlist_entries">[]>()
-          ).data?.map<[string, string]>((entry) => [
+          ).data?.map<[number, string]>((entry) => [
             entry.media_id,
             entry.column_order,
           ]) ?? []
@@ -95,7 +97,7 @@ async function getWatchlistEntries(
 
 async function testInsertionUpdates(
   client: SupabaseClient,
-  entries: [string, string][][]
+  entries: [number, string][][]
 ) {
   let fromCol;
   do {
@@ -187,7 +189,6 @@ const testWatchlist = async () => {
   }
 
   const movieIds = MOVIE_IDS.slice(0, NUMBER_OF_MOVIES);
-
   for (const [idx, movie_id] of movieIds.entries()) {
     await testInsertWatchlist(
       client,

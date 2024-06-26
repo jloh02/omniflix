@@ -25,7 +25,7 @@ import { useEffect, useState } from "react";
 
 interface ReviewsSectionProps {
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
 }
 
 const ReviewsSection: React.FC<ReviewsSectionProps> = ({

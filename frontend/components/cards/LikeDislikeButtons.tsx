@@ -15,7 +15,7 @@ import getLikeDislikeCount from "@/utils/database/likesDislikes/getLikeDislikeCo
 
 const LikeDislikeButtons: React.FC<{
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
 }> = (props) => {
   const [likeStatus, setLikeStatus] = useState<LikeStatus>(LikeStatus.NONE);
   const [likeDislikeCount, setLikeDislikeCount] = useState<{

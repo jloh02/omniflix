@@ -12,7 +12,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie, showLabel = true }) => {
   return (
     <MediaCard
       mediaType={MediaType.MOVIE}
-      mediaId={movie.imdbId}
+      mediaId={movie.mediaId}
       posterUrl={movie.posterUrl}
       title={movie.title}
       subtitle={movie.year}

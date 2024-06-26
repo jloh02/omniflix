@@ -19,7 +19,7 @@ import { useRouter } from "next/navigation";
 
 interface UserReviewCardProps {
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
   poster: string;
   mediaTitle: string;
   rating: number;

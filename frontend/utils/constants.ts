@@ -54,6 +54,7 @@ export enum TableNames {
   LIKES_DISLIKES = "likes_dislikes",
   REVIEWS = "reviews",
   MOVIES_CACHE = "movies",
+  MEDIA = "media",
 }
 
 // Datable Constants and Types

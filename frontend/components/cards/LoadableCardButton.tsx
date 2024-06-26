@@ -4,18 +4,18 @@ import { MediaType } from "@/utils/constants";
 
 interface LoadableCardButtonProps {
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
   checkEnabledFn: (
     mediaType: MediaType,
-    mediaId: string,
+    mediaId: number,
   ) => Promise<boolean | undefined>;
   disableFn: (
     mediaType: MediaType,
-    mediaId: string,
+    mediaId: number,
   ) => Promise<boolean | undefined>;
   enableFn: (
     mediaType: MediaType,
-    mediaId: string,
+    mediaId: number,
   ) => Promise<boolean | undefined>;
   loadingText: string;
   enabledText: string;

@@ -9,7 +9,7 @@ import LoadableCardButton from "./LoadableCardButton";
 
 const AddToWatchlistButton: React.FC<{
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
 }> = (props) => {
   return (
     <LoadableCardButton

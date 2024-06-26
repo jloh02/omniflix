@@ -9,7 +9,7 @@ import {
 
 async function updateWatchlist(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
   statusColumn: number,
   columnOrderBefore?: string,
   columnOrderAfter?: string,

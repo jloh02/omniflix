@@ -23,9 +23,9 @@ async function getFavorites(
   // Fetch favorites
   const { data, error } = await supabase
     .from(TableNames.FAVORITES)
-    .select("media_id")
+    .select(`media_id, ${TableNames.MEDIA}:media_id(media_type)`)
     .eq("user_id", user.id)
-    .eq("media_type", mediaType)
+    .eq(`${TableNames.MEDIA}.media_type`, mediaType)
     .returns<Tables<TableNames.FAVORITES>[]>();
 
   if (error) {
@@ -33,13 +33,12 @@ async function getFavorites(
       "Error encountered when getting Favorites. Please try again later.",
     );
   }
-
   // Extract media_id
-  const movieIds: string[] = data ? data.map((item: any) => item.media_id) : [];
+  const mediaIds: number[] = data ? data.map((item: any) => item.media_id) : [];
 
   // Fetch movie details
   const movieDetails = await Promise.all(
-    movieIds.map(async (movieId) => await getMovieDetails(movieId)),
+    mediaIds.map(async (id) => await getMovieDetails(id)),
   );
 
   return movieDetails.filter(

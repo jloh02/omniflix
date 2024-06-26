@@ -9,7 +9,7 @@ import { MediaType } from "@/utils/constants";
 
 interface MoviePageProps {
   params: {
-    movieId: string;
+    movieId: number;
   };
 }
 
