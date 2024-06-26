@@ -55,6 +55,15 @@ Deno.serve(async (req: Request) => {
     );
   }
 
+  if (typeof id !== "number" || id <= 0) {
+    return new Response(
+      JSON.stringify({ error: `Invalid id ${id}. Must be a number > 0.` }),
+      { status: 400 }
+    );
+  }
+
+  // Continue with the rest of the code...
+
   const cacheLimit = Date.now() - CACHE_DURATION_MS;
   const { data, error } = await adminSupabaseClient
     .from(TableNames.MOVIES_CACHE_TABLE)
@@ -62,6 +71,8 @@ Deno.serve(async (req: Request) => {
     .eq(`${TableNames.MEDIA}.media_id`, id)
     .returns<Tables<TableNames.MOVIES_CACHE_TABLE>[]>()
     .single();
+
+  if (error) console.error(error);
 
   // Return cached value if valid cache
   if (
