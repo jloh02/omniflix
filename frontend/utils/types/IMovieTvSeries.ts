@@ -1,8 +1,8 @@
-interface IMovie {
+interface IMovieTvSeries {
   title: string;
   year: string;
   mediaId: number;
   posterUrl: string;
 }
 
-export default IMovie;
+export default IMovieTvSeries;

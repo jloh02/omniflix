@@ -54,6 +54,7 @@ export enum TableNames {
   LIKES_DISLIKES = "likes_dislikes",
   REVIEWS = "reviews",
   MOVIES_CACHE = "movies",
+  TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
 }
 
@@ -80,3 +81,25 @@ export enum WatchlistFunctionAction {
   REMOVE = "remove",
   UPDATE = "update",
 }
+
+// Utility for converting media type to various parameters
+export type MediaTypeParam = {
+  tableName: TableNames;
+  omdbType: OMDBType;
+  label: string;
+  urlPath: string;
+};
+export const MediaTypeToParam: Record<MediaType, MediaTypeParam> = {
+  [MediaType.MOVIE]: {
+    tableName: TableNames.MOVIES_CACHE,
+    omdbType: "movie",
+    label: "Movie",
+    urlPath: MOVIES_PAGE_ROUTE,
+  },
+  [MediaType.TV_SERIES]: {
+    tableName: TableNames.TV_SERIES_CACHE,
+    omdbType: "series",
+    label: "TV Series",
+    urlPath: TV_SERIES_PAGE_ROUTE,
+  },
+};

@@ -1,14 +1,15 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { COMPLETED_STATUS_COLUMN_INDEX, TableNames } from "../../constants";
-import { Enums, Tables } from "@/utils/supabase/types.gen";
+import {
+  COMPLETED_STATUS_COLUMN_INDEX,
+  MediaType,
+  TableNames,
+} from "../../constants";
+import { Tables } from "@/utils/supabase/types.gen";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 
-async function getWatchlist(
-  mediaType: Enums<"media_type">,
-  columnNames: string[],
-) {
+async function getWatchlist(mediaType: MediaType, columnNames: string[]) {
   const supabase = createClient();
   const {
     data: { user },
@@ -22,7 +23,7 @@ async function getWatchlist(
     .from(TableNames.WATCHLIST)
     .select(
       `*, 
-      ${TableNames.MEDIA}:media_id (
+      ${TableNames.MEDIA}:media_id!inner (
         media_type
       )`,
     )

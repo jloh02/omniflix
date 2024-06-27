@@ -1,7 +1,7 @@
 "use client";
 import InfoSummaryHeader from "@/components/moviePage/InfoSummaryHeader";
 import getMovieDetails from "@/utils/database/movies/getMovieDetails";
-import IMovieDetails from "@/utils/types/IMovieDetails";
+import IMovieDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";

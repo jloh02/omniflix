@@ -2,10 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Grid, Typography } from "@mui/material";
-import MovieCard from "../../../components/cards/MovieCard";
 import getFavorites from "@/utils/database/favorites/getFavorites";
 import { MediaType } from "@/utils/constants";
-import IMovieDetails from "@/utils/types/IMovieDetails";
+import IMovieDetails from "@/utils/types/IMovieTvSeriesDetails";
+import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
 
 const Favorites: React.FC = () => {
   const [favorites, setFavorites] = useState<IMovieDetails[]>([]);
@@ -47,7 +47,7 @@ const Favorites: React.FC = () => {
     <Grid container spacing={3} className="mt-0 items-stretch">
       {favorites.map((movie: IMovieDetails) => (
         <Grid item>
-          <MovieCard movie={movie} />
+          <MovieTvSeriesCard media={movie} type={MediaType.MOVIE} />
         </Grid>
       ))}
     </Grid>

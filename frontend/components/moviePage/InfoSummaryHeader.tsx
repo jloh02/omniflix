@@ -1,4 +1,4 @@
-import IMovieDetails from "@/utils/types/IMovieDetails";
+import IMovieDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, CardMedia, Typography } from "@mui/material";
 import FavoriteButton from "../cards/FavoriteButton";
 import { MediaType } from "@/utils/constants";

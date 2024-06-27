@@ -2,7 +2,7 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { FunctionNames, OMDBType } from "../../constants";
-import IMovieDetails from "../../types/IMovieDetails";
+import IMovieDetails from "../../types/IMovieTvSeriesDetails";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
 async function getMovieDetails(
