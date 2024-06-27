@@ -3,6 +3,7 @@ import { Avatar, Box, Typography } from "@mui/material";
 import ShareButton from "../socialShare/ShareButton";
 import { USER_PUBLIC_PROFILE_PAGE_ROUTE } from "@/utils/constants";
 import { useEffect, useState } from "react";
+import ViewProfileButton from "./ViewProfileButton";
 
 interface UserInfoHeaderPersonalProps {
   name: string;
@@ -15,12 +16,12 @@ const UserInfoHeaderPersonal: React.FC<UserInfoHeaderPersonalProps> = ({
   username,
   bio,
 }) => {
-  const [shareRoute, setShareRoute] = useState<string | undefined>();
+  const [profileRoute, setProfileRoute] = useState<string | undefined>();
 
   useEffect(() => {
     // This runs on the client side, where window is defined
-    const shareRoute = `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`;
-    setShareRoute(shareRoute);
+    const profilePageRoute = `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`;
+    setProfileRoute(profilePageRoute);
   }, [username]);
 
   return (
@@ -47,10 +48,11 @@ const UserInfoHeaderPersonal: React.FC<UserInfoHeaderPersonalProps> = ({
           <Box>
             <Typography variant="h4">{name}</Typography>
             <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
-            <Box marginY={1}>
+            <Box marginY={1} display="flex" gap={1}>
+              <ViewProfileButton username={username} />
               <ShareButton
                 text={`Check out ${name}'s profile on Omniflix!`}
-                link={shareRoute}
+                link={profileRoute}
               />
             </Box>
           </Box>
