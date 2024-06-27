@@ -1,8 +1,8 @@
 "use server";
 import { Avatar, Box, Typography } from "@mui/material";
-import ShareButton from "../socialShare/ShareButton";
-import FollowButton from "../following/FollowButton";
 import isFollowingUser from "@/utils/database/followers/isFollowingUser";
+import UserInfoHeaderActions from "./UserInfoHeaderActions";
+import { createClient } from "@/utils/supabase/server";
 
 interface UserInfoHeaderProps {
   userId: string;
@@ -17,8 +17,23 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
   username,
   bio,
 }) => {
+  // Fetch following status
   const { data: isFollowing, error: isFollowingError } =
     (await isFollowingUser(userId)) || {};
+
+  // Fetch current user details
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // If user is not logged in, throw an error
+  if (!user) {
+    throw new Error("Please login again.");
+  }
+
+  // Check if user is the current user
+  const isCurrentUser = user.id === userId;
 
   return (
     <Box
@@ -44,13 +59,12 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
           <Box>
             <Typography variant="h4">{name}</Typography>
             <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
-            <Box display="flex" marginY={1} gap={1}>
-              <FollowButton
-                userId={userId}
-                isFollowingUser={isFollowing ?? false}
-              />
-              <ShareButton text={`Check out ${name}'s profile on Omniflix!`} />
-            </Box>
+            <UserInfoHeaderActions
+              userId={userId}
+              name={name}
+              isFollowing={isFollowing ?? false}
+              isCurrentUser={isCurrentUser}
+            />
           </Box>
         </Box>
         <Typography>{bio}</Typography>
