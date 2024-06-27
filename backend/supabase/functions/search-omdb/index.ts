@@ -4,19 +4,20 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import {
   ALLOWED_OMDB_TYPES,
+  OMDB_TYPE_TO_TABLE,
   OMDBType,
   TableNames,
 } from "../_shared/constants.ts";
-import { Tables } from "../_shared/types.gen.ts";
-import { mapMovieKeys } from "../_shared/movieKeys.ts";
+import { mapOmdbKeys } from "../_shared/omdbKeys.ts";
 
-//TODO handle type for various movies, series, episodes
 async function cacheItems(
   client: SupabaseClient,
   items: any[],
   type: OMDBType
 ) {
-  const entriesToUpsert = items.map(mapMovieKeys);
+  const CACHE_TABLE = OMDB_TYPE_TO_TABLE[type];
+
+  const entriesToUpsert = items.map(mapOmdbKeys);
   const imdbKeys = entriesToUpsert.map((v) => {
     return { media_specific_id: v.imdb_id, media_type: type };
   });
@@ -34,14 +35,11 @@ async function cacheItems(
     throw new Error(`Error inserting media map: ${mediaError}`);
   }
 
-  const { error } = await client
-    .from(TableNames.MOVIES_CACHE_TABLE)
-    .upsert(entriesToUpsert, {
-      defaultToNull: true,
-      onConflict: "imdb_id,media_type",
-      ignoreDuplicates: false,
-    })
-    .returns<Tables<TableNames.MOVIES_CACHE_TABLE>>();
+  const { error } = await client.from(CACHE_TABLE).upsert(entriesToUpsert, {
+    defaultToNull: true,
+    onConflict: "imdb_id,media_type",
+    ignoreDuplicates: false,
+  });
 
   if (error) {
     console.error("Error upserting data", error);
@@ -106,7 +104,7 @@ Deno.serve(async (req: Request) => {
     return new Response(
       JSON.stringify({
         ...resBody,
-        Search: resBody.Search.map(mapMovieKeys).map((v: any, idx: number) => ({
+        Search: resBody.Search.map(mapOmdbKeys).map((v: any, idx: number) => ({
           ...v,
           media_id: cache[idx].media_id,
         })),
@@ -128,7 +126,7 @@ Deno.serve(async (req: Request) => {
   const cache = await cacheItems(adminSupabaseClient, [titleResBody], type);
   return new Response(
     JSON.stringify({
-      Search: [{ ...mapMovieKeys(titleResBody), media_id: cache[0].media_id }],
+      Search: [{ ...mapOmdbKeys(titleResBody), media_id: cache[0].media_id }],
     })
   );
 });

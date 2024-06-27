@@ -4,15 +4,14 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import {
   ALLOWED_OMDB_TYPES,
+  OMDB_TYPE_TO_TABLE,
   OMDBType,
   TableNames,
 } from "../_shared/constants.ts";
-import { Tables, TablesInsert } from "../_shared/types.gen.ts";
-import { mapMovieKeys } from "../_shared/movieKeys.ts";
+import { mapOmdbKeys } from "../_shared/omdbKeys.ts";
 
 const CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
 
-// TODO handle different types
 Deno.serve(async (req: Request) => {
   const adminSupabaseClient: SupabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
@@ -31,6 +30,7 @@ Deno.serve(async (req: Request) => {
 
   const { id, type } = await req.json();
 
+  // Ensure required params are present: must have 'id' and 'type'
   const errorStr: string[] = [];
   if (!id) errorStr.push("id");
   if (!type) errorStr.push("type");
@@ -43,6 +43,7 @@ Deno.serve(async (req: Request) => {
     );
   }
 
+  // Ensure the type is valid for OMDB queries
   const mediaType = ALLOWED_OMDB_TYPES.find(
     (validType) => validType === type
   ) as OMDBType;
@@ -54,7 +55,9 @@ Deno.serve(async (req: Request) => {
       { status: 400 }
     );
   }
+  const CACHE_TABLE = OMDB_TYPE_TO_TABLE[mediaType];
 
+  // Ensure the 'id' is a positive integer
   if (typeof id !== "number" || id <= 0) {
     return new Response(
       JSON.stringify({
@@ -64,14 +67,12 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  // Continue with the rest of the code...
-
+  // Check cache for existing data
   const cacheLimit = Date.now() - CACHE_DURATION_MS;
   const { data, error } = await adminSupabaseClient
-    .from(TableNames.MOVIES_CACHE_TABLE)
+    .from(CACHE_TABLE)
     .select(`*, ${TableNames.MEDIA}!inner(media_id)`)
     .eq(`${TableNames.MEDIA}.media_id`, id)
-    .returns<Tables<TableNames.MOVIES_CACHE_TABLE>[]>()
     .single();
 
   if (error) console.error(error);
@@ -96,7 +97,7 @@ Deno.serve(async (req: Request) => {
     });
   }
 
-  const processBody = mapMovieKeys(resBody);
+  const processBody = mapOmdbKeys(resBody);
 
   const returnResult = {
     created_at: new Date().toISOString(),
@@ -113,10 +114,9 @@ Deno.serve(async (req: Request) => {
   };
 
   const { error: cacheError } = await adminSupabaseClient
-    .from(TableNames.MOVIES_CACHE_TABLE)
+    .from(CACHE_TABLE)
     .update([returnResult])
-    .eq("imdb_id", returnResult.imdb_id)
-    .returns<TablesInsert<TableNames.MOVIES_CACHE_TABLE>[]>();
+    .eq("imdb_id", returnResult.imdb_id);
 
   if (cacheError) {
     console.error("Error inserting data", cacheError);
