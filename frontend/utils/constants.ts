@@ -82,6 +82,12 @@ export enum WatchlistFunctionAction {
   UPDATE = "update",
 }
 
+// Utility to convert category into a media type
+export const CategoryToMediaType: Record<string, MediaType> = {
+  Movies: MediaType.MOVIE,
+  "TV Series": MediaType.TV_SERIES,
+};
+
 // Utility for converting media type to various parameters
 export type MediaTypeParam = {
   tableName: TableNames;
