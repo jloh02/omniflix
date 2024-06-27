@@ -232,6 +232,59 @@ export type Database = {
           },
         ]
       }
+      tv_series: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          genre: string[] | null
+          imdb_id: string
+          imdb_rating: number | null
+          media_type: Database["public"]["Enums"]["media_type"]
+          poster_url: string | null
+          rated: string | null
+          released: string | null
+          runtime: number | null
+          title: string | null
+          year: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          genre?: string[] | null
+          imdb_id: string
+          imdb_rating?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"]
+          poster_url?: string | null
+          rated?: string | null
+          released?: string | null
+          runtime?: number | null
+          title?: string | null
+          year?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          genre?: string[] | null
+          imdb_id?: string
+          imdb_rating?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"]
+          poster_url?: string | null
+          rated?: string | null
+          released?: string | null
+          runtime?: number | null
+          title?: string | null
+          year?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tv_series_media_fkey"
+            columns: ["media_type", "imdb_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+        ]
+      }
       users_info: {
         Row: {
           bio: string | null
@@ -311,7 +364,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      media_type: "movie"
+      media_type: "movie" | "tv_series"
     }
     CompositeTypes: {
       [_ in never]: never
