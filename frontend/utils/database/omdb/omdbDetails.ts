@@ -2,13 +2,13 @@
 
 import { createClient } from "@/utils/supabase/server";
 import { FunctionNames, OMDBType } from "../../constants";
-import IMovieDetails from "../../types/IMovieTvSeriesDetails";
+import IMovieTvSeriesDetails from "../../types/IMovieTvSeriesDetails";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
-async function getMovieDetails(
+async function getOmdbDetails(
   mediaId: number,
   type: OMDBType,
-): Promise<IMovieDetails | undefined> {
+): Promise<IMovieTvSeriesDetails | undefined> {
   const supabase = createClient();
   const {
     data: { user },
@@ -32,7 +32,9 @@ async function getMovieDetails(
     throw new Error(await error.context.text());
   }
 
-  return objectKeysSnakeCaseToCamelCase(JSON.parse(data)) as IMovieDetails;
+  return objectKeysSnakeCaseToCamelCase(
+    JSON.parse(data),
+  ) as IMovieTvSeriesDetails;
 }
 
-export default getMovieDetails;
+export default getOmdbDetails;

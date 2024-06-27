@@ -3,12 +3,12 @@
 import { createClient } from "@/utils/supabase/server";
 import { TableNames, MediaType, MediaTypeToParam } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
-import getMovieDetails from "@/utils/database/movies/getMovieDetails";
-import IMovieDetails from "@/utils/types/IMovieTvSeriesDetails";
+import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
+import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 
 async function getFavorites(
   type: MediaType,
-): Promise<IMovieDetails[] | undefined> {
+): Promise<IMovieTvSeriesDetails[] | undefined> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -39,12 +39,12 @@ async function getFavorites(
   // Fetch movie details
   const { omdbType } = MediaTypeToParam[type];
   const movieDetails = await Promise.all(
-    mediaIds.map(async (id) => await getMovieDetails(id, omdbType)),
+    mediaIds.map(async (id) => await getOmdbDetails(id, omdbType)),
   );
 
   return movieDetails.filter(
     (movieDetail) => movieDetail !== undefined,
-  ) as IMovieDetails[];
+  ) as IMovieTvSeriesDetails[];
 }
 
 export default getFavorites;

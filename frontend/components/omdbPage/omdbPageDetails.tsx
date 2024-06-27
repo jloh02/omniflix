@@ -1,19 +1,27 @@
 "use client";
 import InfoSummaryHeader from "@/components/moviePage/InfoSummaryHeader";
-import getMovieDetails from "@/utils/database/movies/getMovieDetails";
-import IMovieDetails from "@/utils/types/IMovieTvSeriesDetails";
+import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
+import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";
-import { HOME_PAGE_ROUTE, MediaType } from "@/utils/constants";
+import {
+  HOME_PAGE_ROUTE,
+  MediaType,
+  MediaTypeToParam,
+} from "@/utils/constants";
 
 interface MoviePageProps {
-  params: {
-    movieId: string;
-  };
+  mediaId: number;
+  mediaType: MediaType;
+  errorHeader: string;
+  errorBody: string;
 }
 
-const ErrorPage = () => (
+const ErrorPage: React.FC<{ header: string; body: string }> = ({
+  header,
+  body,
+}) => (
   <Box
     sx={{
       display: "flex",
@@ -24,10 +32,10 @@ const ErrorPage = () => (
     }}
   >
     <Typography variant="h4" component="h1" gutterBottom>
-      Movie Not Found
+      {header}
     </Typography>
     <Typography variant="body1" component="p" gutterBottom>
-      The movie you're looking for could not be found.
+      {body}
     </Typography>
     <Button
       variant="contained"
@@ -40,31 +48,36 @@ const ErrorPage = () => (
   </Box>
 );
 
-const Movie: React.FC<MoviePageProps> = ({ params }) => {
-  const [movieDetails, setMovieDetails] = useState<IMovieDetails | null>(null);
+const OmdbPageDetails: React.FC<MoviePageProps> = ({
+  mediaId,
+  mediaType,
+  errorHeader,
+  errorBody,
+}) => {
+  const [mediaDetails, setMediaDetails] =
+    useState<IMovieTvSeriesDetails | null>(null);
   const [error, setError] = useState<Error | null>(null);
 
+  const { omdbType } = MediaTypeToParam[mediaType];
+
   useEffect(() => {
-    const fetchMovieDetails = async () => {
+    const fetchDetails = async () => {
       try {
-        const details = await getMovieDetails(
-          parseInt(params.movieId),
-          "movie",
-        );
-        setMovieDetails(details || null);
+        const details = await getOmdbDetails(mediaId, omdbType);
+        setMediaDetails(details || null);
       } catch (err) {
         setError(err as Error);
       }
     };
 
-    fetchMovieDetails();
-  }, [params.movieId]);
+    fetchDetails();
+  }, [mediaId]);
 
   if (error) {
-    return <ErrorPage />;
+    return <ErrorPage header={errorHeader} body={errorBody} />;
   }
 
-  if (!movieDetails) {
+  if (!mediaDetails) {
     return <Typography sx={{ padding: 1 }}>Loading...</Typography>;
   }
 
@@ -75,13 +88,10 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
       flexDirection="column"
       justifyContent="center"
     >
-      <InfoSummaryHeader movie={movieDetails} />
-      <ReviewsSection
-        mediaType={MediaType.MOVIE}
-        mediaId={parseInt(params.movieId)}
-      />
+      <InfoSummaryHeader media={mediaDetails} mediaType={mediaType} />
+      <ReviewsSection mediaType={mediaType} mediaId={mediaId} />
     </Box>
   );
 };
 
-export default Movie;
+export default OmdbPageDetails;

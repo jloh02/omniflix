@@ -20,7 +20,7 @@ import {
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
-import searchOmdb from "@/utils/database/movies/searchOmdb";
+import searchOmdb from "@/utils/database/omdb/searchOmdb";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
 
