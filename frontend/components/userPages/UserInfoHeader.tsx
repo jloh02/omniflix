@@ -26,8 +26,6 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
     const newShareRoute = isProfilePageRoute
       ? `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`
       : undefined;
-    console.log(isProfilePageRoute);
-    console.log(window.location);
     setShareRoute(newShareRoute);
   }, [username]);
 

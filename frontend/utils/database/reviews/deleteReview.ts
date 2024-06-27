@@ -7,7 +7,7 @@ import { PostgrestError } from "@supabase/supabase-js";
 
 async function deleteReview(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
 ): Promise<PostgrestError | null> {
   // Fetch current user
   const supabase = createClient();
@@ -25,7 +25,6 @@ async function deleteReview(
     .from(TableNames.REVIEWS)
     .delete()
     .eq("user_id", user.id)
-    .eq("media_type", mediaType)
     .eq("media_id", mediaId);
 
   return error;

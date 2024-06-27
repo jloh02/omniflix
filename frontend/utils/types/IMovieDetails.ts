@@ -4,7 +4,7 @@ interface IMovieDetails extends IMovie {
   rated: string;
   released: string;
   runtime: string;
-  genre: string;
+  genre: string[];
   director: string;
   writer: string;
   actors: string;

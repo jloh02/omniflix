@@ -16,14 +16,21 @@ async function getLastColumnOrder(
   media_type: string,
   status_column?: number
 ) {
-  const { data } = await client
+  const { data, error } = await client
     .from(TableNames.WATCHLIST)
-    .select("column_order")
-    .match({ user_id, media_type, status_column: status_column ?? 0 })
+    .select(`column_order, ${TableNames.MEDIA}:media_id(media_type)`)
+    .match({
+      user_id,
+      status_column: status_column ?? 0,
+    })
+    .eq(`${TableNames.MEDIA}.media_type`, media_type)
     .order("column_order", { ascending: false })
     .limit(1)
-    .returns<Tables<TableNames.WATCHLIST>[]>()
     .single();
+
+  if (error) {
+    console.warn(error);
+  }
 
   const columnOrder = data ? data.column_order : genFirstLexoRank();
   return getLexorank(columnOrder, genLastLexoRank(columnOrder.length));
@@ -80,7 +87,6 @@ Deno.serve(async (req: Request) => {
       .from(TableNames.WATCHLIST)
       .insert({
         user_id,
-        media_type,
         media_id,
         column_order,
         status_column: status_column ?? 0,
@@ -88,6 +94,7 @@ Deno.serve(async (req: Request) => {
       .returns<TablesInsert<TableNames.WATCHLIST>>();
 
     if (error) {
+      console.error(error);
       return new Response(JSON.stringify({ error: error.message }), {
         status: 400,
       });
@@ -102,10 +109,11 @@ Deno.serve(async (req: Request) => {
     const { error } = await supabaseClient
       .from(TableNames.WATCHLIST)
       .delete()
-      .match({ user_id, media_type, media_id })
+      .match({ user_id, media_id })
       .returns<TablesUpdate<TableNames.WATCHLIST>>();
 
     if (error) {
+      console.error(error);
       return new Response(JSON.stringify({ error: error.message }), {
         status: 400,
       });
@@ -138,10 +146,11 @@ Deno.serve(async (req: Request) => {
     const { error } = await supabaseClient
       .from(TableNames.WATCHLIST)
       .update({ status_column, column_order })
-      .match({ user_id, media_type, media_id })
+      .match({ user_id, media_id })
       .returns<TablesUpdate<TableNames.WATCHLIST>>();
 
     if (error) {
+      console.error(error);
       return new Response(JSON.stringify({ error }), {
         status: 400,
       });

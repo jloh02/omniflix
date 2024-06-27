@@ -11,7 +11,7 @@ export interface ReviewWithUserInfo extends TablesInsert<TableNames.REVIEWS> {
 
 async function getReviews(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
 ): Promise<IReview[]> {
   // Fetch current user
   const supabase = createClient();
@@ -30,12 +30,15 @@ async function getReviews(
     .select(
       `
       *,
-      users_info:user_id (
+      ${TableNames.USERS_INFO}:user_id (
         username
+      ),
+      ${TableNames.MEDIA}:media_id (
+        media_type
       )
     `,
     )
-    .eq("media_type", mediaType)
+    .eq(`${TableNames.MEDIA}.media_type`, mediaType)
     .eq("media_id", mediaId)
     .order("created_at", { ascending: false })
     .returns<ReviewWithUserInfo[]>();

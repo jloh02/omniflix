@@ -6,7 +6,7 @@ import { Tables } from "@/utils/supabase/types.gen";
 
 async function getLikeDislikeCount(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
 ): Promise<{ likeCount: number; dislikeCount: number }> {
   // Fetch current user
   const supabase = createClient();
@@ -23,7 +23,6 @@ async function getLikeDislikeCount(
   const { count: likeCount, error: likeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })
-    .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .eq("status", LikeStatus.LIKE)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
@@ -38,7 +37,6 @@ async function getLikeDislikeCount(
   const { count: dislikeCount, error: dislikeError } = await supabase
     .from(TableNames.LIKES_DISLIKES)
     .select("*", { count: "exact", head: true })
-    .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .eq("status", LikeStatus.DISLIKE)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();

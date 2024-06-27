@@ -30,7 +30,7 @@ interface KanbanCardProps {
   item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
-  removeItem: (id: string) => void;
+  removeItem: (id: number) => void;
 }
 
 const IMAGE_SIZE = 100;

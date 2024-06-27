@@ -20,8 +20,14 @@ async function getWatchlist(
 
   const { data: watchlistData, error } = await supabase
     .from(TableNames.WATCHLIST)
-    .select()
-    .match({ user_id: user.id, media_type: mediaType })
+    .select(
+      `*, 
+      ${TableNames.MEDIA}:media_id (
+        media_type
+      )`,
+    )
+    .eq("user_id", user.id)
+    .eq(`${TableNames.MEDIA}.media_type`, mediaType)
     .returns<Tables<TableNames.WATCHLIST>[]>()
     .order("column_order");
 
@@ -34,18 +40,22 @@ async function getWatchlist(
   // Read from movie cache
   const { data: cacheData, error: cacheError } = await supabase
     .from(TableNames.MOVIES_CACHE)
-    .select()
-    .in("imdb_id", movieIds)
-    .returns<Tables<TableNames.MOVIES_CACHE>[]>();
+    .select(
+      `*, 
+      ${TableNames.MEDIA}!inner (
+        media_id
+      )`,
+    )
+    .in(`${TableNames.MEDIA}.media_id`, movieIds);
 
   if (cacheError || !cacheData) {
     throw new Error("Cache should always contain updated data. None found");
   }
 
   const data = cacheData.reduce((acc, item) => {
-    acc.set(item.imdb_id, item);
+    acc.set(item.media.media_id, item);
     return acc;
-  }, new Map<string, Tables<TableNames.MOVIES_CACHE>>());
+  }, new Map<number, Tables<TableNames.MOVIES_CACHE>>());
 
   // Group by columnNames
   let result = columnNames.reduce(

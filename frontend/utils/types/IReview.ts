@@ -3,7 +3,7 @@ interface IReview {
   userId: string;
   username: string;
   mediaType: string;
-  mediaId: string;
+  mediaId: number;
   rating: number;
   title: string;
   description: string;

@@ -6,7 +6,6 @@ const KEY_MAP: KeyValueMap = {
   imdbID: "imdb_id",
   Poster: "poster_url",
   imdbRating: "imdb_rating",
-  imdbVotes: "imdb_votes",
   Genre: "genre",
   Rated: "rated",
   Released: "released",
