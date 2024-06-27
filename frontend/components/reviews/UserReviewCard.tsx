@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   Card,
@@ -10,9 +11,8 @@ import {
   Collapse,
   CardMedia,
   Button,
-  CardActionArea,
 } from "@mui/material";
-import { MOVIES_PAGE_ROUTE, MediaType } from "@/utils/constants";
+import { MediaType, MediaTypeToParam } from "@/utils/constants";
 import { ArrowDropDown, Edit, Star } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,7 +39,8 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
   reviewDescription,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const mediaPagePath = MOVIES_PAGE_ROUTE + "/" + mediaId;
+  const { urlPath } = MediaTypeToParam[mediaType];
+  const mediaPagePath = urlPath + "/" + mediaId;
 
   // Initialize router
   const router = useRouter();
