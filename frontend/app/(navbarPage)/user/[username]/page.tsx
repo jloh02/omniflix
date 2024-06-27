@@ -1,4 +1,4 @@
-import UserInfoHeader from "@/components/userPages/UserInfoHeader";
+import UserInfoHeader from "@/components/publicProfile/UserInfoHeader";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import { Box, Button, Typography } from "@mui/material";
 
