@@ -9,6 +9,6 @@
     "db:migrate": "supabase db diff --use-migra -f output"
   },
   "devDependencies": {
-    "supabase": "^1.167.4"
+    "supabase": "^1.176.4"
   }
 }

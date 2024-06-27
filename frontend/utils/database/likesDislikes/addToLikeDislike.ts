@@ -5,7 +5,7 @@ import { Tables } from "@/utils/supabase/types.gen";
 
 async function addToLikeDislike(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
   likeStatus: LikeStatus,
 ) {
   // Fetch current user
@@ -24,7 +24,6 @@ async function addToLikeDislike(
     .from(TableNames.LIKES_DISLIKES)
     .select("*")
     .eq("user_id", user.id)
-    .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
@@ -37,7 +36,6 @@ async function addToLikeDislike(
         status: likeStatus,
       })
       .eq("user_id", user.id)
-      .eq("media_type", mediaType)
       .eq("media_id", mediaId)
       .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
   } else {
@@ -46,7 +44,6 @@ async function addToLikeDislike(
       .from(TableNames.LIKES_DISLIKES)
       .insert({
         user_id: user.id,
-        media_type: mediaType,
         media_id: mediaId,
         status: likeStatus,
       })

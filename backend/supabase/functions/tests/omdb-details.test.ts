@@ -71,15 +71,18 @@ const testOmdbDetails = async () => {
     assertStringIncludes(errorMsg, "Missing params");
     assertStringIncludes(errorMsg, "type");
   });
-  await testError(client, { id: "tt0000000", type: "invalid" }, (errorMsg) => {
+  await testError(client, { id: 1, type: "invalid" }, (errorMsg) => {
     assertStringIncludes(errorMsg, "Invalid type");
   });
-
-  await testError(client, { id: "tt0000000", type: "movie" }, (errorMsg) => {
-    assertStringIncludes(errorMsg, "Error");
+  await testError(client, { id: "0", type: "movie" }, (errorMsg) => {
+    assertStringIncludes(errorMsg, "number");
   });
 
-  await testSuccess(client, { id: "tt0363771", type: "movie" }, (body) => {
+  await testError(client, { id: -1, type: "movie" }, (errorMsg) => {
+    assertStringIncludes(errorMsg, "number");
+  });
+
+  await testSuccess(client, { id: 1, type: "movie" }, (body) => {
     assertExists(body["rated"]);
     assertExists(body["released"]);
     assertExists(body["runtime"]);

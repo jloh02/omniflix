@@ -25,6 +25,7 @@ async function getUserAccountInfo(): Promise<Tables<TableNames.USERS_INFO>> {
     .returns<Tables<TableNames.USERS_INFO>[]>();
 
   if (error) {
+    console.error(error);
     throw new Error(
       "Error encountered when getting user info. Please try again later.",
     );

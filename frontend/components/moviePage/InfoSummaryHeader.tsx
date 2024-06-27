@@ -9,7 +9,7 @@ import ShareButton from "../socialShare/ShareButton";
 
 interface ButtonsRowProps {
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
   mediaTitle: string;
 }
 
@@ -78,15 +78,15 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
         <Box flex={1}>
           <Typography variant="h6">{movie.title}</Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.rated} · {movie.released} · {movie.runtime}
+            {movie.rated} · {movie.released} · {movie.runtime} mins
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.genre}
+            {movie.genre.join(", ")}
           </Typography>
           <RatingsRow imdbRating={movie.imdbRating} />
           <ButtonsRow
             mediaType={MediaType.MOVIE}
-            mediaId={movie.imdbId}
+            mediaId={movie.mediaId}
             mediaTitle={movie.title}
           />
         </Box>

@@ -15,7 +15,7 @@ import Link from "next/link";
 
 type MediaCardProps = {
   mediaType: MediaType;
-  mediaId: string;
+  mediaId: number;
   posterUrl: string;
   title: string;
   subtitle: string;

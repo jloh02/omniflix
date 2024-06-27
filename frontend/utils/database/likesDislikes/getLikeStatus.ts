@@ -6,7 +6,7 @@ import { Tables } from "@/utils/supabase/types.gen";
 
 async function getLikeStatus(
   mediaType: MediaType,
-  mediaId: string,
+  mediaId: number,
 ): Promise<LikeStatus> {
   // Fetch current user
   const supabase = createClient();
@@ -24,12 +24,12 @@ async function getLikeStatus(
     .from(TableNames.LIKES_DISLIKES)
     .select("status")
     .eq("user_id", user.id)
-    .eq("media_type", mediaType)
     .eq("media_id", mediaId)
     .limit(1)
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
   if (error) {
+    console.error(error);
     throw new Error(
       "Error encountered when getting like status. Please try again later.",
     );

@@ -5,7 +5,7 @@ import IMovieDetails from "@/utils/types/IMovieDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";
-import { MediaType } from "@/utils/constants";
+import { HOME_PAGE_ROUTE, MediaType } from "@/utils/constants";
 
 interface MoviePageProps {
   params: {
@@ -29,7 +29,12 @@ const ErrorPage = () => (
     <Typography variant="body1" component="p" gutterBottom>
       The movie you're looking for could not be found.
     </Typography>
-    <Button variant="contained" color="primary" href="/" sx={{ margin: 1 }}>
+    <Button
+      variant="contained"
+      color="primary"
+      href={HOME_PAGE_ROUTE}
+      sx={{ margin: 1 }}
+    >
       Return to homepage
     </Button>
   </Box>
@@ -42,7 +47,7 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const details = await getMovieDetails(params.movieId);
+        const details = await getMovieDetails(parseInt(params.movieId));
         setMovieDetails(details || null);
       } catch (err) {
         setError(err as Error);
@@ -68,7 +73,10 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
       justifyContent="center"
     >
       <InfoSummaryHeader movie={movieDetails} />
-      <ReviewsSection mediaType={MediaType.MOVIE} mediaId={params.movieId} />
+      <ReviewsSection
+        mediaType={MediaType.MOVIE}
+        mediaId={parseInt(params.movieId)}
+      />
     </Box>
   );
 };

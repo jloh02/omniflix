@@ -17,19 +17,37 @@ async function cacheItems(
   type: OMDBType
 ) {
   const entriesToUpsert = items.map(mapMovieKeys);
+  const imdbKeys = entriesToUpsert.map((v) => {
+    return { media_specific_id: v.imdb_id, media_type: type };
+  });
+
+  const { data: mediaMap, error: mediaError } = await client
+    .from(TableNames.MEDIA)
+    .upsert(imdbKeys, {
+      onConflict: "media_specific_id,media_type",
+      ignoreDuplicates: false,
+    })
+    .select("media_id");
+
+  if (mediaError) {
+    console.error("Error inserting media map", mediaError);
+    throw new Error(`Error inserting media map: ${mediaError}`);
+  }
 
   const { error } = await client
     .from(TableNames.MOVIES_CACHE_TABLE)
     .upsert(entriesToUpsert, {
       defaultToNull: true,
-      onConflict: "imdb_id",
-      ignoreDuplicates: true,
+      onConflict: "imdb_id,media_type",
+      ignoreDuplicates: false,
     })
     .returns<Tables<TableNames.MOVIES_CACHE_TABLE>>();
 
   if (error) {
     console.error("Error upserting data", error);
   }
+
+  return mediaMap;
 }
 
 Deno.serve(async (req: Request) => {
@@ -81,11 +99,17 @@ Deno.serve(async (req: Request) => {
   );
   const resBody = await res.json();
   if (!resBody.Error) {
-    await cacheItems(adminSupabaseClient, resBody.Search, type);
+    // Cache items, return media_ids
+    const cache = await cacheItems(adminSupabaseClient, resBody.Search, type);
+
+    // Map movie keys to match schema and add media_id
     return new Response(
       JSON.stringify({
         ...resBody,
-        Search: resBody.Search.map(mapMovieKeys),
+        Search: resBody.Search.map(mapMovieKeys).map((v: any, idx: number) => ({
+          ...v,
+          media_id: cache[idx].media_id,
+        })),
       })
     );
   }
@@ -101,6 +125,10 @@ Deno.serve(async (req: Request) => {
   }
 
   // Format data so it matches the search API
-  await cacheItems(adminSupabaseClient, [titleResBody], type);
-  return new Response(JSON.stringify({ Search: [mapMovieKeys(titleResBody)] }));
+  const cache = await cacheItems(adminSupabaseClient, [titleResBody], type);
+  return new Response(
+    JSON.stringify({
+      Search: [{ ...mapMovieKeys(titleResBody), media_id: cache[0].media_id }],
+    })
+  );
 });

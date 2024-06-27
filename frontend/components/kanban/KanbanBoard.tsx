@@ -73,7 +73,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   );
 
   const removeItem = useCallback(
-    (id: string) => {
+    (id: number) => {
       removeFromWatchlist(mediaType, id).then((success) => {
         if (!success) return;
 

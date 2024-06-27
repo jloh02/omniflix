@@ -38,31 +38,28 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           user_id: string
         }
         Update: {
           created_at?: string
           id?: number
-          media_id?: string
-          media_type?: Database["public"]["Enums"]["media_type"]
+          media_id?: number
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "favorites_entries_media_id_fkey"
+            foreignKeyName: "favorites_entries_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
-            referencedRelation: "movies"
-            referencedColumns: ["imdb_id"]
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
           },
           {
             foreignKeyName: "favorites_entries_user_id_fkey"
@@ -77,28 +74,32 @@ export type Database = {
         Row: {
           created_at: string
           id: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           status: number
           user_id: string
         }
         Insert: {
           created_at?: string
           id?: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           status: number
           user_id?: string
         }
         Update: {
           created_at?: string
           id?: number
-          media_id?: string
-          media_type?: Database["public"]["Enums"]["media_type"]
+          media_id?: number
           status?: number
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "likes_dislikes_media_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
+          },
           {
             foreignKeyName: "likes_dislikes_user_id_fkey"
             columns: ["user_id"]
@@ -108,6 +109,24 @@ export type Database = {
           },
         ]
       }
+      media: {
+        Row: {
+          media_id: number
+          media_specific_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+        }
+        Insert: {
+          media_id?: never
+          media_specific_id: string
+          media_type: Database["public"]["Enums"]["media_type"]
+        }
+        Update: {
+          media_id?: never
+          media_specific_id?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+        }
+        Relationships: []
+      }
       movies: {
         Row: {
           created_at: string | null
@@ -115,6 +134,7 @@ export type Database = {
           genre: string[] | null
           imdb_id: string
           imdb_rating: number | null
+          media_type: Database["public"]["Enums"]["media_type"]
           poster_url: string | null
           rated: string | null
           released: string | null
@@ -128,6 +148,7 @@ export type Database = {
           genre?: string[] | null
           imdb_id: string
           imdb_rating?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"]
           poster_url?: string | null
           rated?: string | null
           released?: string | null
@@ -141,6 +162,7 @@ export type Database = {
           genre?: string[] | null
           imdb_id?: string
           imdb_rating?: number | null
+          media_type?: Database["public"]["Enums"]["media_type"]
           poster_url?: string | null
           rated?: string | null
           released?: string | null
@@ -148,15 +170,22 @@ export type Database = {
           title?: string | null
           year?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "movies_media_fkey"
+            columns: ["media_type", "imdb_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+        ]
       }
       reviews: {
         Row: {
           created_at: string
           description: string
           id: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           rating: number
           title: string
           user_id: string
@@ -165,8 +194,7 @@ export type Database = {
           created_at?: string
           description: string
           id?: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           rating: number
           title: string
           user_id?: string
@@ -175,19 +203,18 @@ export type Database = {
           created_at?: string
           description?: string
           id?: number
-          media_id?: string
-          media_type?: Database["public"]["Enums"]["media_type"]
+          media_id?: number
           rating?: number
           title?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "reviews_media_id_fkey"
+            foreignKeyName: "reviews_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
-            referencedRelation: "movies"
-            referencedColumns: ["imdb_id"]
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
           },
           {
             foreignKeyName: "reviews_user_id_fkey"
@@ -289,8 +316,7 @@ export type Database = {
           column_order: string
           created_at: string
           id: number
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           status_column: number
           user_id: string
         }
@@ -298,8 +324,7 @@ export type Database = {
           column_order?: string
           created_at?: string
           id?: never
-          media_id: string
-          media_type: Database["public"]["Enums"]["media_type"]
+          media_id: number
           status_column?: number
           user_id: string
         }
@@ -307,18 +332,17 @@ export type Database = {
           column_order?: string
           created_at?: string
           id?: never
-          media_id?: string
-          media_type?: Database["public"]["Enums"]["media_type"]
+          media_id?: number
           status_column?: number
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "watchlist_entries_media_id_fkey"
+            foreignKeyName: "watchlist_entries_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
-            referencedRelation: "movies"
-            referencedColumns: ["imdb_id"]
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
           },
           {
             foreignKeyName: "watchlist_entries_user_id_fkey"
