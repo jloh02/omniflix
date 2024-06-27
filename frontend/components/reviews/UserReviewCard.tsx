@@ -39,21 +39,9 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
   reviewDescription,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const { urlPath } = MediaTypeToParam[mediaType];
+  const { urlPath, label } = MediaTypeToParam[mediaType];
   const mediaPagePath = urlPath + "/" + mediaId;
-
-  // Initialize router
   const router = useRouter();
-
-  function toTitleCase(str: string) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map(function (word) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(" ");
-  }
 
   return (
     <Box onClick={() => setExpanded(!expanded)}>
@@ -79,7 +67,7 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
             </Link>
             <Box width="100%" position="relative">
               <Chip
-                label={toTitleCase(mediaType)}
+                label={label}
                 sx={{
                   position: "absolute",
                   top: 0,
