@@ -8,7 +8,7 @@ import {
   genLastLexoRank,
   getLexorank,
 } from "../_shared/lexorank.ts";
-import { Tables, TablesInsert, TablesUpdate } from "../_shared/types.gen.ts";
+import { TablesInsert, TablesUpdate } from "../_shared/types.gen.ts";
 
 async function getLastColumnOrder(
   client: SupabaseClient,

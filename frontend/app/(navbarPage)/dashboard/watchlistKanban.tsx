@@ -7,10 +7,16 @@ import { KanbanItem } from "@/components/kanban/kanbanTypes";
 import getWatchlist from "@/utils/database/watchlist/getWatchlist";
 import { MediaType } from "@/utils/constants";
 
-const WATCHLIST_COLUMNS = ["To Watch", "Watched"];
+interface WatchlistKanbanProps {
+  columns: string[];
+  mediaType: MediaType;
+}
 
-const MovieWatchlist: React.FC = () => {
-  const [movieWatchlist, setMovieWatchlist] = useState<
+const WatchlistKanban: React.FC<WatchlistKanbanProps> = ({
+  columns,
+  mediaType,
+}) => {
+  const [watchlist, setWatchlist] = useState<
     | {
         [columnId: string]: KanbanItem[];
       }
@@ -18,17 +24,17 @@ const MovieWatchlist: React.FC = () => {
   >();
 
   useEffect(() => {
-    getWatchlist(MediaType.MOVIE, WATCHLIST_COLUMNS).then((watchlist) =>
-      setMovieWatchlist(watchlist),
+    getWatchlist(mediaType, columns).then((watchlist) =>
+      setWatchlist(watchlist),
     );
   }, []);
 
   return (
     <Box>
       <KanbanBoard
-        kanbanData={movieWatchlist}
-        columnNames={WATCHLIST_COLUMNS}
-        setKanbanData={setMovieWatchlist}
+        kanbanData={watchlist}
+        columnNames={columns}
+        setKanbanData={setWatchlist}
         renderKanbanCard={(item) => (
           <CardContent>
             <Typography variant="h6" noWrap={true} textOverflow="ellipsis">
@@ -37,10 +43,10 @@ const MovieWatchlist: React.FC = () => {
             <Typography variant="body1">{item.year}</Typography>
           </CardContent>
         )}
-        mediaType={MediaType.MOVIE}
+        mediaType={mediaType}
       />
     </Box>
   );
 };
 
-export default MovieWatchlist;
+export default WatchlistKanban;

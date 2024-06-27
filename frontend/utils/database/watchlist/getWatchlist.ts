@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import {
   COMPLETED_STATUS_COLUMN_INDEX,
   MediaType,
+  MediaTypeToParam,
   TableNames,
 } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
@@ -36,18 +37,19 @@ async function getWatchlist(mediaType: MediaType, columnNames: string[]) {
     return;
   }
 
-  const movieIds = watchlistData.map((item) => item.media_id);
+  const mediaIds = watchlistData.map((item) => item.media_id);
 
-  // Read from movie cache
+  // Read from cache
+  const { tableName: cacheTable } = MediaTypeToParam[mediaType];
   const { data: cacheData, error: cacheError } = await supabase
-    .from(TableNames.MOVIES_CACHE)
+    .from(cacheTable)
     .select(
       `*, 
       ${TableNames.MEDIA}!inner (
         media_id
       )`,
     )
-    .in(`${TableNames.MEDIA}.media_id`, movieIds);
+    .in(`${TableNames.MEDIA}.media_id`, mediaIds);
 
   if (cacheError || !cacheData) {
     throw new Error("Cache should always contain updated data. None found");
