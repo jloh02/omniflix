@@ -1,9 +1,9 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { FunctionNames, MediaType } from "../../constants";
+import { FunctionNames, OMDBType } from "../../constants";
 
-async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
+async function searchOmdb(query: string, type: OMDBType, page?: number) {
   const supabase = createClient();
   const {
     data: { user },
@@ -18,7 +18,7 @@ async function searchOmdb(mediaType: MediaType, query: string, page?: number) {
     {
       body: {
         query,
-        type: mediaType,
+        type,
         page,
       },
     },

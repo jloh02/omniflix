@@ -47,7 +47,10 @@ const Movie: React.FC<MoviePageProps> = ({ params }) => {
   useEffect(() => {
     const fetchMovieDetails = async () => {
       try {
-        const details = await getMovieDetails(parseInt(params.movieId));
+        const details = await getMovieDetails(
+          parseInt(params.movieId),
+          "movie",
+        );
         setMovieDetails(details || null);
       } catch (err) {
         setError(err as Error);

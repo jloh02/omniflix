@@ -61,6 +61,7 @@ export enum TableNames {
 export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
+  TV_SERIES = "tv_series",
 }
 export enum LikeStatus {
   LIKE = 1,

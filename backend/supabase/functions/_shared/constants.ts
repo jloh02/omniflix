@@ -1,6 +1,11 @@
 const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
 
+enum MediaType {
+  MOVIE = "movie",
+  TV_SERIES = "tv_series",
+}
+
 enum WatchlistAction {
   ADD = "add",
   REMOVE = "remove",
@@ -20,5 +25,17 @@ const OMDB_TYPE_TO_TABLE: Record<OMDBType, string> = {
   episode: TableNames.TV_SERIES_CACHE_TABLE,
 };
 
+const OMDB_TYPE_TO_MEDIA_TYPE: Record<OMDBType, MediaType> = {
+  movie: MediaType.MOVIE,
+  series: MediaType.TV_SERIES,
+  episode: MediaType.TV_SERIES,
+};
+
 export type { OMDBType };
-export { ALLOWED_OMDB_TYPES, OMDB_TYPE_TO_TABLE, TableNames, WatchlistAction };
+export {
+  ALLOWED_OMDB_TYPES,
+  OMDB_TYPE_TO_TABLE,
+  OMDB_TYPE_TO_MEDIA_TYPE,
+  TableNames,
+  WatchlistAction,
+};

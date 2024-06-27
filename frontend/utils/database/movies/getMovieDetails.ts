@@ -1,12 +1,13 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { FunctionNames, MediaType } from "../../constants";
+import { FunctionNames, OMDBType } from "../../constants";
 import IMovieDetails from "../../types/IMovieDetails";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
 async function getMovieDetails(
   mediaId: number,
+  type: OMDBType,
 ): Promise<IMovieDetails | undefined> {
   const supabase = createClient();
   const {
@@ -21,7 +22,7 @@ async function getMovieDetails(
     FunctionNames.OMDB_DETAILS,
     {
       body: {
-        type: MediaType.MOVIE,
+        type,
         id: mediaId,
       },
     },

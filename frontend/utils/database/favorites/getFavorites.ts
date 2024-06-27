@@ -1,13 +1,13 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { MediaType, TableNames } from "@/utils/constants";
+import { OMDBType, TableNames } from "@/utils/constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import getMovieDetails from "@/utils/database/movies/getMovieDetails";
 import IMovieDetails from "@/utils/types/IMovieDetails";
 
 async function getFavorites(
-  mediaType: MediaType,
+  type: OMDBType,
 ): Promise<IMovieDetails[] | undefined> {
   // Fetch current user
   const supabase = createClient();
@@ -38,7 +38,7 @@ async function getFavorites(
 
   // Fetch movie details
   const movieDetails = await Promise.all(
-    mediaIds.map(async (id) => await getMovieDetails(id)),
+    mediaIds.map(async (id) => await getMovieDetails(id, type)),
   );
 
   return movieDetails.filter(

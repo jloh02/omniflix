@@ -16,7 +16,7 @@ import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
   MINIMUM_SEARCH_LENGTH,
-  MediaType,
+  OMDBType,
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovie from "@/utils/types/IMovie";
@@ -51,7 +51,7 @@ const Movies: React.FC = () => {
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
 
-    searchOmdb(MediaType.MOVIE, searchInput).then(async (response) => {
+    searchOmdb(searchInput, "movie").then(async (response) => {
       if (response["Error"]) {
         setError(response["Error"]);
         setIsLoading(false);
