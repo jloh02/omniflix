@@ -1,6 +1,6 @@
 "use server";
 import { Typography } from "@mui/material";
-import UserProfileRow from "@/components/userProfile/UserProfileRow";
+import UserProfileRow from "@/components/userPages/UserProfileRow";
 import React from "react";
 import UserPageTemplate from "@/components/userPages/UserPageTemplate";
 import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";

@@ -1,32 +1,27 @@
 "use client";
 import { Avatar, Box, Typography } from "@mui/material";
 import ShareButton from "../socialShare/ShareButton";
-import {
-  PROFILE_PAGE_ROUTE,
-  USER_PUBLIC_PROFILE_PAGE_ROUTE,
-} from "@/utils/constants";
+import { USER_PUBLIC_PROFILE_PAGE_ROUTE } from "@/utils/constants";
 import { useEffect, useState } from "react";
+import ViewProfileButton from "./ViewProfileButton";
 
-interface UserInfoHeaderProps {
+interface UserInfoHeaderPersonalProps {
   name: string;
   username: string;
   bio: string;
 }
 
-const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
+const UserInfoHeaderPersonal: React.FC<UserInfoHeaderPersonalProps> = ({
   name,
   username,
   bio,
 }) => {
-  const [shareRoute, setShareRoute] = useState<string | undefined>();
+  const [profileRoute, setProfileRoute] = useState<string | undefined>();
 
   useEffect(() => {
     // This runs on the client side, where window is defined
-    const isProfilePageRoute = window.location.pathname == PROFILE_PAGE_ROUTE;
-    const newShareRoute = isProfilePageRoute
-      ? `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`
-      : undefined;
-    setShareRoute(newShareRoute);
+    const profilePageRoute = `${window.location.origin}${USER_PUBLIC_PROFILE_PAGE_ROUTE}/${username}`;
+    setProfileRoute(profilePageRoute);
   }, [username]);
 
   return (
@@ -53,10 +48,11 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
           <Box>
             <Typography variant="h4">{name}</Typography>
             <Typography sx={{ fontStyle: "italic" }}>@{username}</Typography>
-            <Box marginY={1}>
+            <Box marginY={1} display="flex" gap={1}>
+              <ViewProfileButton username={username} />
               <ShareButton
                 text={`Check out ${name}'s profile on Omniflix!`}
-                link={shareRoute}
+                link={profileRoute}
               />
             </Box>
           </Box>
@@ -67,4 +63,4 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = ({
   );
 };
 
-export default UserInfoHeader;
+export default UserInfoHeaderPersonal;

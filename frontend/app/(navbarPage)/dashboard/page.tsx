@@ -9,18 +9,18 @@ const Dashboard: React.FC = () => {
       tabLabels={[
         "Overview",
         "Favorites",
-        "Feed",
-        "Not Started",
-        "In Progress",
-        "Finished",
+        // "Feed",
+        // "Not Started",
+        // "In Progress",
+        // "Finished",
       ]}
     >
       <Watchlist />
       <Favorites />
-      <div>Feed Page WIP</div>
+      {/* <div>Feed Page WIP</div>
       <div>"To Watch" Page WIP</div>
       <div>"Watching" Page WIP</div>
-      <div>"Watched" Page WIP</div>
+      <div>"Watched" Page WIP</div> */}
     </TabbedView>
   );
 };
