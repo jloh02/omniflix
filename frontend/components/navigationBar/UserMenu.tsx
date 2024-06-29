@@ -12,16 +12,17 @@ import LogoutMenuItem from "./LogoutMenuItem";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import Person from "@mui/icons-material/Person";
 import {
+  FOLLOWING_ROUTE,
   FRIENDS_ROUTE,
   PROFILE_PAGE_ROUTE,
   USER_REVIEWS_ROUTE,
 } from "@/utils/constants";
-import { Group, RateReview } from "@mui/icons-material";
-import { usePathname } from "next/navigation";
+import { Diversity1, Group, RateReview } from "@mui/icons-material";
 
 const MENU_ITEMS = [
   { route: PROFILE_PAGE_ROUTE, label: "Profile", icon: <Person /> },
-  { route: FRIENDS_ROUTE, label: "My Friends", icon: <Group /> },
+  { route: FRIENDS_ROUTE, label: "My Friends", icon: <Diversity1 /> },
+  { route: FOLLOWING_ROUTE, label: "My Following", icon: <Group /> },
   { route: USER_REVIEWS_ROUTE, label: "My Reviews", icon: <RateReview /> },
 ];
 

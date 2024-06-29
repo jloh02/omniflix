@@ -13,6 +13,7 @@ export const USER_PUBLIC_PROFILE_PAGE_ROUTE = "/user";
 export const USER_REVIEWS_ROUTE = "/profile/reviews";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
+export const FOLLOWING_ROUTE = "/following";
 export const MOVIES_PAGE_ROUTE = "/movies";
 export const TV_SERIES_PAGE_ROUTE = "/tv-series";
 export const BOOKS_PAGE_ROUTE = "/books";
@@ -53,6 +54,7 @@ export enum TableNames {
   FAVORITES = "favorites_entries",
   LIKES_DISLIKES = "likes_dislikes",
   REVIEWS = "reviews",
+  USER_FOLLOWING = "user_following",
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",

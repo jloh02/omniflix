@@ -1,7 +1,7 @@
 import { Box } from "@mui/system";
-import UserInfoHeader from "./UserInfoHeader";
 import UserSectionsNavMenu from "./UserSectionsNavMenu";
 import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
+import UserInfoHeaderPersonal from "./UserInfoHeaderPersonal";
 
 interface UserPageTemplateProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ const UserPageTemplate: React.FC<UserPageTemplateProps> = async ({
   const userInfo = await getUserAccountInfo();
   return (
     <>
-      <UserInfoHeader
+      <UserInfoHeaderPersonal
         name={userInfo.name}
         username={userInfo.username}
         bio={userInfo.bio ?? ""}

@@ -1,4 +1,4 @@
-import UserInfoHeader from "@/components/userPages/UserInfoHeader";
+import UserInfoHeader from "@/components/publicProfile/UserInfoHeader";
 import getUserInfo from "@/utils/database/userProfile/getUserInfo";
 import { Box, Button, Typography } from "@mui/material";
 
@@ -57,6 +57,7 @@ const UserProfilePage: React.FC<UserProfilePageProps> = async ({ params }) => {
       justifyContent="center"
     >
       <UserInfoHeader
+        userId={data.user_id}
         name={data.name}
         username={data.username}
         bio={data.bio ?? ""}

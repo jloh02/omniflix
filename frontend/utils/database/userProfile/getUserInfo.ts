@@ -29,7 +29,7 @@ async function getUserInfo(username: string): Promise<
     .select("*")
     .eq("username", username)
     .limit(1)
-    .returns<Tables<TableNames.USERS_INFO>>()
+    .returns<Tables<TableNames.USERS_INFO>[]>()
     .single();
 
   return { data, error };

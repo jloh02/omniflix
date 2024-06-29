@@ -9,15 +9,17 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import {
+  FOLLOWING_ROUTE,
   FRIENDS_ROUTE,
   PROFILE_PAGE_ROUTE,
   USER_REVIEWS_ROUTE,
 } from "@/utils/constants";
-import { Group, Person, RateReview } from "@mui/icons-material";
+import { Diversity1, Group, Person, RateReview } from "@mui/icons-material";
 
 const MENU_ITEMS = [
   { route: PROFILE_PAGE_ROUTE, label: "Basic Info", icon: <Person /> },
-  { route: FRIENDS_ROUTE, label: "Friends", icon: <Group /> },
+  { route: FRIENDS_ROUTE, label: "Friends", icon: <Diversity1 /> },
+  { route: FOLLOWING_ROUTE, label: "Following", icon: <Group /> },
   { route: USER_REVIEWS_ROUTE, label: "Reviews", icon: <RateReview /> },
 ];
 
