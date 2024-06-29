@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Card,
   CardMedia,
@@ -7,7 +7,7 @@ import {
   Chip,
   Box,
 } from "@mui/material";
-import { MOVIES_PAGE_ROUTE, MediaType } from "@/utils/constants";
+import { MediaType, MediaTypeParam, MediaTypeToParam } from "@/utils/constants";
 import FavoriteButton from "./FavoriteButton";
 import AddToWatchlistButton from "./AddToWatchlistButton";
 import LikeDislikeButtons from "./LikeDislikeButtons";
@@ -30,17 +30,14 @@ const MediaCard: React.FC<MediaCardProps> = ({
   subtitle,
   showLabel = true,
 }) => {
-  let mediaPagePath;
-  switch (mediaType) {
-    case MediaType.MOVIE:
-      mediaPagePath = MOVIES_PAGE_ROUTE;
-      break;
-  }
-  mediaPagePath += `/${mediaId}`;
+  const { label, urlPath }: MediaTypeParam = useMemo(
+    () => MediaTypeToParam[mediaType],
+    [mediaType],
+  );
 
   return (
     <Card className="relative w-52 h-full">
-      <Link href={mediaPagePath}>
+      <Link href={`${urlPath}/${mediaId}`}>
         <CardMedia component="img" src={posterUrl} className="h-72" />
       </Link>
       <CardContent className="p-2.5 last:pb-8">
@@ -51,7 +48,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
           </Box>
           {showLabel ? (
             <Chip
-              label="Movie"
+              label={label}
               sx={{
                 color: "white",
                 backgroundColor: (theme) => theme.palette.primary.light,

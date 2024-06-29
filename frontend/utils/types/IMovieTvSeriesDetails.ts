@@ -1,6 +1,6 @@
-import IMovie from "@/utils/types/IMovie";
+import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
 
-interface IMovieDetails extends IMovie {
+interface IMovieTvSeriesDetails extends IMovieTvSeries {
   rated: string;
   released: string;
   runtime: string;
@@ -23,4 +23,4 @@ interface IMovieDetails extends IMovie {
   website: string;
 }
 
-export default IMovieDetails;
+export default IMovieTvSeriesDetails;

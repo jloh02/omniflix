@@ -22,8 +22,11 @@ const TabView: React.FC<TabViewProps> = ({
       `TabView requires ${tabLabels.length} children. Found ${numChild}`,
     );
 
-  const childView = useMemo(
-    () => React.Children.toArray(children)[tab],
+  const childrenView = useMemo(
+    () =>
+      React.Children.toArray(children).map((child, index) => (
+        <Box display={index === tab ? "block" : "none"}>{child}</Box>
+      )),
     [tab, children],
   );
 
@@ -35,14 +38,13 @@ const TabView: React.FC<TabViewProps> = ({
           textColor="secondary"
           indicatorColor="secondary"
           onChange={(_, newValue) => setTab(newValue)}
-          aria-label="basic tabs example"
         >
           {tabLabels.map((tabLabel, index) => (
             <Tab key={index} label={tabLabel} />
           ))}
         </Tabs>
       </Box>
-      {childView}
+      {childrenView}
     </Box>
   );
 };

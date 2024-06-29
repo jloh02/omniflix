@@ -8,7 +8,7 @@ import {
   genLastLexoRank,
   getLexorank,
 } from "../_shared/lexorank.ts";
-import { Tables, TablesInsert, TablesUpdate } from "../_shared/types.gen.ts";
+import { TablesInsert, TablesUpdate } from "../_shared/types.gen.ts";
 
 async function getLastColumnOrder(
   client: SupabaseClient,
@@ -18,7 +18,7 @@ async function getLastColumnOrder(
 ) {
   const { data, error } = await client
     .from(TableNames.WATCHLIST)
-    .select(`column_order, ${TableNames.MEDIA}:media_id(media_type)`)
+    .select(`column_order, ${TableNames.MEDIA}:media_id!inner(media_type)`)
     .match({
       user_id,
       status_column: status_column ?? 0,

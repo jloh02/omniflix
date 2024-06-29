@@ -19,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.167.4
+          version: 1.176.4
       - run: supabase start
       - name: Verify generated types are checked in (Frontend)
         env:
@@ -48,7 +48,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.167.4
+          version: 1.176.4
       - uses: denoland/setup-deno@v1
         with:
           deno-version: 1.43.6

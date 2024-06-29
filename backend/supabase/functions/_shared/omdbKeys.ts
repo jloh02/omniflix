@@ -6,13 +6,14 @@ const KEY_MAP: KeyValueMap = {
   imdbID: "imdb_id",
   Poster: "poster_url",
   imdbRating: "imdb_rating",
+  imdbVotes: "imdb_votes",
   Genre: "genre",
   Rated: "rated",
   Released: "released",
   Runtime: "runtime",
 };
 
-const mapMovieKeys = (omdbResult: KeyValueMap) => {
+const mapOmdbKeys = (omdbResult: KeyValueMap) => {
   const newObj: KeyValueMap = {};
   for (const key in KEY_MAP) {
     if (key in omdbResult) {
@@ -22,4 +23,4 @@ const mapMovieKeys = (omdbResult: KeyValueMap) => {
   return newObj;
 };
 
-export { mapMovieKeys };
+export { mapOmdbKeys };

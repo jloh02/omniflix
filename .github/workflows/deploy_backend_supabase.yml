@@ -26,7 +26,7 @@ jobs:
           fi
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.167.4
+          version: 1.176.4
       - run: supabase functions deploy --project-ref $PROJECT_ID
   deploy-db:
     name: Deploy Supabase Database Migrations
@@ -45,7 +45,7 @@ jobs:
           fi
       - uses: supabase/setup-cli@v1
         with:
-          version: 1.167.4
+          version: 1.176.4
       - run: supabase link --project-ref $PROJECT_ID
       - run: supabase db push --include-all
       # Only reset staging database

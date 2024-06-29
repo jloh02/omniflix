@@ -1,4 +1,4 @@
-import IMovieDetails from "@/utils/types/IMovieDetails";
+import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, CardMedia, Typography } from "@mui/material";
 import FavoriteButton from "../cards/FavoriteButton";
 import { MediaType } from "@/utils/constants";
@@ -54,10 +54,14 @@ const RatingsRow: React.FC<RatingsRowProps> = ({ imdbRating }) => {
 };
 
 interface InfoSummaryHeaderProps {
-  movie: IMovieDetails;
+  media: IMovieTvSeriesDetails;
+  mediaType: MediaType;
 }
 
-const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
+const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({
+  media,
+  mediaType,
+}) => {
   return (
     <Box
       margin={2}
@@ -71,28 +75,28 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({ movie }) => {
       <Box display="flex" alignItems="start">
         <CardMedia
           component="img"
-          image={movie.posterUrl}
-          alt={movie.title}
+          image={media.posterUrl}
+          alt={media.title}
           sx={{ height: "30vh", width: "auto", objectFit: "contain", mr: 2 }}
         />
         <Box flex={1}>
-          <Typography variant="h6">{movie.title}</Typography>
+          <Typography variant="h6">{media.title}</Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.rated} · {movie.released} · {movie.runtime} mins
+            {media.rated} · {media.released} · {media.runtime} mins
           </Typography>
           <Typography variant="body1" color="text.secondary">
-            {movie.genre.join(", ")}
+            {media.genre.join(", ")}
           </Typography>
-          <RatingsRow imdbRating={movie.imdbRating} />
+          <RatingsRow imdbRating={media.imdbRating} />
           <ButtonsRow
-            mediaType={MediaType.MOVIE}
-            mediaId={movie.mediaId}
-            mediaTitle={movie.title}
+            mediaType={mediaType}
+            mediaId={media.mediaId}
+            mediaTitle={media.title}
           />
         </Box>
       </Box>
       <Typography variant="body2" align="justify" marginTop={1}>
-        {movie.plot}
+        {media.plot}
       </Typography>
     </Box>
   );

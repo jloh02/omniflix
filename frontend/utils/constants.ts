@@ -56,6 +56,7 @@ export enum TableNames {
   REVIEWS = "reviews",
   USER_FOLLOWING = "user_following",
   MOVIES_CACHE = "movies",
+  TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
 }
 
@@ -63,6 +64,7 @@ export enum TableNames {
 export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
+  TV_SERIES = "tv_series",
 }
 export enum LikeStatus {
   LIKE = 1,
@@ -81,3 +83,31 @@ export enum WatchlistFunctionAction {
   REMOVE = "remove",
   UPDATE = "update",
 }
+
+// Utility to convert category into a media type
+export const CategoryToMediaType: Record<string, MediaType> = {
+  Movies: MediaType.MOVIE,
+  "TV Series": MediaType.TV_SERIES,
+};
+
+// Utility for converting media type to various parameters
+export type MediaTypeParam = {
+  tableName: TableNames;
+  omdbType: OMDBType;
+  label: string;
+  urlPath: string;
+};
+export const MediaTypeToParam: Record<MediaType, MediaTypeParam> = {
+  [MediaType.MOVIE]: {
+    tableName: TableNames.MOVIES_CACHE,
+    omdbType: "movie",
+    label: "Movie",
+    urlPath: MOVIES_PAGE_ROUTE,
+  },
+  [MediaType.TV_SERIES]: {
+    tableName: TableNames.TV_SERIES_CACHE,
+    omdbType: "series",
+    label: "TV Series",
+    urlPath: TV_SERIES_PAGE_ROUTE,
+  },
+};

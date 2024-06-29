@@ -1,12 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import React from "react";
+import { MediaType } from "@/utils/constants";
+import OmdbPage from "@/components/omdbPage/omdbPage";
 
-export default async function Index() {
-  return (
-    <Box sx={{ width: "90%", padding: "10px" }}>
-      <Typography align="left" variant="h4">
-        TV Series
-      </Typography>
-      <Typography sx={{ fontStyle: "italic" }}>Page in development.</Typography>
-    </Box>
-  );
-}
+const TVSeries: React.FC = () => {
+  return <OmdbPage title="TV Series" type={MediaType.TV_SERIES} />;
+};
+
+export default TVSeries;

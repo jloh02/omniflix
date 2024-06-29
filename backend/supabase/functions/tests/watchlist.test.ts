@@ -80,7 +80,7 @@ async function getWatchlistEntries(
           (
             await client
               .from("watchlist_entries")
-              .select(`*, ${TableNames.MEDIA}:media_id(media_type)`)
+              .select(`*, ${TableNames.MEDIA}:media_id!inner(media_type)`)
               .match({ status_column })
               .eq(`${TableNames.MEDIA}.media_type`, "movie")
               .order("column_order", { ascending: true })

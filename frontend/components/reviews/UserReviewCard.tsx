@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import {
   Card,
@@ -10,9 +11,8 @@ import {
   Collapse,
   CardMedia,
   Button,
-  CardActionArea,
 } from "@mui/material";
-import { MOVIES_PAGE_ROUTE, MediaType } from "@/utils/constants";
+import { MediaType, MediaTypeToParam } from "@/utils/constants";
 import { ArrowDropDown, Edit, Star } from "@mui/icons-material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -39,20 +39,9 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
   reviewDescription,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const mediaPagePath = MOVIES_PAGE_ROUTE + "/" + mediaId;
-
-  // Initialize router
+  const { urlPath, label } = MediaTypeToParam[mediaType];
+  const mediaPagePath = urlPath + "/" + mediaId;
   const router = useRouter();
-
-  function toTitleCase(str: string) {
-    return str
-      .toLowerCase()
-      .split(" ")
-      .map(function (word) {
-        return word.charAt(0).toUpperCase() + word.slice(1);
-      })
-      .join(" ");
-  }
 
   return (
     <Box onClick={() => setExpanded(!expanded)}>
@@ -78,7 +67,7 @@ const UserReviewCard: React.FC<UserReviewCardProps> = ({
             </Link>
             <Box width="100%" position="relative">
               <Chip
-                label={toTitleCase(mediaType)}
+                label={label}
                 sx={{
                   position: "absolute",
                   top: 0,

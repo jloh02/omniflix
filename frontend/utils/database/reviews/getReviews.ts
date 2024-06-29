@@ -33,7 +33,7 @@ async function getReviews(
       ${TableNames.USERS_INFO}:user_id (
         username
       ),
-      ${TableNames.MEDIA}:media_id (
+      ${TableNames.MEDIA}:media_id!inner (
         media_type
       )
     `,
