@@ -72,7 +72,9 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
           />
           <IconButton
             disabled={isLoading}
-            onClick={async () => {
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
               setIsLoading(true);
               if (isEnabled) {
                 const success = await disableFn(mediaType, mediaId);
