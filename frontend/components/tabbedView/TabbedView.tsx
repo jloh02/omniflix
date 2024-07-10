@@ -25,7 +25,9 @@ const TabView: React.FC<TabViewProps> = ({
   const childrenView = useMemo(
     () =>
       React.Children.toArray(children).map((child, index) => (
-        <Box display={index === tab ? "block" : "none"}>{child}</Box>
+        <Box key={index} display={index === tab ? "block" : "none"}>
+          {child}
+        </Box>
       )),
     [tab, children],
   );
