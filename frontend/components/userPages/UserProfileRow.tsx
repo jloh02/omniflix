@@ -18,6 +18,7 @@ import {
   USERNAME_MAX_CHAR_LENGTH,
 } from "@/utils/constants";
 import { AuthResponse } from "@/utils/supabase/auth";
+import { useRouter } from "next/navigation";
 
 interface LabelProps {
   label: string;
@@ -36,6 +37,7 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
   value,
   onUpdate,
 }) => {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [newValue, setNewValue] = useState<string>(value);
   const [error, setError] = useState<string | null>(null);
@@ -126,7 +128,6 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
         sx={{ width: "100%" }}
       >
         <AlertTitle>Update successful!</AlertTitle>
-        Please reload to see the changes.
       </Alert>
     </Snackbar>
   );
@@ -179,6 +180,7 @@ const DefaultRow: React.FC<UserProfileRowProps> = ({
                 setUpdateError(error);
                 setOpenErrorSnackbar(true);
               } else {
+                router.refresh();
                 setOpenSuccessSnackbar(true);
                 setIsEditing(!isEditing);
               }
@@ -262,7 +264,6 @@ const PasswordRow: React.FC<UserProfileRowProps> = ({
         sx={{ width: "100%" }}
       >
         <AlertTitle>Update successful!</AlertTitle>
-        Please reload to see the changes.
       </Alert>
     </Snackbar>
   );
