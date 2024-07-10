@@ -38,9 +38,10 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const checkEnabled = useCallback(async () => {
-    const success = await checkEnabledFn(mediaType, mediaId);
-    setIsEnabled(success ?? false);
-    setIsLoading(false);
+    checkEnabledFn(mediaType, mediaId).then((success) => {
+      setIsEnabled(success ?? false);
+      setIsLoading(false);
+    });
   }, [isEnabled, isLoading, mediaType, mediaId]);
 
   useEffect(() => {

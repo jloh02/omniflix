@@ -1,29 +1,19 @@
-"use server";
+"use client";
 
-import { createClient } from "@/utils/supabase/server";
-import { MediaType, TableNames } from "../../constants";
+import { MediaType } from "../../constants";
+import DebouncedSupabaseQuery from "../DebouncedSupabaseQuery";
+import getWatchlistBatch from "./getWatchlistBatch";
 
-async function isWatchlisted(mediaType: MediaType, mediaId: number) {
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+const client = new DebouncedSupabaseQuery<boolean, number[]>(
+  getWatchlistBatch,
+  (mediaId, results) => results.includes(mediaId),
+);
 
-  if (!user) {
-    return;
-  }
-
-  const { data, error } = await supabase
-    .from(TableNames.WATCHLIST)
-    .select("*")
-    .match({ media_id: mediaId, user_id: user.id })
-    .limit(1);
-
-  if (error) {
-    return;
-  }
-
-  return data && data.length > 0;
+async function isWatchlisted(
+  mediaType: MediaType,
+  mediaId: number,
+): Promise<boolean> {
+  return client.query(mediaId);
 }
 
 export default isWatchlisted;
