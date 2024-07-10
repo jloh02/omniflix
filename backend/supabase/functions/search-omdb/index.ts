@@ -114,6 +114,9 @@ Deno.serve(async (req: Request) => {
     );
   }
 
+  if (page > 1)
+    return new Response(JSON.stringify({ Search: [] }), { status: 404 });
+
   const titleRes = await fetch(
     `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`
   );

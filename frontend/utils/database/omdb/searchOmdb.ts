@@ -25,7 +25,9 @@ async function searchOmdb(query: string, type: OMDBType, page?: number) {
   );
 
   if (error) {
-    return await error.context.json();
+    const e = await error.context.json();
+    console.error(e);
+    return e;
   }
 
   return JSON.parse(data);
