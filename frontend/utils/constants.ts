@@ -40,6 +40,7 @@ export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
 export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
+export const OMDB_FULL_RESPONSE_LENGTH = 10;
 
 // User Info constants
 export const NAME_MAX_CHAR_LENGTH = 30;

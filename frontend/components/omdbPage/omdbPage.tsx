@@ -10,19 +10,21 @@ import {
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
   MINIMUM_SEARCH_LENGTH,
   MediaType,
   MediaTypeToParam,
+  OMDB_FULL_RESPONSE_LENGTH,
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
 import searchOmdb from "@/utils/database/omdb/searchOmdb";
 import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
+import { useInView } from "react-intersection-observer";
 
 interface OmdbPageProps {
   title: string;
@@ -34,6 +36,8 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
   const [searchResult, setSearchResult] = useState<IMovieTvSeries[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [reachedEnd, setReachedEnd] = useState(false);
 
   const searchInputDebounced = useDebounce(
     searchInput,
@@ -44,6 +48,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
   useEffect(() => {
     setSearchResult([]);
     setError("");
+    setReachedEnd(false);
 
     if (searchInput.length < MINIMUM_SEARCH_LENGTH) {
       setIsLoading(false);
@@ -55,31 +60,41 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
 
   const { omdbType } = useMemo(() => MediaTypeToParam[type], [type]);
 
+  const searchOmdbCallback = useCallback(async () => {
+    const response = await searchOmdb(searchInput, omdbType, page);
+    if (response["Error"]) {
+      setError(response["Error"]);
+      setIsLoading(false);
+      return;
+    }
+
+    if (!response["Search"]) {
+      setError("No results found");
+      return;
+    }
+
+    const processedRes = (response["Search"] as object[]).map(
+      (mediaObj: object) =>
+        objectKeysSnakeCaseToCamelCase(mediaObj) as IMovieTvSeries,
+    );
+
+    if (processedRes.length < OMDB_FULL_RESPONSE_LENGTH) setReachedEnd(true);
+
+    setSearchResult((res) => res.concat(processedRes));
+    setPage((page) => page + 1);
+  }, [page, searchInput, omdbType]);
+
+  const { ref, inView } = useInView({ threshold: 0 });
+
+  useEffect(() => {
+    if (inView && !reachedEnd) searchOmdbCallback();
+  }, [inView, reachedEnd]);
+
   // Handle search
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
-
-    searchOmdb(searchInput, omdbType).then(async (response) => {
-      if (response["Error"]) {
-        setError(response["Error"]);
-        setIsLoading(false);
-        return;
-      }
-
-      if (!response["Search"]) {
-        setError("No results found");
-        setIsLoading(false);
-        return;
-      }
-
-      setSearchResult(
-        (response["Search"] as object[]).map(
-          (mediaObj: object) =>
-            objectKeysSnakeCaseToCamelCase(mediaObj) as IMovieTvSeries,
-        ),
-      );
-      setIsLoading(false);
-    });
+    searchOmdbCallback();
+    setIsLoading(false);
   }, [searchInputDebounced]);
 
   return (
@@ -116,7 +131,11 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
       ) : searchResult.length && !error.length ? (
         <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
           {searchResult.map((media, idx) => (
-            <Grid key={idx} item>
+            <Grid
+              key={idx}
+              item
+              ref={idx === searchResult.length - 1 ? ref : null} //Attach inView ref to last item
+            >
               <MovieTvSeriesCard media={media} type={type} showLabel={false} />
             </Grid>
           ))}
