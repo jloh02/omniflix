@@ -7,9 +7,13 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box } from "@mui/material";
+import deleteAccount from "@/utils/supabase/deleteAccount";
+import { useRouter } from "next/navigation";
+import { HOME_PAGE_ROUTE } from "@/utils/constants";
 
 const DeleteAccountButton: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -19,11 +23,9 @@ const DeleteAccountButton: React.FC = () => {
     setOpen(false);
   };
 
-  const handleDelete = () => {
-    // Implement your delete logic here, e.g., call an API to delete the account
-    console.log("Account deletion confirmed");
-    setOpen(false);
-    // Redirect or update UI as needed after deletion
+  const handleDelete = async () => {
+    await deleteAccount();
+    router.push(HOME_PAGE_ROUTE);
   };
 
   return (
@@ -40,11 +42,11 @@ const DeleteAccountButton: React.FC = () => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleDelete} color="info" autoFocus>
-            Confirm
-          </Button>
-          <Button onClick={handleClose} color="info">
+          <Button onClick={handleClose} color="info" autoFocus>
             Cancel
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            Delete My Account
           </Button>
         </DialogActions>
       </Dialog>

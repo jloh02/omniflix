@@ -81,6 +81,7 @@ export enum FunctionNames {
   SEARCH_OMDB = "search-omdb",
   WATCHLIST = "watchlist",
   OMDB_DETAILS = "omdb-details",
+  DELETE_ACCOUNT = "delete-account",
 }
 export enum WatchlistFunctionAction {
   ADD = "add",

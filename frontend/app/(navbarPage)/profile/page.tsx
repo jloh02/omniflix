@@ -7,6 +7,7 @@ import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo"
 import updateUserAccountInfo from "@/utils/database/userProfile/updateUserAccountInfo";
 import { createClient } from "@/utils/supabase/server";
 import { resetPassword, updateEmail } from "@/utils/supabase/auth";
+import DeleteAccountButton from "./deleteAccountButton";
 
 export default async function UserProfile() {
   const userInfo = await getUserAccountInfo();
@@ -60,7 +61,7 @@ export default async function UserProfile() {
           return await resetPassword(value);
         }}
       />
-      {/* <DeleteAccountButton /> */}
+      <DeleteAccountButton />
     </UserPageTemplate>
   );
 }

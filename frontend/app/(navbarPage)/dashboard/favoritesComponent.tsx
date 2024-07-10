@@ -51,8 +51,8 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
 
   return favorites.length > 0 ? (
     <Grid container spacing={3} className="mt-0 items-stretch">
-      {favorites.map((media: IMovieTvSeriesDetails) => (
-        <Grid item>
+      {favorites.map((media: IMovieTvSeriesDetails, index) => (
+        <Grid key={index} item>
           <MovieTvSeriesCard media={media} type={mediaType} />
         </Grid>
       ))}
