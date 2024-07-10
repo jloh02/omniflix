@@ -96,7 +96,7 @@ const InfoSummaryHeader: React.FC<InfoSummaryHeaderProps> = ({
         </Box>
       </Box>
       <Typography variant="body2" align="justify" marginTop={1}>
-        {media.plot}
+        {media.data.plot}
       </Typography>
     </Box>
   );

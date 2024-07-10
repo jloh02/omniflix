@@ -8,9 +8,23 @@ const KEY_MAP: KeyValueMap = {
   imdbRating: "imdb_rating",
   imdbVotes: "imdb_votes",
   Genre: "genre",
+  Plot: "plot",
   Rated: "rated",
   Released: "released",
   Runtime: "runtime",
+  Director: "director",
+  Writer: "writer",
+  Actors: "actors",
+  Language: "language",
+  Country: "country",
+  Awards: "awards",
+  Ratings: "ratings",
+  Metascore: "metascore",
+  Type: "type",
+  DVD: "dvd",
+  BoxOffice: "box_office",
+  Production: "production",
+  Website: "website",
 };
 
 const mapOmdbKeys = (omdbResult: KeyValueMap) => {
