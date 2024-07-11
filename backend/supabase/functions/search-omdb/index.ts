@@ -19,7 +19,17 @@ async function cacheItems(
   const CACHE_TABLE = OMDB_TYPE_TO_TABLE[type];
   const MEDIA_TYPE = OMDB_TYPE_TO_MEDIA_TYPE[type];
 
-  const entriesToUpsert = items.map(mapOmdbKeys);
+  const entriesToUpsert = items.map(mapOmdbKeys).map((v) => ({
+    imdb_id: v.imdb_id,
+    title: v.title,
+    year: v.year,
+    rated: v.rated,
+    released: v.released,
+    runtime: v.runtime,
+    genre: v.genre,
+    poster_url: v.poster_url,
+    imdb_rating: v.imdb_rating,
+  }));
   const imdbKeys = entriesToUpsert.map((v) => {
     return { media_specific_id: v.imdb_id, media_type: MEDIA_TYPE };
   });
