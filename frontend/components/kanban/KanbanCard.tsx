@@ -26,14 +26,14 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
 import { Close } from "@mui/icons-material";
 
+const IMAGE_SIZE = 100;
+
 interface KanbanCardProps {
   item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
   removeItem: (id: number) => void;
 }
-
-const IMAGE_SIZE = 100;
 
 const KanbanCard: React.FC<KanbanCardProps> = ({
   item,
@@ -101,11 +101,11 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
         }}
       >
         <Box display="flex" flexDirection="row">
-          <Box flexShrink={0} width={IMAGE_SIZE} height={IMAGE_SIZE}>
+          <Box flexShrink={0} width={IMAGE_SIZE} maxWidth="25%">
             <Box
               component="img"
               src={item.image}
-              sx={{ pointerEvents: "none" }}
+              sx={{ pointerEvents: "none", height: "100%", objectFit: "cover" }}
             ></Box>
           </Box>
           <Box

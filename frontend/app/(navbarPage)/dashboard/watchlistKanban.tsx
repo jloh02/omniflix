@@ -2,10 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import KanbanBoard from "@/components/kanban/KanbanBoard";
-import { Box, CardContent, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 import getWatchlist from "@/utils/database/watchlist/getWatchlist";
 import { MediaType } from "@/utils/constants";
+import KanbanCardRenderer from "./kanbanCardRenderer";
 
 interface WatchlistKanbanProps {
   columns: string[];
@@ -36,12 +37,7 @@ const WatchlistKanban: React.FC<WatchlistKanbanProps> = ({
         columnNames={columns}
         setKanbanData={setWatchlist}
         renderKanbanCard={(item) => (
-          <CardContent>
-            <Typography variant="h6" noWrap={true} textOverflow="ellipsis">
-              {item.title}
-            </Typography>
-            <Typography variant="body1">{item.year}</Typography>
-          </CardContent>
+          <KanbanCardRenderer mediaType={mediaType} item={item} />
         )}
         mediaType={mediaType}
       />
