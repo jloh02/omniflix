@@ -55,6 +55,8 @@ export enum TableNames {
   LIKES_DISLIKES = "likes_dislikes",
   REVIEWS = "reviews",
   USER_FOLLOWING = "user_following",
+  FRIEND_REQUESTS = "friend_requests",
+  FRIENDSHIPS = "friendships",
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
@@ -70,6 +72,37 @@ export enum LikeStatus {
   LIKE = 1,
   NONE = 0,
   DISLIKE = -1,
+}
+export enum FriendRequestDirection {
+  FROM_USER1 = "FROM_USER1",
+  FROM_USER2 = "FROM_USER2",
+}
+// Mapping object to associate enum members with boolean values
+const FriendRequestDirectionBooleanMap: Record<
+  FriendRequestDirection,
+  boolean
+> = {
+  [FriendRequestDirection.FROM_USER1]: true,
+  [FriendRequestDirection.FROM_USER2]: false,
+};
+// Function to get the boolean value for a given FriendRequestDirection
+export function getFriendRequestDirectionBoolean(
+  direction: FriendRequestDirection,
+): boolean {
+  return FriendRequestDirectionBooleanMap[direction];
+}
+export function getFriendRequestDirectionFromBoolean(
+  direction: boolean,
+): FriendRequestDirection {
+  return direction
+    ? FriendRequestDirection.FROM_USER1
+    : FriendRequestDirection.FROM_USER2;
+}
+export enum FriendshipStatus {
+  NONE,
+  PENDING_ME,
+  PENDING_THEM,
+  FRIENDS,
 }
 
 // Supabase edge function names
