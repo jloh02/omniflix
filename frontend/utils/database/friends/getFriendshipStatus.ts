@@ -37,15 +37,6 @@ async function getFriendshipStatus(targetUserId: string): Promise<
     .returns<Tables<TableNames.FRIENDSHIPS>[]>()
     .single();
 
-  console.log(
-    "Friendship data: " +
-      friendshipData +
-      ", error: " +
-      friendshipError?.code +
-      " " +
-      friendshipError?.details,
-  );
-
   if (friendshipError && friendshipError.code !== "PGRST116") {
     return { data: null, error: friendshipError };
   }
@@ -66,15 +57,6 @@ async function getFriendshipStatus(targetUserId: string): Promise<
     .eq("user_id2", userId2)
     .returns<Tables<TableNames.FRIEND_REQUESTS>[]>()
     .single();
-
-  console.log(
-    "Friend request: " +
-      friendRequestData +
-      ", error :" +
-      friendRequestError?.code +
-      " " +
-      friendRequestError?.details,
-  );
 
   if (friendRequestError) {
     return { data: null, error: friendRequestError };

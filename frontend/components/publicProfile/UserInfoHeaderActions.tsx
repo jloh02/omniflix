@@ -8,6 +8,7 @@ import FriendButton from "../friends/FriendButton";
 interface UserInfoHeaderActionsProps {
   userId: string;
   name: string;
+  username: string;
   isFollowing: boolean;
   friendshipStatus: FriendshipStatus;
   isCurrentUser: boolean;
@@ -16,6 +17,7 @@ interface UserInfoHeaderActionsProps {
 const UserInfoHeaderActions: React.FC<UserInfoHeaderActionsProps> = ({
   userId,
   name,
+  username,
   isFollowing,
   friendshipStatus,
   isCurrentUser,
@@ -25,7 +27,11 @@ const UserInfoHeaderActions: React.FC<UserInfoHeaderActionsProps> = ({
       {!isCurrentUser && (
         <>
           <FollowButton userId={userId} isFollowingUser={isFollowing} />
-          <FriendButton userId={userId} friendshipStatus={friendshipStatus} />
+          <FriendButton
+            userId={userId}
+            username={username}
+            friendshipStatus={friendshipStatus}
+          />
         </>
       )}
       <ShareButton text={`Check out ${name}'s profile on Omniflix!`} />

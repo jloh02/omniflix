@@ -68,6 +68,7 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
             <UserInfoHeaderActions
               userId={userId}
               name={name}
+              username={username}
               isFollowing={isFollowing ?? false}
               friendshipStatus={friendshipStatus ?? FriendshipStatus.NONE}
               isCurrentUser={isCurrentUser}
