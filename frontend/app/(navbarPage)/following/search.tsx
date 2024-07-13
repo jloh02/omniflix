@@ -29,6 +29,8 @@ import searchUserInfo from "@/utils/database/userProfile/searchUserInfo";
 import Link from "next/link";
 import FriendButton from "@/components/friends/FriendButton";
 import getFriendshipStatus from "@/utils/database/friends/getFriendshipStatus";
+import isFollowingUser from "@/utils/database/followers/isFollowingUser";
+import FollowButton from "@/components/following/FollowButton";
 
 const SearchTab: React.FC = () => {
   const [searchInput, setSearchInput] = useState("");
@@ -115,14 +117,13 @@ const UserListItem: React.FC<UserListItemProps> = ({
   name,
   username,
 }) => {
-  const [friendshipStatus, setFriendshipStatus] =
-    useState<FriendshipStatus | null>(null);
+  const [isFollowing, setIsFollowing] = useState<boolean | null>(null);
 
   useEffect(() => {
     console.log("Get friendship Status");
-    getFriendshipStatus(user_id).then(async (response) => {
+    isFollowingUser(user_id).then(async (response) => {
       console.log("Friendship status: ");
-      setFriendshipStatus(response?.data ?? null);
+      setIsFollowing(response?.data ?? null);
     });
   }, []);
 
@@ -142,12 +143,8 @@ const UserListItem: React.FC<UserListItemProps> = ({
           </ListItem>
         </Link>
       </Tooltip>
-      {friendshipStatus !== null && (
-        <FriendButton
-          userId={user_id}
-          username={username}
-          friendshipStatus={friendshipStatus}
-        />
+      {isFollowing !== null && (
+        <FollowButton userId={user_id} isFollowingUser={isFollowing} />
       )}
     </Box>
   );
