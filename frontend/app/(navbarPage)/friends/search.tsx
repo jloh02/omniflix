@@ -94,7 +94,7 @@ const SearchTab: React.FC = () => {
       ) : searchResult.length && !error.length ? (
         <List>
           {searchResult.map(({ user_id, name, username }) => (
-            <UserListItem user_id={user_id} name={name} username={username} />
+            <UserListItem userId={user_id} name={name} username={username} />
           ))}
         </List>
       ) : (
@@ -105,13 +105,13 @@ const SearchTab: React.FC = () => {
 };
 
 interface UserListItemProps {
-  user_id: string;
+  userId: string;
   name: string;
   username: string;
 }
 
 const UserListItem: React.FC<UserListItemProps> = ({
-  user_id,
+  userId,
   name,
   username,
 }) => {
@@ -119,9 +119,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
     useState<FriendshipStatus | null>(null);
 
   useEffect(() => {
-    console.log("Get friendship Status");
-    getFriendshipStatus(user_id).then(async (response) => {
-      console.log("Friendship status: ");
+    getFriendshipStatus(userId).then(async (response) => {
       setFriendshipStatus(response?.data ?? null);
     });
   }, []);
@@ -144,7 +142,7 @@ const UserListItem: React.FC<UserListItemProps> = ({
       </Tooltip>
       {friendshipStatus !== null && (
         <FriendButton
-          userId={user_id}
+          userId={userId}
           username={username}
           friendshipStatus={friendshipStatus}
         />
