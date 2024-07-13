@@ -58,7 +58,7 @@ async function getFriendshipStatus(targetUserId: string): Promise<
     .returns<Tables<TableNames.FRIEND_REQUESTS>[]>()
     .single();
 
-  if (friendRequestError) {
+  if (friendRequestError && friendRequestError.code !== "PGRST116") {
     return { data: null, error: friendRequestError };
   }
 

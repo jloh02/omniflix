@@ -4,6 +4,7 @@ import { Typography } from "@mui/material";
 import React from "react";
 import Friends from "./friends";
 import FriendRequests from "./friendRequests";
+import SearchTab from "./search";
 
 export default async function UserProfile() {
   return (
@@ -11,7 +12,7 @@ export default async function UserProfile() {
       <TabbedView tabLabels={["Friends", "Friend Requests", "Search"]}>
         <Friends />
         <FriendRequests />
-        <Typography>*In development</Typography>
+        <SearchTab />
       </TabbedView>
     </UserPageTemplate>
   );
