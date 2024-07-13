@@ -59,7 +59,7 @@ const FriendButton: React.FC<FriendButtonProps> = ({
 
   const PendingFriendRequestButton = (
     <>
-      <Tooltip title={isLoading ? "Loading..." : "Cancel friend request"}>
+      <Tooltip title={isLoading ? "Loading..." : "Pending friend request"}>
         <Button
           variant="contained"
           size="small"
