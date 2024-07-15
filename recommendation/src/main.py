@@ -53,9 +53,7 @@ for media_type in grouped_by_media_type.keys():
     # Create test dataframe from media_ids and user_ids and predict ratings
     media_id = list(media_ids[media_type])
     user_id = user_ids.keys()
-    print(media_id)
     for uid in user_id:
-        print("A", user_ids[uid])
         ratings = [
             algo.predict(uid, mid)
             for mid in filter(lambda x: not x in user_ids[uid], media_id)
