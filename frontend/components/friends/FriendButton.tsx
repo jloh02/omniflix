@@ -14,7 +14,7 @@ import { FriendshipStatus } from "@/utils/constants";
 import sendFriendRequest from "@/utils/database/friends/sendFriendRequest";
 import unfriendUser from "@/utils/database/friends/unfriendUser";
 import rejectFriendRequest from "@/utils/database/friends/rejectFriendRequest";
-import { PersonAdd } from "@mui/icons-material";
+import { PersonAdd, PersonRemove } from "@mui/icons-material";
 import acceptFriendRequest from "@/utils/database/friends/acceptFriendRequest";
 
 interface FriendButtonProps {
@@ -31,7 +31,9 @@ const FriendButton: React.FC<FriendButtonProps> = ({
   const [friendship, setFriendship] =
     useState<FriendshipStatus>(friendshipStatus);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isConfirmationDialogOpen, setIsConfirmationDialogOpen] =
+  const [isFriendRequestDialogOpen, setIsFriendRequestDialogOpen] =
+    useState<boolean>(false);
+  const [isUnfriendDialogOpen, setIsUnfriendDialogOpen] =
     useState<boolean>(false);
 
   const AddFriendButton = (
@@ -70,15 +72,15 @@ const FriendButton: React.FC<FriendButtonProps> = ({
             },
           }}
           onClick={() => {
-            setIsConfirmationDialogOpen(true);
+            setIsFriendRequestDialogOpen(true);
           }}
         >
           Pending...
         </Button>
       </Tooltip>
       <Dialog
-        open={isConfirmationDialogOpen}
-        onClose={() => setIsConfirmationDialogOpen(false)}
+        open={isFriendRequestDialogOpen}
+        onClose={() => setIsFriendRequestDialogOpen(false)}
       >
         <DialogContent>
           <Box display="flex" gap={1}>
@@ -106,7 +108,7 @@ const FriendButton: React.FC<FriendButtonProps> = ({
                 const error = await acceptFriendRequest(userId);
                 if (!error) {
                   setFriendship(FriendshipStatus.FRIENDS);
-                  setIsConfirmationDialogOpen(false);
+                  setIsFriendRequestDialogOpen(false);
                 }
               }}
             >
@@ -118,7 +120,7 @@ const FriendButton: React.FC<FriendButtonProps> = ({
                 const error = await rejectFriendRequest(userId);
                 if (!error) {
                   setFriendship(FriendshipStatus.NONE);
-                  setIsConfirmationDialogOpen(false);
+                  setIsFriendRequestDialogOpen(false);
                 }
               }}
               autoFocus
@@ -155,26 +157,69 @@ const FriendButton: React.FC<FriendButtonProps> = ({
   );
 
   const UnfriendButton = (
-    <Tooltip title={isLoading ? "Loading..." : "Unfriend"}>
-      <Button
-        variant="contained"
-        size="small"
-        sx={{
-          backgroundColor: "grey !important",
-          "&:hover": {
-            backgroundColor: "dimgrey !important",
-          },
-        }}
-        onClick={async () => {
-          setIsLoading(true);
-          const error = await unfriendUser(userId);
-          if (!error) setFriendship(FriendshipStatus.NONE);
-          setIsLoading(false);
-        }}
+    <>
+      <Tooltip title={isLoading ? "Loading..." : "Unfriend"}>
+        <Button
+          variant="contained"
+          size="small"
+          sx={{
+            backgroundColor: "grey !important",
+            "&:hover": {
+              backgroundColor: "dimgrey !important",
+            },
+          }}
+          onClick={() => setIsUnfriendDialogOpen(true)}
+        >
+          Friends
+        </Button>
+      </Tooltip>
+      <Dialog
+        open={isUnfriendDialogOpen}
+        onClose={() => setIsUnfriendDialogOpen(false)}
       >
-        Friends
-      </Button>
-    </Tooltip>
+        <DialogContent>
+          <Box display="flex" gap={1}>
+            <PersonRemove />
+            <Typography>Remove {username} from friends?</Typography>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-evenly"
+            paddingBottom={1}
+          >
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                backgroundColor: "dodgerblue !important",
+                "&:hover": {
+                  backgroundColor: "deepskyblue !important",
+                },
+              }}
+              onClick={async () => {
+                const error = await unfriendUser(userId);
+                if (!error) {
+                  setFriendship(FriendshipStatus.NONE);
+                  setIsUnfriendDialogOpen(false);
+                }
+              }}
+            >
+              Confirm
+            </Button>
+            <Button
+              sx={{ color: "white" }}
+              onClick={() => setIsUnfriendDialogOpen(false)}
+              autoFocus
+            >
+              Cancel
+            </Button>
+          </Box>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 
   return (
