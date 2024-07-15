@@ -1,8 +1,7 @@
 import os
 import pandas as pd
 from dotenv import load_dotenv
-from surprise import Reader, Dataset, SVD, NMF
-from surprise.model_selection import cross_validate
+from surprise import Reader, Dataset, SVD
 from supabase import create_client, Client
 
 if not os.environ.get("PRODUCTION") == "True":
@@ -21,17 +20,21 @@ response = (
 # Process response to group by media_type and store media_ids and user_ids for later use
 grouped_by_media_type = {}
 media_ids = {}
-user_ids = set()
+# Store media_ids that have been rated by a user so recommendations exclude them
+user_ids = {}
 for review in response.data:
     media_type = review["media"]["media_type"]
     if media_type not in grouped_by_media_type:
         grouped_by_media_type[media_type] = []
         media_ids[media_type] = set()
+    if review["user_id"] not in user_ids:
+        user_ids[review["user_id"]] = set()
+
+    user_ids[review["user_id"]].add(review["media_id"])
 
     value = review.copy()
     del value["media"]
 
-    user_ids.add(value["user_id"])
     media_ids[media_type].add(value["media_id"])
     grouped_by_media_type[media_type].append(value)
 
@@ -49,13 +52,18 @@ for media_type in grouped_by_media_type.keys():
 
     # Create test dataframe from media_ids and user_ids and predict ratings
     media_id = list(media_ids[media_type])
-    user_id = list(user_ids)
-    for i in range(len(user_ids)):
-        ratings = [algo.predict(user_id[i], media_id[j]) for j in range(len(media_id))]
+    user_id = user_ids.keys()
+    print(media_id)
+    for uid in user_id:
+        print("A", user_ids[uid])
+        ratings = [
+            algo.predict(uid, mid)
+            for mid in filter(lambda x: not x in user_ids[uid], media_id)
+        ]
         ratings.sort(reverse=True, key=lambda x: x.est)
         results.append(
             {
-                "user_id": user_id[i],
+                "user_id": uid,
                 "media_type": media_type,
                 "recommendations": list(map(lambda x: x.iid, ratings[:10])),
             }
