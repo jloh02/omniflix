@@ -1,5 +1,0 @@
-services:
-  recommendation:
-    build: .
-    environment:
-      - PRODUCTION: True
