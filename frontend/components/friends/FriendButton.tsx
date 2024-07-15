@@ -87,7 +87,12 @@ const FriendButton: React.FC<FriendButtonProps> = ({
           </Box>
         </DialogContent>
         <DialogActions>
-          <Box width="100%" display="flex" justifyContent="space-evenly">
+          <Box
+            width="100%"
+            display="flex"
+            justifyContent="space-evenly"
+            paddingBottom={1}
+          >
             <Button
               variant="contained"
               size="small"
