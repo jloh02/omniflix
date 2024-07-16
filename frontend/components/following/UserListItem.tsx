@@ -2,16 +2,12 @@
 import {
   Avatar,
   Box,
-  Button,
-  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Tooltip,
-  Typography,
 } from "@mui/material";
 import React from "react";
-import getUserFollowing from "@/utils/database/followers/getUserFollowing";
 import { USER_PUBLIC_PROFILE_PAGE_ROUTE } from "@/utils/constants";
 import Link from "next/link";
 

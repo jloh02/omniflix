@@ -70,6 +70,109 @@ export type Database = {
           },
         ]
       }
+      friend_requests: {
+        Row: {
+          created_at: string
+          id: number
+          request_direction: boolean
+          user_id1: string
+          user_id2: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          request_direction: boolean
+          user_id1: string
+          user_id2: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          request_direction?: boolean
+          user_id1?: string
+          user_id2?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friend_requests_user_id1_fkey"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id1_fkey1"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id2_fkey"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id2_fkey1"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      friendships: {
+        Row: {
+          created_at: string
+          id: number
+          user_id1: string
+          user_id2: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          user_id1: string
+          user_id2: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          user_id1?: string
+          user_id2?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friendships_user_id1_fkey"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id1_fkey1"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id2_fkey"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id2_fkey1"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       likes_dislikes: {
         Row: {
           created_at: string

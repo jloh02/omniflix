@@ -3,6 +3,8 @@ import { Avatar, Box, Typography } from "@mui/material";
 import isFollowingUser from "@/utils/database/followers/isFollowingUser";
 import UserInfoHeaderActions from "./UserInfoHeaderActions";
 import { createClient } from "@/utils/supabase/server";
+import getFriendshipStatus from "@/utils/database/friends/getFriendshipStatus";
+import { FriendshipStatus } from "@/utils/constants";
 
 interface UserInfoHeaderProps {
   userId: string;
@@ -20,6 +22,10 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
   // Fetch following status
   const { data: isFollowing, error: isFollowingError } =
     (await isFollowingUser(userId)) || {};
+
+  // Fetch friendship status
+  const { data: friendshipStatus, error: friendshipStatusError } =
+    (await getFriendshipStatus(userId)) || {};
 
   // Fetch current user details
   const supabase = createClient();
@@ -62,7 +68,9 @@ const UserInfoHeader: React.FC<UserInfoHeaderProps> = async ({
             <UserInfoHeaderActions
               userId={userId}
               name={name}
+              username={username}
               isFollowing={isFollowing ?? false}
+              friendshipStatus={friendshipStatus ?? FriendshipStatus.NONE}
               isCurrentUser={isCurrentUser}
             />
           </Box>
