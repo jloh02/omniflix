@@ -65,6 +65,9 @@ export enum TableNames {
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
+  COLLECTIONS = "collections",
+  COLLECTION_COLLABORATORS = "collection_users",
+  COLLECTION_ENTRIES = "collection_entries",
 }
 
 // Database aggregated views
