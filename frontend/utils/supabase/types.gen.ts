@@ -34,6 +34,121 @@ export type Database = {
   }
   public: {
     Tables: {
+      collection_entries: {
+        Row: {
+          collection_id: number
+          created_at: string
+          id: number
+          media_id: number
+        }
+        Insert: {
+          collection_id: number
+          created_at?: string
+          id?: number
+          media_id: number
+        }
+        Update: {
+          collection_id?: number
+          created_at?: string
+          id?: number
+          media_id?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_entries_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
+          },
+        ]
+      }
+      collection_users: {
+        Row: {
+          collection_id: number
+          created_at: string
+          id: number
+          user_id: string
+        }
+        Insert: {
+          collection_id: number
+          created_at?: string
+          id?: number
+          user_id: string
+        }
+        Update: {
+          collection_id?: number
+          created_at?: string
+          id?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_users_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "collection_users_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      collections: {
+        Row: {
+          created_at: string
+          id: number
+          name: string
+          owner_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          name: string
+          owner_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          name?: string
+          owner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collections_owner_id_fkey"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "collections_owner_id_fkey1"
+            columns: ["owner_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       favorites_entries: {
         Row: {
           created_at: string
