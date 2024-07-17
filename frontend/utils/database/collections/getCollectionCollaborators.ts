@@ -5,9 +5,9 @@ import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { PostgrestError } from "@supabase/supabase-js";
 
-async function getUserCollections(targetUserId?: string): Promise<
+async function getCollectionCollaborators(collectionId: string): Promise<
   | {
-      data: Tables<TableNames.COLLECTIONS>[] | null;
+      data: Tables<TableNames.USERS_INFO>[] | null;
       error: PostgrestError | null;
     }
   | undefined
@@ -28,13 +28,13 @@ async function getUserCollections(targetUserId?: string): Promise<
     .from(TableNames.COLLECTION_COLLABORATORS)
     .select(
       `
-      ${TableNames.COLLECTIONS} (
+      ${TableNames.USERS_INFO} (
         *
       ),
     `,
     )
-    .eq("user_id", targetUserId ?? user.id)
-    .returns<Tables<TableNames.COLLECTIONS>[]>();
+    .eq("collection_id", collectionId)
+    .returns<Tables<TableNames.USERS_INFO>[]>();
 
   if (error) {
     return { data: null, error };
@@ -43,4 +43,4 @@ async function getUserCollections(targetUserId?: string): Promise<
   return { data, error };
 }
 
-export default getUserCollections;
+export default getCollectionCollaborators;
