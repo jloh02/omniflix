@@ -62,8 +62,111 @@ export type Database = {
             referencedColumns: ["media_id"]
           },
           {
-            foreignKeyName: "public_favorites_entries_user_id_fkey"
+            foreignKeyName: "favorites_entries_user_id_fkey"
             columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      friend_requests: {
+        Row: {
+          created_at: string
+          id: number
+          request_direction: boolean
+          user_id1: string
+          user_id2: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          request_direction: boolean
+          user_id1: string
+          user_id2: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          request_direction?: boolean
+          user_id1?: string
+          user_id2?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friend_requests_user_id1_fkey"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id1_fkey1"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id2_fkey"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friend_requests_user_id2_fkey1"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      friendships: {
+        Row: {
+          created_at: string
+          id: number
+          user_id1: string
+          user_id2: string
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          user_id1: string
+          user_id2: string
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          user_id1?: string
+          user_id2?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "friendships_user_id1_fkey"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id1_fkey1"
+            columns: ["user_id1"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id2_fkey"
+            columns: ["user_id2"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "friendships_user_id2_fkey1"
+            columns: ["user_id2"]
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
@@ -101,7 +204,7 @@ export type Database = {
             referencedColumns: ["media_id"]
           },
           {
-            foreignKeyName: "public_likes_dislikes_user_id_fkey"
+            foreignKeyName: "likes_dislikes_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
@@ -210,13 +313,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_reviews_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users_info"
-            referencedColumns: ["user_id"]
-          },
-          {
             foreignKeyName: "reviews_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
@@ -229,6 +325,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "users"
             referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reviews_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
           },
         ]
       }
