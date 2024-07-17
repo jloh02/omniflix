@@ -26,10 +26,9 @@ async function getTopLists(
       .from(view)
       .select(`media_id, ${tableName}(*)`)
       .eq("media_type", mediaType)
-      .returns<any>()
       .limit(10);
 
-    if (!data.length || error) return null;
+    if (!data || !data.length || error) return null;
 
     // TODO handle different media types
     return data.map((d: any) => ({
