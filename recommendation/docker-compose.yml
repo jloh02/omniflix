@@ -1,5 +1,0 @@
-services:
-  recommendation:
-    build:
-      context: .
-      dockerfile: Dockerfile
