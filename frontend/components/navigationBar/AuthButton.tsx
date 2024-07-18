@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import LoginButton from "./LoginButton";
-import UserMenu from "./UserMenu";
+import getUserAccountInfo from "@/utils/database/userProfile/getUserAccountInfo";
+import AuthButtonClient from "./AuthButtonClient";
 
 export default async function AuthButton() {
   const supabase = createClient();
@@ -8,5 +9,7 @@ export default async function AuthButton() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  return user ? <UserMenu /> : <LoginButton />;
+  const { name } = await getUserAccountInfo();
+
+  return user ? <AuthButtonClient name={name} /> : <LoginButton />;
 }

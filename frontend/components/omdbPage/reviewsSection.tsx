@@ -8,7 +8,7 @@ import getReviews from "@/utils/database/reviews/getReviews";
 import updateReview from "@/utils/database/reviews/updateReview";
 import { createClient } from "@/utils/supabase/client";
 import IReview from "@/utils/types/IReview";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit, Star } from "@mui/icons-material";
 import {
   Alert,
   Box,
@@ -19,9 +19,13 @@ import {
   DialogContentText,
   DialogTitle,
   Snackbar,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+
+const ALL_RATING_VALUE = "0";
 
 interface ReviewsSectionProps {
   mediaType: MediaType;
@@ -43,6 +47,9 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   const [successSnackbarMessage, setSuccessSnackbarMessage] = useState("");
   const [showErrorSnackbar, setShowErrorSnackbar] = useState(false);
   const [errorSnackbarMessage, setErrorSnackbarMessage] = useState("");
+
+  // Review filter states
+  const [filterRating, setFilterRating] = useState([ALL_RATING_VALUE]);
 
   const handleCloseSuccessSnackbar = () => {
     setShowSuccessSnackbar(false);
@@ -267,17 +274,63 @@ const ReviewsSection: React.FC<ReviewsSectionProps> = ({
             />
           </Box>
         )}
-        {userReview && <Typography variant="h6">All Reviews</Typography>}
-        {reviews.map((review) => (
-          <ReviewCard
-            key={review.userId}
-            title={review.title}
-            rating={review.rating}
-            username={review.username}
-            datetime={review.createdAt}
-            description={review.description}
-          />
-        ))}
+        {userReview && (
+          <Box display="flex" flexDirection="row" alignItems="center">
+            <Typography flex={1} variant="h6">
+              All Reviews
+            </Typography>
+            {/* Button group for rating filters */}
+            {reviews.length && (
+              <ToggleButtonGroup
+                value={filterRating}
+                onChange={(_, value) => {
+                  // If no value is selected or "All" is selected, show all reviews
+                  if (
+                    value.length == 0 ||
+                    value.slice(-1)[0] === ALL_RATING_VALUE
+                  )
+                    setFilterRating([ALL_RATING_VALUE]);
+                  else
+                    setFilterRating(
+                      value.filter((v: string) => v !== ALL_RATING_VALUE),
+                    );
+                }}
+              >
+                <ToggleButton value={ALL_RATING_VALUE} className="px-5">
+                  All
+                </ToggleButton>
+                {[1, 2, 3, 4, 5].map((index) => (
+                  <ToggleButton value={index.toString()}>
+                    {index} <Star className="ml-1" sx={{ color: "gold" }} />
+                  </ToggleButton>
+                ))}
+              </ToggleButtonGroup>
+            )}
+          </Box>
+        )}
+        {!reviews.length && (
+          <Typography variant="body1">No Reviews Found</Typography>
+        )}
+        {reviews
+          .filter((review) => {
+            // Filter reviews based on rating but show all reviews if no filter ("All") is selected
+            if (
+              filterRating.length == 1 &&
+              filterRating[0] === ALL_RATING_VALUE
+            )
+              return true;
+            return filterRating.includes(review.rating.toString());
+          })
+          .map((review) => (
+            <ReviewCard
+              key={review.userId}
+              title={review.title}
+              rating={review.rating}
+              username={review.username}
+              datetime={review.createdAt}
+              description={review.description}
+            />
+          ))}
       </Box>
       <DeleteConfirmDialog />
       <SuccessSnackbar />

@@ -158,3 +158,9 @@ export const MediaTypeToParam: Record<MediaType, MediaTypeParam> = {
     urlPath: TV_SERIES_PAGE_ROUTE,
   },
 };
+
+// Local storage keys
+export enum LocalStorageKeys {
+  WATCHLIST = "watchlist",
+  FAVORITES = "favorites",
+}

@@ -1,0 +1,42 @@
+name: Deploy to Staging Recommendation Engine
+
+on:
+  push:
+    branches: ["dev"]
+    paths:
+      - recommendation/*
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Digital Ocean droplet via SSH action
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          passphrase: ${{ secrets.SSH_PASSPHRASE }}
+          command_timeout: 60m
+          script: |
+            ls
+            cd /root/omniflix
+
+            # Temp store changes
+            git stash
+
+            # Pull from git repo
+            git checkout dev || true # Force return true so exit code is not 1
+            git pull
+
+            # Clear space
+            docker system prune -f
+
+            # Build and Deploy
+            cd recommendation
+            docker compose build recommendation-staging
+            cd ..
+
+            # Restore changes
+            git stash pop || true # Force return true in case no changes stashed
