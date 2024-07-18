@@ -40,8 +40,9 @@ async function getTopLists(
   };
 
   // Process all 3 views
-  const [topLikes, topFavorites, topReviews] = await Promise.all(
+  const [reccos, topLikes, topFavorites, topReviews] = await Promise.all(
     [
+      DatabaseViews.RECOMMENDATIONS,
       DatabaseViews.TOP_LIKES,
       DatabaseViews.TOP_FAVORITES,
       DatabaseViews.TOP_REVIEWS,
@@ -50,6 +51,7 @@ async function getTopLists(
 
   const resolvedData = Object.fromEntries(
     Object.entries({
+      "For You": reccos,
       "Most Liked": topLikes,
       "Most Favorited": topFavorites,
       "Top Reviews": topReviews,

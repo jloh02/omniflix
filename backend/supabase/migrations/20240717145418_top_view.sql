@@ -48,3 +48,28 @@ having
   avg(reviews.rating) > 2
 order by
   rating desc;
+
+create view user_recommendations with(security_invoker = true) as
+select
+  media_type,
+  M.media_id,
+  media_specific_id
+from
+  media M
+  join (
+    select
+      unnest(recommendations) as media_id
+    from
+      recommendations
+  ) as R on M.media_id = R.media_id;
+
+create policy "Allow users to read own recommendations" on "public"."recommendations" as permissive for
+select
+  to authenticated using (
+    (
+      (
+        SELECT
+          auth.uid() AS uid
+      ) = user_id
+    )
+  );

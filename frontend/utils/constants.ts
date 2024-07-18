@@ -69,6 +69,7 @@ export enum TableNames {
 
 // Database aggregated views
 export enum DatabaseViews {
+  RECOMMENDATIONS = "user_recommendations",
   TOP_LIKES = "top_likes",
   TOP_FAVORITES = "top_favorites",
   TOP_REVIEWS = "top_reviews",
