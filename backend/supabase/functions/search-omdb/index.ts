@@ -23,12 +23,7 @@ async function cacheItems(
     imdb_id: v.imdb_id,
     title: v.title,
     year: v.year,
-    rated: v.rated,
-    released: v.released,
-    runtime: v.runtime,
-    genre: v.genre,
     poster_url: v.poster_url,
-    imdb_rating: v.imdb_rating,
   }));
   const imdbKeys = entriesToUpsert.map((v) => {
     return { media_specific_id: v.imdb_id, media_type: MEDIA_TYPE };
@@ -76,7 +71,7 @@ Deno.serve(async (req: Request) => {
   const OMDB_API_KEY = Deno.env.get("OMDB_API_KEY");
   if (!OMDB_API_KEY) throw new Error("OMDB_API_KEY is not defined");
 
-  let { query, page, type } = await req.json();
+  let { query, page, type, search_by_imdb_id } = await req.json();
   if (!page) page = 1;
 
   const errorStr: string[] = [];
@@ -103,45 +98,68 @@ Deno.serve(async (req: Request) => {
     );
   }
 
-  // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
-  const res = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`
-  );
-  const resBody = await res.json();
-  if (!resBody.Error) {
+  if (search_by_imdb_id) {
+    const res = await fetch(
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${query}&type=${mediaType}`
+    );
+    const resBody = await res.json();
+    if (resBody.Error) {
+      console.error(resBody.Error);
+      return new Response(JSON.stringify(resBody), { status: 404 });
+    }
     // Cache items, return media_ids
-    const cache = await cacheItems(adminSupabaseClient, resBody.Search, type);
+    const cache = await cacheItems(adminSupabaseClient, [resBody], type);
 
     // Map movie keys to match schema and add media_id
     return new Response(
       JSON.stringify({
-        ...resBody,
-        Search: resBody.Search.map(mapOmdbKeys).map((v: any, idx: number) => ({
-          ...v,
-          media_id: cache[idx].media_id,
-        })),
+        Search: [{ ...mapOmdbKeys(resBody), media_id: cache[0].media_id }],
+      })
+    );
+  } else {
+    // Search by imdb id flag not shown
+    // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
+    const res = await fetch(
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`
+    );
+    const resBody = await res.json();
+    if (!resBody.Error) {
+      // Cache items, return media_ids
+      const cache = await cacheItems(adminSupabaseClient, resBody.Search, type);
+
+      // Map movie keys to match schema and add media_id
+      return new Response(
+        JSON.stringify({
+          ...resBody,
+          Search: resBody.Search.map(mapOmdbKeys).map(
+            (v: any, idx: number) => ({
+              ...v,
+              media_id: cache[idx].media_id,
+            })
+          ),
+        })
+      );
+    }
+
+    if (page > 1)
+      return new Response(JSON.stringify({ Search: [] }), { status: 404 });
+
+    const titleRes = await fetch(
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`
+    );
+    const titleResBody = await titleRes.json();
+
+    // Return 404 when error returned by title API
+    if (titleResBody.Error) {
+      return new Response(JSON.stringify(titleResBody), { status: 404 });
+    }
+
+    // Format data so it matches the search API
+    const cache = await cacheItems(adminSupabaseClient, [titleResBody], type);
+    return new Response(
+      JSON.stringify({
+        Search: [{ ...mapOmdbKeys(titleResBody), media_id: cache[0].media_id }],
       })
     );
   }
-
-  if (page > 1)
-    return new Response(JSON.stringify({ Search: [] }), { status: 404 });
-
-  const titleRes = await fetch(
-    `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&t=${query}&type=${mediaType}`
-  );
-  const titleResBody = await titleRes.json();
-
-  // Return 404 when error returned by title API
-  if (titleResBody.Error) {
-    return new Response(JSON.stringify(titleResBody), { status: 404 });
-  }
-
-  // Format data so it matches the search API
-  const cache = await cacheItems(adminSupabaseClient, [titleResBody], type);
-  return new Response(
-    JSON.stringify({
-      Search: [{ ...mapOmdbKeys(titleResBody), media_id: cache[0].media_id }],
-    })
-  );
 });
