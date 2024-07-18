@@ -33,6 +33,15 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
     fetchFavorites();
   }, []);
 
+  // TODO: Handle other media_type states
+  if (mediaType !== MediaType.MOVIE && mediaType !== MediaType.TV_SERIES) {
+    return (
+      <Typography variant="body1" className="mt-4">
+        WIP
+      </Typography>
+    );
+  }
+
   if (isLoading) {
     return (
       <Typography variant="body1" className="mt-4">
