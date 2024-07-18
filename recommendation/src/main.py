@@ -4,7 +4,10 @@ from dotenv import load_dotenv
 from surprise import Reader, Dataset, SVD
 from supabase import create_client, Client
 
-load_dotenv(".env.local")
+if os.environ.get("PRODUCTION") == "True":
+    load_dotenv(".env.prod")
+else:
+    load_dotenv(".env.local")
 
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_SERVICE_ROLE_KEY")
