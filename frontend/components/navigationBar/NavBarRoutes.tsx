@@ -26,7 +26,7 @@ export const NAVBAR_PAGES = [
 
 const NavBarRoutes: React.FC = () => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
     <>
