@@ -26,6 +26,7 @@ import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCam
 import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
 import { useInView } from "react-intersection-observer";
 import getTopLists from "@/utils/database/recommendations/getTopLists";
+import HorizontalMovieTvList from "./horizontalMovieTvList";
 
 interface OmdbPageProps {
   title: string;
@@ -125,6 +126,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
       </Grid>
     );
   } else {
+    // Display top lists if nothing being searched
     content = (
       <Box pb={40}>
         {Object.entries(topLists).map(([listName, mediaList], idx) => (
@@ -132,21 +134,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
             <Typography variant="h5" className="my-4">
               {listName}
             </Typography>
-            <Grid container spacing={3} sx={{ alignItems: "stretch" }}>
-              {mediaList.map((media, idx) => (
-                <Grid
-                  key={idx}
-                  item
-                  ref={idx === searchResult.length - 1 ? ref : null} //Attach inView ref to last item
-                >
-                  <MovieTvSeriesCard
-                    media={media}
-                    type={type}
-                    showLabel={false}
-                  />
-                </Grid>
-              ))}
-            </Grid>
+            <HorizontalMovieTvList mediaList={mediaList} type={type} />
           </Box>
         ))}
       </Box>
