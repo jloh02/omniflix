@@ -26,7 +26,7 @@ jobs:
 
             # Pull from git repo
             git checkout main || true # Force return true so exit code is not 1
-            git pull
+            git pull https://jloh02:${{ secrets.CICD_PAT }}@github.com/jloh02/omniflix.git
 
             # Clear space
             docker system prune -f
