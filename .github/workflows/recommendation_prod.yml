@@ -25,7 +25,7 @@ jobs:
             git stash
 
             # Pull from git repo
-            git checkout dev || true # Force return true so exit code is not 1
+            git checkout main || true # Force return true so exit code is not 1
             git pull
 
             # Clear space
