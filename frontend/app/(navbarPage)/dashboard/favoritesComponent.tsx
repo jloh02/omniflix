@@ -18,6 +18,15 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // TODO: Handle other media_type states
+  if (mediaType !== MediaType.MOVIE && mediaType !== MediaType.TV_SERIES) {
+    return (
+      <Typography variant="body1" className="mt-4">
+        WIP
+      </Typography>
+    );
+  }
+
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
@@ -32,15 +41,6 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
     };
     fetchFavorites();
   }, []);
-
-  // TODO: Handle other media_type states
-  if (mediaType !== MediaType.MOVIE && mediaType !== MediaType.TV_SERIES) {
-    return (
-      <Typography variant="body1" className="mt-4">
-        WIP
-      </Typography>
-    );
-  }
 
   if (isLoading) {
     return (
