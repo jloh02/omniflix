@@ -1,0 +1,7 @@
+services:
+  recommendation-staging:
+    build: .
+  recommendation-production:
+    build: .
+    environment:
+      PRODUCTION: "True"
