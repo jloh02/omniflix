@@ -34,7 +34,6 @@ jobs:
             # Build and Deploy
             cd recommendation
             docker compose build recommendation-production
-            docker compose up -d recommendation-production
             cd ..
 
             # Restore changes
