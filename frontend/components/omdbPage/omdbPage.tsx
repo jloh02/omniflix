@@ -97,12 +97,12 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
 
     setSearchResult((res) => res.concat(processedRes));
     setPage((page) => page + 1);
+    setIsLoading(false);
   }, [page, searchInput, omdbType]);
 
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
     searchOmdbCallback();
-    setIsLoading(false);
   }, [searchInputDebounced]);
 
   // Load more on scroll to last item
