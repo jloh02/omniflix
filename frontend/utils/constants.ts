@@ -44,7 +44,7 @@ export const OMDB_FULL_RESPONSE_LENGTH = 10;
 
 // Time to delay before sending a batch request to database query
 // Only for functions using DebouncedSupabaseQuery
-export const BATCH_DEBOUNCE_DURATION_IN_MS = 50;
+export const BATCH_DEBOUNCE_DURATION_IN_MS = 200;
 
 // User Info constants
 export const NAME_MAX_CHAR_LENGTH = 30;
@@ -65,6 +65,14 @@ export enum TableNames {
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
+}
+
+// Database aggregated views
+export enum DatabaseViews {
+  RECOMMENDATIONS = "user_recommendations",
+  TOP_LIKES = "top_likes",
+  TOP_FAVORITES = "top_favorites",
+  TOP_REVIEWS = "top_reviews",
 }
 
 // Datable Constants and Types
@@ -150,3 +158,9 @@ export const MediaTypeToParam: Record<MediaType, MediaTypeParam> = {
     urlPath: TV_SERIES_PAGE_ROUTE,
   },
 };
+
+// Local storage keys
+export enum LocalStorageKeys {
+  WATCHLIST = "watchlist",
+  FAVORITES = "favorites",
+}
