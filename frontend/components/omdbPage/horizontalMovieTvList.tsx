@@ -1,6 +1,6 @@
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
 import { Box, Grid } from "@mui/material";
-import React, { useMemo, useRef, useState } from "react";
+import React, { useLayoutEffect, useRef, useState } from "react";
 import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
 import { MediaType } from "@/utils/constants";
 import { ChevronRight } from "@mui/icons-material";
@@ -11,12 +11,20 @@ const HorizontalMovieTvList: React.FC<{
 }> = ({ mediaList, type }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
   const gridRef = useRef<HTMLDivElement>(null);
+  const [showScrollableBox, setShowScrollableBox] = useState(false);
 
-  const showScrollableBox = useMemo(() => {
-    return (
-      gridRef.current &&
-      gridRef.current.clientWidth < gridRef.current.scrollWidth
-    );
+  useLayoutEffect(() => {
+    const updateScrollableBox = () => {
+      if (gridRef && gridRef.current)
+        setShowScrollableBox(
+          gridRef.current.clientWidth < gridRef.current.scrollWidth,
+        );
+    };
+    window.addEventListener("resize", updateScrollableBox);
+
+    return () => {
+      window.removeEventListener("resize", updateScrollableBox);
+    };
   }, [gridRef, mediaList]);
 
   return (
