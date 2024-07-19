@@ -58,6 +58,13 @@ export type Database = {
             foreignKeyName: "favorites_entries_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "favorites_entries_media_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media"
             referencedColumns: ["media_id"]
           },
@@ -228,6 +235,13 @@ export type Database = {
             foreignKeyName: "likes_dislikes_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "likes_dislikes_media_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media"
             referencedColumns: ["media_id"]
           },
@@ -334,6 +348,13 @@ export type Database = {
             foreignKeyName: "movies_media_fkey"
             columns: ["media_type", "imdb_id"]
             isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "movies_media_fkey"
+            columns: ["media_type", "imdb_id"]
+            isOneToOne: false
             referencedRelation: "media"
             referencedColumns: ["media_type", "media_specific_id"]
           },
@@ -422,6 +443,13 @@ export type Database = {
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "reviews_media_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_id"]
+          },
           {
             foreignKeyName: "reviews_media_fkey"
             columns: ["media_id"]
@@ -521,6 +549,13 @@ export type Database = {
             foreignKeyName: "tv_series_media_fkey"
             columns: ["media_type", "imdb_id"]
             isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "tv_series_media_fkey"
+            columns: ["media_type", "imdb_id"]
+            isOneToOne: false
             referencedRelation: "media"
             referencedColumns: ["media_type", "media_specific_id"]
           },
@@ -553,6 +588,24 @@ export type Database = {
             referencedColumns: ["media_type", "media_specific_id"]
           },
         ]
+      }
+      upcoming: {
+        Row: {
+          created_at: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          upcoming: number[]
+        }
+        Insert: {
+          created_at?: string
+          media_type: Database["public"]["Enums"]["media_type"]
+          upcoming: number[]
+        }
+        Update: {
+          created_at?: string
+          media_type?: Database["public"]["Enums"]["media_type"]
+          upcoming?: number[]
+        }
+        Relationships: []
       }
       user_following: {
         Row: {
@@ -663,6 +716,13 @@ export type Database = {
             foreignKeyName: "watchlist_entries_media_fkey"
             columns: ["media_id"]
             isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "watchlist_entries_media_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
             referencedRelation: "media"
             referencedColumns: ["media_id"]
           },
@@ -705,6 +765,14 @@ export type Database = {
       }
     }
     Views: {
+      discover_latest: {
+        Row: {
+          media_id: number | null
+          media_specific_id: string | null
+          media_type: Database["public"]["Enums"]["media_type"] | null
+        }
+        Relationships: []
+      }
       top_favorites: {
         Row: {
           favorites: number | null

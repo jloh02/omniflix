@@ -1,5 +1,10 @@
+const CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
+
 const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
+
+const ALLOWED_TMDB_TYPES = ["movie", "tv"] as const;
+type TMDBType = (typeof ALLOWED_TMDB_TYPES)[number];
 
 enum MediaType {
   MOVIE = "movie",
@@ -17,6 +22,7 @@ enum TableNames {
   MOVIES_CACHE_TABLE = "movies",
   TV_SERIES_CACHE_TABLE = "tv_series",
   MEDIA = "media",
+  UPCOMING = "upcoming",
 }
 
 const OMDB_TYPE_TO_TABLE: Record<OMDBType, string> = {
@@ -31,11 +37,20 @@ const OMDB_TYPE_TO_MEDIA_TYPE: Record<OMDBType, MediaType> = {
   episode: MediaType.TV_SERIES,
 };
 
-export type { OMDBType };
+const OMDB_TYPE_TO_TMDB_TYPE: Record<OMDBType, TMDBType> = {
+  movie: "movie",
+  series: "tv",
+  episode: "tv",
+};
+
+export type { OMDBType, TMDBType };
 export {
+  CACHE_DURATION_MS,
   ALLOWED_OMDB_TYPES,
+  ALLOWED_TMDB_TYPES,
   OMDB_TYPE_TO_TABLE,
   OMDB_TYPE_TO_MEDIA_TYPE,
+  OMDB_TYPE_TO_TMDB_TYPE,
   TableNames,
   WatchlistAction,
 };
