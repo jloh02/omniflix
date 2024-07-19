@@ -73,6 +73,7 @@ export enum DatabaseViews {
   TOP_LIKES = "top_likes",
   TOP_FAVORITES = "top_favorites",
   TOP_REVIEWS = "top_reviews",
+  DISCOVER_LATEST = "discover_latest",
 }
 
 // Datable Constants and Types
@@ -124,6 +125,7 @@ export enum FunctionNames {
   WATCHLIST = "watchlist",
   OMDB_DETAILS = "omdb-details",
   DELETE_ACCOUNT = "delete-account",
+  UPCOMING_MOVIE_TV = "latest",
 }
 export enum WatchlistFunctionAction {
   ADD = "add",

@@ -73,3 +73,17 @@ grant truncate on table "public"."upcoming" to "service_role";
 grant
 update
   on table "public"."upcoming" to "service_role";
+
+create view discover_latest as
+select
+  media_type,
+  M.media_id,
+  media_specific_id
+from
+  media M
+  join (
+    select
+      unnest(upcoming) as media_id
+    from
+      upcoming
+  ) as R on M.media_id = R.media_id;

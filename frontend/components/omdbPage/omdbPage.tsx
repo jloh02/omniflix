@@ -27,6 +27,7 @@ import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
 import { useInView } from "react-intersection-observer";
 import getTopLists from "@/utils/database/recommendations/getTopLists";
 import HorizontalMovieTvList from "./horizontalMovieTvList";
+import getLatestMovieTv from "@/utils/database/latest/getLatestMovieTv";
 
 interface OmdbPageProps {
   title: string;
@@ -48,8 +49,12 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
 
   //Fetch top lists
   useEffect(() => {
-    getTopLists(type).then(setTopLists);
-  }, []);
+    const updateTopLists = () => getTopLists(type).then(setTopLists);
+    updateTopLists();
+    getLatestMovieTv(omdbType).then((success) => {
+      if (success) updateTopLists();
+    });
+  }, [omdbType, type]);
 
   // Handle debounced search event
   const searchInputDebounced = useDebounce(
