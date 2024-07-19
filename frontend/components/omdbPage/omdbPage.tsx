@@ -116,32 +116,40 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
   if (isLoading) content = <LinearProgress color="secondary" />;
   else if (error.length) {
     content = <Typography color="error">{error}</Typography>;
-  } else if (searchResult.length) {
-    content = (
-      <Grid pb={40} container spacing={3} sx={{ alignItems: "stretch" }}>
-        {searchResult.map((media, idx) => (
-          <Grid
-            key={idx}
-            item
-            ref={idx === searchResult.length - 1 ? ref : null} //Attach inView ref to last item
-          >
-            <MovieTvSeriesCard media={media} type={type} showLabel={false} />
-          </Grid>
-        ))}
-      </Grid>
-    );
   } else {
-    // Display top lists if nothing being searched
+    const showTopLists = !Boolean(searchResult.length);
     content = (
-      <Box pb={40}>
-        {Object.entries(topLists).map(([listName, mediaList], idx) => (
-          <Box key={idx} pb={3}>
-            <Typography variant="h5" className="my-4">
-              {listName}
-            </Typography>
-            <HorizontalMovieTvList mediaList={mediaList} type={type} />
-          </Box>
-        ))}
+      <Box>
+        {/* Display search results */}
+        <Grid
+          display={showTopLists ? "none" : "flex"}
+          pb={40}
+          container
+          spacing={3}
+          sx={{ alignItems: "stretch" }}
+        >
+          {searchResult.map((media, idx) => (
+            <Grid
+              key={idx}
+              item
+              ref={idx === searchResult.length - 1 ? ref : null} //Attach inView ref to last item
+            >
+              <MovieTvSeriesCard media={media} type={type} showLabel={false} />
+            </Grid>
+          ))}
+        </Grid>
+
+        {/* Display top lists */}
+        <Box display={showTopLists ? "block" : "none"} pb={40}>
+          {Object.entries(topLists).map(([listName, mediaList], idx) => (
+            <Box key={idx} pb={3}>
+              <Typography variant="h5" className="my-4">
+                {listName}
+              </Typography>
+              <HorizontalMovieTvList mediaList={mediaList} type={type} />
+            </Box>
+          ))}
+        </Box>
       </Box>
     );
   }
