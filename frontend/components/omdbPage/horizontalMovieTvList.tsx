@@ -20,6 +20,8 @@ const HorizontalMovieTvList: React.FC<{
           gridRef.current.clientWidth < gridRef.current.scrollWidth,
         );
     };
+    updateScrollableBox();
+
     window.addEventListener("resize", updateScrollableBox);
 
     return () => {
