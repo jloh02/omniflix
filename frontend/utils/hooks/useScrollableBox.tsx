@@ -55,7 +55,7 @@ const useScrollableBox = (direction: Direction, deps: DependencyList) => {
         : divRef.current.scrollHeight - divRef.current.clientHeight,
       MAX_SCROLL_THRESHOLD,
     );
-  }, [divRef]);
+  }, [divRef, deps]);
 
   const scrollableBox = useMemo(() => {
     if (!showScrollableBox) return;
