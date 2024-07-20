@@ -15,6 +15,8 @@ import {
 
 type Direction = "horizontal" | "vertical";
 
+const MAX_SCROLL_THRESHOLD = 200;
+
 // This hook is used to determine if a box is scrollable in a certain direction
 const useScrollableBox = (direction: Direction, deps: DependencyList) => {
   const divRef = useRef<HTMLDivElement>(null);
@@ -45,7 +47,15 @@ const useScrollableBox = (direction: Direction, deps: DependencyList) => {
     return () => window.removeEventListener("resize", updateScrollableBox);
   }, [divRef, deps]);
 
-  useEffect(() => {}, [scrollPosition]);
+  const scrollThreshold = useMemo(() => {
+    if (!divRef.current) return MAX_SCROLL_THRESHOLD;
+    return Math.min(
+      direction === "horizontal"
+        ? divRef.current.scrollWidth - divRef.current.clientWidth
+        : divRef.current.scrollHeight - divRef.current.clientHeight,
+      MAX_SCROLL_THRESHOLD,
+    );
+  }, [divRef]);
 
   const scrollableBox = useMemo(() => {
     if (!showScrollableBox) return;
@@ -78,7 +88,7 @@ const useScrollableBox = (direction: Direction, deps: DependencyList) => {
         borderRadius="10px"
         sx={{
           pointerEvents: "none",
-          opacity: Math.max(1.0 - scrollPosition / 200.0, 0.0),
+          opacity: Math.max(1.0 - scrollPosition / scrollThreshold, 0.0),
           transition: "opacity 0.3s",
           background: `linear-gradient(${gradientAngle}, transparent, #000000BA, #000000FF)`,
         }}
