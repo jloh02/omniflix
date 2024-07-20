@@ -209,7 +209,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
               : "none"
           }
           width="100%"
-          maxHeight="65vh"
+          height="65vh"
           gap={3}
           mb={2}
         >
@@ -233,8 +233,8 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
       <Box
         display="flex"
         flexDirection="row"
-        maxHeight="90vh"
         width="100%"
+        maxHeight="80vh"
         gap={3}
         mb={2}
       >
