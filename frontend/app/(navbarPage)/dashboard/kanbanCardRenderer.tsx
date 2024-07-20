@@ -40,7 +40,7 @@ const KanbanCardRenderer: React.FC<KanbanCardRendererProps> = ({
       <Tooltip title={item.title} disableHoverListener={!shouldShrink}>
         <Typography
           variant="h6"
-          noWrap={true}
+          noWrap={!shouldShrink}
           textOverflow="ellipsis"
           fontSize={shouldShrink ? "0.85rem" : "1.25rem"}
         >
