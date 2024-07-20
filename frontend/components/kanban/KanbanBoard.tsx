@@ -36,7 +36,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
   const [mobileSelectedColumn, setMobileSelectedColumn] = useState<
     string | null
-  >("To Watch");
+  >(null);
 
   if (columnNames.length > COMPLETED_STATUS_COLUMN_INDEX + 1) {
     throw new Error(
@@ -195,19 +195,41 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
     });
   }, [dataWithKeyAndIdx]);
 
-  return (
-    <Box display="flex" flexDirection="column">
-      {isMobile && mobileSelectedColumn && (
-        <Box display="flex" width="100%" maxHeight="65vh" gap={3} mb={2}>
+  // Extra single column for mobile view
+  let mobileView = null;
+  if (isMobile && mobileSelectedColumn) {
+    // Still render all to maintain state
+    mobileView = Object.entries(dataWithKeyAndIdx).map(
+      ([title, items], colIdx) => (
+        <Box
+          key={colIdx + "mobile"}
+          display={
+            mobileSelectedColumn && mobileSelectedColumn === title
+              ? "flex"
+              : "none"
+          }
+          width="100%"
+          maxHeight="65vh"
+          gap={3}
+          mb={2}
+        >
           <KanbanColumn
             title={mobileSelectedColumn}
             instanceId={instanceId}
-            items={dataWithKeyAndIdx[mobileSelectedColumn]}
+            items={items}
             renderKanbanCard={renderKanbanCard}
             removeItem={removeItem}
           />
         </Box>
-      )}
+      ),
+    );
+  }
+
+  return (
+    <Box display="flex" flexDirection="column">
+      {mobileView}
+
+      {/* Handles both mobile and non-mobile multi-column view */}
       <Box
         display="flex"
         flexDirection="row"
