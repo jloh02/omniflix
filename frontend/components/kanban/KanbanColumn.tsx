@@ -18,9 +18,7 @@ interface KanbanColumnProps {
   removeItem: (id: number) => void;
   mobileConfig?: {
     isColumnSelected: boolean;
-    setMobileSelectedColumn: React.Dispatch<
-      React.SetStateAction<string | null>
-    >;
+    setMobileSelectedColumn: React.Dispatch<React.SetStateAction<string>>;
   };
 }
 

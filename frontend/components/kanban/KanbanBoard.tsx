@@ -34,9 +34,9 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const [instanceId] = useState(() => Symbol("instanceId"));
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
-  const [mobileSelectedColumn, setMobileSelectedColumn] = useState<
-    string | null
-  >(null);
+  const [mobileSelectedColumn, setMobileSelectedColumn] = useState<string>(
+    columnNames[0],
+  );
 
   if (columnNames.length > COMPLETED_STATUS_COLUMN_INDEX + 1) {
     throw new Error(
