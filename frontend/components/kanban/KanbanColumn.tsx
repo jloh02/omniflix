@@ -101,6 +101,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
     <Box
       flex="1 1 0px"
       display="flex"
+      width="0"
       flexDirection="column"
       ref={dropTargetRef}
     >
@@ -122,7 +123,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
           height="100%"
           ref={colRef}
           sx={{
-            overflowY: "scroll",
+            overflowY: "auto",
             scrollbarColor: "grey transparent",
             scrollbarWidth: "thin",
             backgroundColor: isDraggedOver
