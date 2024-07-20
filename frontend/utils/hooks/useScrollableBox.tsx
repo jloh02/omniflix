@@ -45,7 +45,7 @@ const useScrollableBox = (direction: Direction, deps: DependencyList) => {
     updateScrollableBox();
     window.addEventListener("resize", updateScrollableBox);
     return () => window.removeEventListener("resize", updateScrollableBox);
-  }, [divRef, deps]);
+  }, [divRef, ...deps]);
 
   const scrollThreshold = useMemo(() => {
     if (!divRef.current) return MAX_SCROLL_THRESHOLD;
@@ -55,7 +55,7 @@ const useScrollableBox = (direction: Direction, deps: DependencyList) => {
         : divRef.current.scrollHeight - divRef.current.clientHeight,
       MAX_SCROLL_THRESHOLD,
     );
-  }, [divRef, deps]);
+  }, [divRef, ...deps]);
 
   const scrollableBox = useMemo(() => {
     if (!showScrollableBox) return;
