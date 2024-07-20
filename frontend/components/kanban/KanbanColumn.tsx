@@ -16,8 +16,12 @@ interface KanbanColumnProps {
   items: KanbanItemWithKeyIndex[];
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
   removeItem: (id: number) => void;
-  condensedView?: boolean;
-  setMobileSelectedColumn?: React.Dispatch<React.SetStateAction<string | null>>;
+  mobileConfig?: {
+    isColumnSelected: boolean;
+    setMobileSelectedColumn: React.Dispatch<
+      React.SetStateAction<string | null>
+    >;
+  };
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
@@ -26,8 +30,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   items,
   renderKanbanCard,
   removeItem,
-  condensedView,
-  setMobileSelectedColumn,
+  mobileConfig,
 }: KanbanColumnProps) => {
   const dropTargetRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -36,6 +39,9 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   useEffect(() => {
     const element = dropTargetRef.current;
     if (!element) return;
+
+    // If column is already selected, don't allow drop
+    if (mobileConfig?.isColumnSelected) return;
 
     return dropTargetForElements({
       element,
@@ -49,13 +55,14 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
       onDragLeave: () => setIsDraggedOver(false),
       onDrop: () => setIsDraggedOver(false),
     });
-  }, [dropTargetRef, title]);
+  }, [dropTargetRef, title, mobileConfig?.isColumnSelected]);
 
   // Indicator that list is scrollable
   const { ref: colRef, scrollableBox } = useScrollableBox("vertical", [items]);
 
   // Used on mobile for not showing all items
-  if (condensedView) {
+  if (mobileConfig) {
+    const { isColumnSelected, setMobileSelectedColumn } = mobileConfig;
     return (
       <Box
         flex="1 1 0px"
@@ -63,35 +70,40 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         flexDirection="column"
         ref={dropTargetRef}
         sx={{ cursor: "pointer" }}
-        onClick={() =>
-          setMobileSelectedColumn && setMobileSelectedColumn(title)
-        }
+        // Disable click if column is already selected
+        onClick={() => !isColumnSelected && setMobileSelectedColumn(title)}
       >
         <Typography pl={1} sx={{ userSelect: "none" }}>
           {title}
         </Typography>
         <Box
-          border="2px dotted"
+          border={`2px ${isColumnSelected ? "solid" : "dotted"}`}
           borderColor="secondary.main"
           borderRadius="10px"
           p={2}
           display="flex"
           flexDirection="column"
           alignItems="center"
+          justifyContent="center"
           height="100%"
           sx={{
             backgroundColor: isDraggedOver
               ? alpha(theme.palette.primary.light, 0.35)
-              : alpha(theme.palette.secondary.light, 0.35),
+              : alpha(
+                  theme.palette.secondary.main,
+                  isColumnSelected ? 0.8 : 0.4,
+                ),
           }}
         >
           <Typography variant="h6" lineHeight={1.1}>
             {items.length}
           </Typography>
           <Typography>Items</Typography>
-          <Typography textAlign="center" variant="caption">
-            (Click to view, Drag to move here)
-          </Typography>
+          {!isColumnSelected && (
+            <Typography textAlign="center" variant="caption">
+              (Click to view, Drag to move here)
+            </Typography>
+          )}
         </Box>
       </Box>
     );

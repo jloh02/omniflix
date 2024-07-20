@@ -238,21 +238,24 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
         gap={3}
         mb={2}
       >
-        {Object.entries(dataWithKeyAndIdx)
-          // When in mobile view, do not render the selected column
-          .filter(([title]) => !isMobile || title !== mobileSelectedColumn)
-          .map(([title, items], colIdx) => (
-            <KanbanColumn
-              key={colIdx}
-              title={title}
-              instanceId={instanceId}
-              items={items}
-              renderKanbanCard={renderKanbanCard}
-              removeItem={removeItem}
-              condensedView={isMobile}
-              setMobileSelectedColumn={setMobileSelectedColumn}
-            />
-          ))}
+        {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
+          <KanbanColumn
+            key={colIdx}
+            title={title}
+            instanceId={instanceId}
+            items={items}
+            renderKanbanCard={renderKanbanCard}
+            removeItem={removeItem}
+            mobileConfig={
+              isMobile
+                ? {
+                    setMobileSelectedColumn,
+                    isColumnSelected: title === mobileSelectedColumn,
+                  }
+                : undefined
+            }
+          />
+        ))}
       </Box>
     </Box>
   );
