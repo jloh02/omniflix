@@ -1,6 +1,6 @@
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
-import { Box, Typography, alpha, useMediaQuery, useTheme } from "@mui/material";
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { Box, Typography, alpha, useTheme } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
 import {
   KanbanDropType,
   KanbanItem,
@@ -17,6 +17,7 @@ interface KanbanColumnProps {
   renderKanbanCard: (item: KanbanItem) => React.ReactNode;
   removeItem: (id: number) => void;
   condensedView?: boolean;
+  setMobileSelectedColumn?: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const KanbanColumn: React.FC<KanbanColumnProps> = ({
@@ -26,6 +27,7 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   renderKanbanCard,
   removeItem,
   condensedView,
+  setMobileSelectedColumn,
 }: KanbanColumnProps) => {
   const dropTargetRef = useRef<HTMLDivElement | null>(null);
   const theme = useTheme();
@@ -60,6 +62,10 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
         display="flex"
         flexDirection="column"
         ref={dropTargetRef}
+        sx={{ cursor: "pointer" }}
+        onClick={() =>
+          setMobileSelectedColumn && setMobileSelectedColumn(title)
+        }
       >
         <Typography pl={1} sx={{ userSelect: "none" }}>
           {title}
