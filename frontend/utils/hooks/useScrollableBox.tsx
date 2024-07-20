@@ -1,12 +1,7 @@
-import {
-  ChevronRight,
-  KeyboardArrowDown,
-  KeyboardArrowRight,
-} from "@mui/icons-material";
+import { KeyboardArrowDown, KeyboardArrowRight } from "@mui/icons-material";
 import { Box } from "@mui/material";
 import {
   DependencyList,
-  useEffect,
   useLayoutEffect,
   useMemo,
   useRef,
