@@ -26,21 +26,26 @@ async function getUserCollections(targetUserId?: string): Promise<
   // Fetch user owned collections
   const { data, error } = await supabase
     .from(TableNames.COLLECTION_COLLABORATORS)
-    .select(
-      `
-      ${TableNames.COLLECTIONS} (
-        *
-      ),
-    `,
-    )
+    .select("collection_id")
     .eq("user_id", targetUserId ?? user.id)
-    .returns<Tables<TableNames.COLLECTIONS>[]>();
+    .returns<Tables<TableNames.COLLECTION_COLLABORATORS>[]>();
 
   if (error) {
     return { data: null, error };
   }
 
-  return { data, error };
+  // Get collection details
+  const { data: collections, error: collectionsError } = await supabase
+    .from(TableNames.COLLECTIONS)
+    .select("*")
+    .in("id", data?.map((collection) => collection.collection_id) ?? [])
+    .returns<Tables<TableNames.COLLECTIONS>[]>();
+
+  if (collectionsError) {
+    return { data: null, error: collectionsError };
+  }
+
+  return { data: collections, error };
 }
 
 export default getUserCollections;
