@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import {
   KanbanDropType,
@@ -32,6 +32,11 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   mediaType,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const [mobileSelectedColumn, setMobileSelectedColumn] = useState<
+    string | null
+  >("To Watch");
 
   if (columnNames.length > COMPLETED_STATUS_COLUMN_INDEX + 1) {
     throw new Error(
@@ -191,17 +196,41 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   }, [dataWithKeyAndIdx]);
 
   return (
-    <Box display="flex" flexDirection="row" width="100%" gap={3} mb={2}>
-      {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
-        <KanbanColumn
-          key={colIdx}
-          title={title}
-          instanceId={instanceId}
-          items={items}
-          renderKanbanCard={renderKanbanCard}
-          removeItem={removeItem}
-        />
-      ))}
+    <Box display="flex" flexDirection="column" gap={3}>
+      <Box display="flex" width="100%" maxHeight="65vh" gap={3} mb={2}>
+        {isMobile && mobileSelectedColumn && (
+          <KanbanColumn
+            key={-1}
+            title={mobileSelectedColumn}
+            instanceId={instanceId}
+            items={dataWithKeyAndIdx[mobileSelectedColumn]}
+            renderKanbanCard={renderKanbanCard}
+            removeItem={removeItem}
+          />
+        )}
+      </Box>
+      <Box
+        display="flex"
+        flexDirection="row"
+        maxHeight="90vh"
+        width="100%"
+        gap={3}
+        mb={2}
+      >
+        {Object.entries(dataWithKeyAndIdx)
+          .filter(([title]) => !isMobile || title !== mobileSelectedColumn)
+          .map(([title, items], colIdx) => (
+            <KanbanColumn
+              key={colIdx}
+              title={title}
+              instanceId={instanceId}
+              items={items}
+              renderKanbanCard={renderKanbanCard}
+              removeItem={removeItem}
+              condensedView={isMobile}
+            />
+          ))}
+      </Box>
     </Box>
   );
 };
