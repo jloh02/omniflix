@@ -56,7 +56,10 @@ const KanbanColumn: React.FC<KanbanColumnProps> = ({
   }, [dropTargetRef, title, mobileConfig?.isColumnSelected]);
 
   // Indicator that list is scrollable
-  const { ref: colRef, scrollableBox } = useScrollableBox("vertical", [items]);
+  const { ref: colRef, scrollableBox } = useScrollableBox("vertical", [
+    items,
+    mobileConfig?.isColumnSelected,
+  ]);
 
   // Used on mobile for not showing all items
   if (mobileConfig) {
