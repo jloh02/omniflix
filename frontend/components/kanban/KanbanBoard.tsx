@@ -133,11 +133,12 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
         switch (desData.type as KanbanDropType) {
           case "column":
+            sourceColumn = sourceItem.columnTitle;
+            desColumn = desData.title as string;
+
             // On mobile, only allow insertion at end of column
             if (isMobile) break;
 
-            sourceColumn = sourceItem.columnTitle;
-            desColumn = desData.title as string;
             if (edge === "top") insertIdx = 0;
             break;
           case "card":
