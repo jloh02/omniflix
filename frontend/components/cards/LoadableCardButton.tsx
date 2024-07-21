@@ -58,6 +58,7 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            position: "relative",
             height: 30,
             width: 30,
           }}

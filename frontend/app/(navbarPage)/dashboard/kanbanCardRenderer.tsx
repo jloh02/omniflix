@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import {
   Box,
   CardContent,
   IconButton,
   Tooltip,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
 import { MediaType, MediaTypeToParam } from "@/utils/constants";
@@ -14,8 +16,6 @@ import LikeDislikeButtons from "@/components/cards/LikeDislikeButtons";
 import FavoriteButton from "@/components/cards/FavoriteButton";
 import Link from "next/link";
 import { OpenInNew } from "@mui/icons-material";
-
-const MAX_BUTTON_WIDTH = 200;
 
 interface KanbanCardRendererProps {
   item: KanbanItem;
@@ -27,18 +27,10 @@ const KanbanCardRenderer: React.FC<KanbanCardRendererProps> = ({
   mediaType,
 }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
-  const [shouldShrink, setShouldShrink] = useState(false);
+  const theme = useTheme();
+  const shouldShrink = useMediaQuery(theme.breakpoints.down("sm"));
 
   const { urlPath } = MediaTypeToParam[mediaType];
-
-  useEffect(() => {
-    const updateShrinkStatus = () => {
-      if (!containerRef.current) return;
-      setShouldShrink(containerRef.current.offsetWidth < MAX_BUTTON_WIDTH);
-    };
-    window.addEventListener("resize", updateShrinkStatus);
-    return () => window.removeEventListener("resize", updateShrinkStatus);
-  }, []);
 
   return (
     <CardContent
@@ -48,7 +40,7 @@ const KanbanCardRenderer: React.FC<KanbanCardRendererProps> = ({
       <Tooltip title={item.title} disableHoverListener={!shouldShrink}>
         <Typography
           variant="h6"
-          noWrap={true}
+          noWrap={!shouldShrink}
           textOverflow="ellipsis"
           fontSize={shouldShrink ? "0.85rem" : "1.25rem"}
         >
