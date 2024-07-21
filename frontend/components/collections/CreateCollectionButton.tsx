@@ -4,18 +4,14 @@ import { Button } from "@mui/material";
 import React, { useState } from "react";
 import CreateCollectionDialog from "./CreateCollectionDialog";
 
-const CreateCollectionButton: React.FC = () => {
+interface CreateCollectionButtonProps {
+  onCollectionCreated?: () => void;
+}
+
+const CreateCollectionButton: React.FC<CreateCollectionButtonProps> = ({
+  onCollectionCreated,
+}) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleDialogClose = () => {
-    setIsDialogOpen(false);
-  };
-
-  const handleCreateCollection = (collectionName: string) => {
-    // Logic to create a new collection
-    console.log(`Creating collection: ${collectionName}`);
-    setIsDialogOpen(false);
-  };
 
   return (
     <>
@@ -29,6 +25,7 @@ const CreateCollectionButton: React.FC = () => {
       <CreateCollectionDialog
         isDialogOpen={isDialogOpen}
         handleCloseDialog={() => setIsDialogOpen(false)}
+        onCollectionCreated={onCollectionCreated}
       />
     </>
   );

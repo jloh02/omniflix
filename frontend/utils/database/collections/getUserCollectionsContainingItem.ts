@@ -5,7 +5,10 @@ import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { PostgrestError } from "@supabase/supabase-js";
 
-async function getUserCollections(targetUserId?: string): Promise<
+async function getUserCollectionsContainingItem(
+  mediaId: number,
+  targetUserId?: string,
+): Promise<
   | {
       data: Tables<TableNames.COLLECTIONS>[] | null;
       error: PostgrestError | null;
@@ -34,11 +37,26 @@ async function getUserCollections(targetUserId?: string): Promise<
     return { data: null, error };
   }
 
+  // Filter user collections containing media id
+  const { data: filteredData, error: filteredError } = await supabase
+    .from(TableNames.COLLECTION_ENTRIES)
+    .select("collection_id")
+    .eq("media_id", mediaId)
+    .in(
+      "collection_id",
+      data?.map((collection) => collection.collection_id) ?? [],
+    )
+    .returns<Tables<TableNames.COLLECTION_ENTRIES>[]>();
+
+  if (filteredError) {
+    return { data: null, error: filteredError };
+  }
+
   // Get collection details
   const { data: collections, error: collectionsError } = await supabase
     .from(TableNames.COLLECTIONS)
     .select("*")
-    .in("id", data?.map((collection) => collection.collection_id) ?? [])
+    .in("id", filteredData?.map((collection) => collection.collection_id) ?? [])
     .returns<Tables<TableNames.COLLECTIONS>[]>();
 
   if (collectionsError) {
@@ -48,4 +66,4 @@ async function getUserCollections(targetUserId?: string): Promise<
   return { data: collections, error };
 }
 
-export default getUserCollections;
+export default getUserCollectionsContainingItem;

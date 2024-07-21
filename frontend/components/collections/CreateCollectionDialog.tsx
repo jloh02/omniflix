@@ -19,17 +19,22 @@ import React, { useState } from "react";
 interface CreateCollectionDialogProps {
   isDialogOpen: boolean;
   handleCloseDialog: () => void;
+  onCollectionCreated?: () => void;
 }
 
 const CreateCollectionDialog: React.FC<CreateCollectionDialogProps> = ({
   isDialogOpen,
   handleCloseDialog,
+  onCollectionCreated,
 }) => {
   const router = useRouter();
   const [collectionName, setCollectionName] = useState("");
 
   const handleCreateCollection = async () => {
     const error = await createCollection(collectionName);
+    if (onCollectionCreated) {
+      onCollectionCreated();
+    }
     router.refresh();
     handleCloseDialog();
   };

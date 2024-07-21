@@ -12,6 +12,7 @@ import FavoriteButton from "./FavoriteButton";
 import AddToWatchlistButton from "./AddToWatchlistButton";
 import LikeDislikeButtons from "./LikeDislikeButtons";
 import Link from "next/link";
+import CollectionButton from "./CollectionButton";
 
 type MediaCardProps = {
   mediaType: MediaType;
@@ -45,6 +46,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
           <Box display="flex" gap={1}>
             <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
             <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
+            <CollectionButton mediaId={mediaId} />
           </Box>
           {showLabel ? (
             <Chip
