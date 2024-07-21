@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { Bookmark, BookmarkBorder } from "@mui/icons-material";
@@ -70,8 +71,13 @@ const CollectionButton: React.FC<CollectionButtonProps> = ({ mediaId }) => {
             </Box>
           </IconButton>
           <AddToCollectionDialog
+            mediaId={mediaId}
+            savedToCollections={savedToCollections}
             isDialogOpen={isDialogOpen}
-            handleCloseDialog={() => setIsDialogOpen(false)}
+            handleCloseDialog={() => {
+              setIsDialogOpen(false);
+              checkEnabled();
+            }}
           />
         </Box>
       </Tooltip>

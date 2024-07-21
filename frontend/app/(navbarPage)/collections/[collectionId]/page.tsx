@@ -1,8 +1,9 @@
 "use server";
 import getCollectionDetails from "@/utils/database/collections/getCollectionDetails";
 import getCollectionItems from "@/utils/database/collections/getCollectionItems";
-import { AppBar, Box, Typography } from "@mui/material";
+import { AppBar, Box, Grid, Typography } from "@mui/material";
 import OptionsButton from "./optionsButton";
+import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
 
 interface CollectionPageProps {
   params: {
@@ -34,7 +35,19 @@ const CollectionPage: React.FC<CollectionPageProps> = async ({ params }) => {
         <Typography variant="h6">{collectionDetails.name}</Typography>
         <OptionsButton collectionDetails={collectionDetails} />
       </Box>
-      <Typography>{collectionItems?.length}</Typography>
+      {collectionItems.length > 0 ? (
+        <Grid container spacing={3} className="mt-0 items-stretch">
+          {collectionItems.map((media, index) => (
+            <Grid key={index} item>
+              <MovieTvSeriesCard media={media} type={media.mediaType} />
+            </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Typography variant="body1" className="mt-4">
+          No items found.
+        </Typography>
+      )}
     </Box>
   );
 };

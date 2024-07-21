@@ -1,8 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { TableNames, MediaTypeToParam } from "@/utils/constants";
-import { Tables } from "@/utils/supabase/types.gen";
+import { MediaTypeToParam, TableNames } from "@/utils/constants";
 import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 
@@ -23,7 +22,9 @@ async function getCollectionItems(
   // Fetch collection items
   const { data, error } = await supabase
     .from(TableNames.COLLECTION_ENTRIES)
-    .select(`media_id, ${TableNames.MEDIA}:media_id!inner(media_type)`)
+    .select(
+      `media_id, media_type:${TableNames.MEDIA}!${TableNames.COLLECTION_ENTRIES}_media_id_fkey(media_type)`,
+    )
     .eq("collection_id", collectionId);
 
   if (error) {
@@ -34,9 +35,17 @@ async function getCollectionItems(
 
   // Fetch media details
   const mediaDetails = await Promise.all(
-    data.map(
-      async (item: any) => await getOmdbDetails(item.media_id, item.media_type),
-    ),
+    data.map(async (item) => {
+      const mediaDetails = await getOmdbDetails(
+        item.media_id,
+        MediaTypeToParam[item.media_type.media_type].omdbType,
+      ); //TODO: Fix type error
+      if (!mediaDetails) {
+        return;
+      }
+      mediaDetails.mediaType = item.media_type.media_type;
+      return mediaDetails;
+    }),
   );
 
   return mediaDetails.filter(
