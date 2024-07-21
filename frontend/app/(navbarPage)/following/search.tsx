@@ -15,11 +15,10 @@ import {
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
-  FriendshipStatus,
   TableNames,
   USER_PUBLIC_PROFILE_PAGE_ROUTE,
 } from "@/utils/constants";
@@ -27,8 +26,6 @@ import { Clear } from "@mui/icons-material";
 import { Tables } from "@/utils/supabase/types.gen";
 import searchUserInfo from "@/utils/database/userProfile/searchUserInfo";
 import Link from "next/link";
-import FriendButton from "@/components/friends/FriendButton";
-import getFriendshipStatus from "@/utils/database/friends/getFriendshipStatus";
 import isFollowingUser from "@/utils/database/followers/isFollowingUser";
 import FollowButton from "@/components/following/FollowButton";
 

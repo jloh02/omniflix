@@ -1,11 +1,25 @@
 "use client";
 import React, { useState } from "react";
-import { IconButton, Menu, MenuItem } from "@mui/material";
+import {
+  IconButton,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+} from "@mui/material";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import EditCollectionDialog from "@/components/collections/EditCollectionDialog";
 import { Tables } from "@/utils/supabase/types.gen";
 import { TableNames } from "@/utils/constants";
 import DeleteCollectionDialog from "@/components/collections/DeleteCollectionDialog";
+import {
+  Delete,
+  DriveFileRenameOutline,
+  Edit,
+  PersonAdd,
+  Share,
+} from "@mui/icons-material";
+import ShareCollectionDialog from "@/components/collections/ShareCollectionDialog";
 
 interface OptionsButtonProps {
   collectionDetails: Tables<TableNames.COLLECTIONS>;
@@ -13,6 +27,7 @@ interface OptionsButtonProps {
 
 const OptionsButton: React.FC<OptionsButtonProps> = ({ collectionDetails }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isShareDialogOpen, setIsShareDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const open = Boolean(anchorEl);
@@ -23,6 +38,11 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ collectionDetails }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleShareClick = () => {
+    setIsShareDialogOpen(true);
+    handleClose();
   };
 
   const handleEditClick = () => {
@@ -46,9 +66,30 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ collectionDetails }) => {
         <MoreVertIcon />
       </IconButton>
       <Menu anchorEl={anchorEl} keepMounted open={open} onClose={handleClose}>
-        <MenuItem onClick={handleEditClick}>Edit collection</MenuItem>
-        <MenuItem onClick={handleDeleteClick}>Delete collection</MenuItem>
+        <MenuItem onClick={handleShareClick}>
+          <ListItemIcon>
+            <PersonAdd />
+          </ListItemIcon>
+          <ListItemText>Share</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleEditClick}>
+          <ListItemIcon>
+            <DriveFileRenameOutline />
+          </ListItemIcon>
+          <ListItemText>Rename</ListItemText>
+        </MenuItem>
+        <MenuItem onClick={handleDeleteClick}>
+          <ListItemIcon>
+            <Delete />
+          </ListItemIcon>
+          <ListItemText>Delete</ListItemText>
+        </MenuItem>
       </Menu>
+      <ShareCollectionDialog
+        collection={collectionDetails}
+        isDialogOpen={isShareDialogOpen}
+        handleCloseDialog={() => setIsShareDialogOpen(false)}
+      />
       <EditCollectionDialog
         collectionId={collectionDetails.id}
         collectionName={collectionDetails.name}

@@ -58,7 +58,9 @@ const DeleteCollectionDialog: React.FC<DeleteCollectionDialogProps> = ({
         <Button onClick={handleDeleteCollection} color="error">
           Delete
         </Button>
-        <Button onClick={handleCloseDialog}>Cancel</Button>
+        <Button onClick={handleCloseDialog} color="info">
+          Cancel
+        </Button>
       </DialogActions>
     </Dialog>
   );

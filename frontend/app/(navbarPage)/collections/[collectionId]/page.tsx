@@ -1,9 +1,11 @@
 "use server";
 import getCollectionDetails from "@/utils/database/collections/getCollectionDetails";
 import getCollectionItems from "@/utils/database/collections/getCollectionItems";
-import { AppBar, Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import OptionsButton from "./optionsButton";
 import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
+import ShareButton from "@/components/socialShare/ShareButton";
+import { createClient } from "@/utils/supabase/server";
 
 interface CollectionPageProps {
   params: {
@@ -12,6 +14,12 @@ interface CollectionPageProps {
 }
 
 const CollectionPage: React.FC<CollectionPageProps> = async ({ params }) => {
+  // Fetch current user
+  const supabase = createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data: collectionDetails, error: collectionDetailsError } =
     (await getCollectionDetails(params.collectionId)) ?? {
       data: null,
@@ -32,8 +40,15 @@ const CollectionPage: React.FC<CollectionPageProps> = async ({ params }) => {
   return (
     <Box width="100%" paddingX={2}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography variant="h6">{collectionDetails.name}</Typography>
-        <OptionsButton collectionDetails={collectionDetails} />
+        <Box display="flex" gap={2}>
+          <Typography variant="h6">{collectionDetails.name}</Typography>
+          <ShareButton
+            text={`Check out this collection (${collectionDetails.name}) on Omniflix!`}
+          />
+        </Box>
+        {user?.id === collectionDetails.owner_id && (
+          <OptionsButton collectionDetails={collectionDetails} />
+        )}
       </Box>
       {collectionItems.length > 0 ? (
         <Grid container spacing={3} className="mt-0 items-stretch">

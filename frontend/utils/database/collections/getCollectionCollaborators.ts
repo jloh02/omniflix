@@ -5,7 +5,7 @@ import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { PostgrestError } from "@supabase/supabase-js";
 
-async function getCollectionCollaborators(collectionId: string): Promise<
+async function getCollectionCollaborators(collectionId: number): Promise<
   | {
       data: Tables<TableNames.USERS_INFO>[] | null;
       error: PostgrestError | null;
@@ -27,20 +27,19 @@ async function getCollectionCollaborators(collectionId: string): Promise<
   const { data, error } = await supabase
     .from(TableNames.COLLECTION_COLLABORATORS)
     .select(
-      `
-      ${TableNames.USERS_INFO} (
-        *
-      ),
-    `,
+      `user:${TableNames.USERS_INFO}!${TableNames.COLLECTION_COLLABORATORS}_user_id_fkey(*)`,
     )
-    .eq("collection_id", collectionId)
-    .returns<Tables<TableNames.USERS_INFO>[]>();
+    .eq("collection_id", collectionId);
 
   if (error) {
     return { data: null, error };
   }
 
-  return { data, error };
+  const collaboratorsData = data.map(
+    (user) => user.user as Tables<TableNames.USERS_INFO>,
+  );
+
+  return { data: collaboratorsData, error };
 }
 
 export default getCollectionCollaborators;
