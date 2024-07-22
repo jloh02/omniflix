@@ -2,6 +2,7 @@
 import { DEBOUNCE_DURATION_IN_MS, TableNames } from "@/utils/constants";
 import addCollectionCollaborator from "@/utils/database/collections/addCollectionCollaborator";
 import getCollectionCollaborators from "@/utils/database/collections/getCollectionCollaborators";
+import removeCollectionCollaborator from "@/utils/database/collections/removeCollectionCollaborator";
 import searchUserInfo from "@/utils/database/userProfile/searchUserInfo";
 import useDebounce from "@/utils/hooks/useDebounce";
 import { Tables } from "@/utils/supabase/types.gen";
@@ -25,6 +26,7 @@ import {
   ListItemText,
   Snackbar,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -46,7 +48,6 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAddCollaborator = async (userId: string) => {
-    console.log("Clicked");
     const error = await addCollectionCollaborator(collectionId, userId);
     if (error) {
       console.error("Failed to add collaborator: ", error);
@@ -97,7 +98,6 @@ const UserSearchBar: React.FC<UserSearchBarProps> = ({
         setSearchInput(value);
       }}
       onChange={(event, value) => {
-        console.log("Changed");
         if (value && typeof value !== "string") {
           handleAddCollaborator(value.user_id);
         }
@@ -174,6 +174,19 @@ const ShareCollectionDialog: React.FC<ShareCollectionDialogProps> = ({
     setSnackbarOpen(false);
   };
 
+  const handleRemoveCollaborator = async (
+    collectionId: number,
+    userId: string,
+  ) => {
+    const error = await removeCollectionCollaborator(collectionId, userId);
+    if (error) {
+      console.error("Failed to add collaborator: ", error);
+      return;
+    }
+
+    fetchCollectionCollaborators();
+  };
+
   const fetchCollectionCollaborators = useCallback(async () => {
     const collaborators = await getCollectionCollaborators(collection.id);
     setCollaborators(collaborators?.data ?? []); // TODO: Handle error
@@ -214,6 +227,22 @@ const ShareCollectionDialog: React.FC<ShareCollectionDialogProps> = ({
                   primary={collaborator.name}
                   secondary={`@${collaborator.username}`}
                 />
+                {collection.owner_id === collaborator.user_id ? (
+                  <Typography>Owner</Typography>
+                ) : (
+                  <Tooltip title="Remove collaborator">
+                    <IconButton
+                      onClick={() =>
+                        handleRemoveCollaborator(
+                          collection.id,
+                          collaborator.user_id,
+                        )
+                      }
+                    >
+                      <Close />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </ListItem>
             ))}
           </List>
