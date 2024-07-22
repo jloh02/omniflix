@@ -1,12 +1,18 @@
 "use client";
-import { TableNames } from "@/utils/constants";
+import { DEBOUNCE_DURATION_IN_MS, TableNames } from "@/utils/constants";
+import addCollectionCollaborator from "@/utils/database/collections/addCollectionCollaborator";
 import getCollectionCollaborators from "@/utils/database/collections/getCollectionCollaborators";
+import searchUserInfo from "@/utils/database/userProfile/searchUserInfo";
+import useDebounce from "@/utils/hooks/useDebounce";
 import { Tables } from "@/utils/supabase/types.gen";
 import { Close, LinkOutlined } from "@mui/icons-material";
 import {
+  Autocomplete,
   Avatar,
   Box,
   Button,
+  ButtonBase,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -15,6 +21,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemButton,
   ListItemText,
   Snackbar,
   TextField,
@@ -22,6 +29,109 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+
+interface UserSearchBarProps {
+  collectionId: number;
+  refreshCollaborators: () => void;
+}
+
+const UserSearchBar: React.FC<UserSearchBarProps> = ({
+  collectionId,
+  refreshCollaborators,
+}) => {
+  const [searchInput, setSearchInput] = useState("");
+  const [searchResults, setSearchResults] = useState<
+    readonly Tables<TableNames.USERS_INFO>[]
+  >([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleAddCollaborator = async (userId: string) => {
+    console.log("Clicked");
+    const error = await addCollectionCollaborator(collectionId, userId);
+    if (error) {
+      console.error("Failed to add collaborator: ", error);
+      return;
+    }
+
+    refreshCollaborators();
+    setSearchInput("");
+  };
+
+  const searchInputDebounced = useDebounce(
+    searchInput,
+    DEBOUNCE_DURATION_IN_MS,
+  );
+
+  // Handle search event
+  useEffect(() => {
+    setSearchResults([]);
+    setIsLoading(true);
+  }, [searchInput]);
+
+  // Handle search
+  useEffect(() => {
+    searchUserInfo(searchInputDebounced).then(async (response) => {
+      if (response?.error) {
+        setIsLoading(false);
+        return;
+      }
+
+      setSearchResults(response?.data ?? []);
+      setIsLoading(false);
+    });
+  }, [searchInputDebounced]);
+
+  return (
+    <Autocomplete
+      freeSolo
+      autoComplete
+      includeInputInList
+      filterSelectedOptions
+      loading={isLoading}
+      getOptionLabel={(option) =>
+        typeof option === "string" ? option : option.username
+      }
+      options={searchResults}
+      noOptionsText="No user found"
+      onInputChange={(event: any, value: string) => {
+        setSearchInput(value);
+      }}
+      onChange={(event, value) => {
+        console.log("Changed");
+        if (value && typeof value !== "string") {
+          handleAddCollaborator(value.user_id);
+        }
+      }}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Add users by username"
+          InputProps={{
+            ...params.InputProps,
+            endAdornment: (
+              <React.Fragment>
+                {isLoading ? (
+                  <CircularProgress color="inherit" size={20} />
+                ) : null}
+                {params.InputProps.endAdornment}
+              </React.Fragment>
+            ),
+          }}
+        />
+      )}
+      renderOption={(props, option) => {
+        return (
+          <li {...props}>
+            <Box display="flex" gap={1} alignItems="center">
+              <Avatar />
+              <ListItemText primary={option.name} secondary={option.username} />
+            </Box>
+          </li>
+        );
+      }}
+    />
+  );
+};
 
 interface ShareCollectionDialogProps {
   collection: Tables<TableNames.COLLECTIONS>;
@@ -89,7 +199,11 @@ const ShareCollectionDialog: React.FC<ShareCollectionDialogProps> = ({
           </IconButton>
         </DialogTitle>
         <DialogContent>
-          <Typography>People with access</Typography>
+          <UserSearchBar
+            collectionId={collection.id}
+            refreshCollaborators={fetchCollectionCollaborators}
+          />
+          <Typography marginTop={2}>People with access</Typography>
           <List>
             {collaborators.map((collaborator) => (
               <ListItem key={collaborator.user_id}>
