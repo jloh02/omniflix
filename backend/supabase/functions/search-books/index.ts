@@ -5,18 +5,7 @@ import {
 import { TableNames, MediaType } from "../_shared/constants.ts";
 import { deepCopyWithSnakeCase } from "../_shared/deepCopyWithSnakeCase.ts";
 
-async function cacheItems(client: SupabaseClient, items: any[]) {
-  const entriesToUpsert = items
-    .map(deepCopyWithSnakeCase)
-    .map((v) => ({ ...v, data: v })) // Assign data property first to allow deconstruction
-    .map(({ id, title, published_date, image_link, data }) => ({
-      google_book_id: id,
-      created_at: new Date().toISOString(),
-      title,
-      published_date,
-      image_link,
-      data,
-    }));
+async function cacheItems(client: SupabaseClient, entriesToUpsert: any[]) {
   const mediaKeys = entriesToUpsert.map((v) => {
     return { media_specific_id: v.google_book_id, media_type: MediaType.BOOK };
   });
@@ -38,7 +27,7 @@ async function cacheItems(client: SupabaseClient, items: any[]) {
     .from(TableNames.BOOKS_CACHE_TABLE)
     .upsert(entriesToUpsert, {
       defaultToNull: true,
-      onConflict: "google_books_id,media_type",
+      onConflict: "google_book_id,media_type",
       ignoreDuplicates: false,
     });
 
@@ -86,19 +75,29 @@ Deno.serve(async (req: Request) => {
     });
   }
 
+  const items = resBody.items
+    .map(deepCopyWithSnakeCase)
+    .filter((v: any) => v.volume_info && v.id)
+    .map((v: any) => ({
+      google_book_id: v.id,
+      created_at: new Date().toISOString(),
+      title: v.volume_info.title,
+      published_date: v.volume_info.published_date,
+      image_link: v.volume_info.image_links?.thumbnail,
+      data: v,
+    }));
+
   // Cache items, return media_ids
-  const cache = await cacheItems(adminSupabaseClient, resBody.items);
+  const cache = await cacheItems(adminSupabaseClient, items);
 
   // Map book keys to match schema and add media_id
   return new Response(
     JSON.stringify({
       ...resBody,
-      items: resBody.items
-        .map(deepCopyWithSnakeCase)
-        .map((v: any, idx: number) => ({
-          ...v,
-          media_id: cache[idx].media_id,
-        })),
+      items: items.map((v: any, idx: number) => ({
+        ...v,
+        media_id: cache[idx].media_id,
+      })),
     })
   );
 });

@@ -1,9 +1,14 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { FunctionNames, OMDBType } from "../../constants";
+import { FunctionNames, MediaType, MediaTypeToParam } from "@/utils/constants";
 
-async function getLatestMovieTv(type: OMDBType): Promise<boolean | undefined> {
+async function getLatestMovieTv(
+  mediaType: MediaType,
+): Promise<boolean | undefined> {
+  const { omdbType: type } = MediaTypeToParam[mediaType];
+  if (type == null) throw new Error("Invalid media type in getLatestMovieTv");
+
   const supabase = createClient();
   const {
     data: { user },

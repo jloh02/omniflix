@@ -1,15 +1,15 @@
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
 import { Box, Grid } from "@mui/material";
-import React, { useState } from "react";
-import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
+import React from "react";
+import MediaCard from "./MediaCard";
 import { MediaType } from "@/utils/constants";
 import { useScrollableBox } from "@/utils/hooks/useScrollableBox";
+import IBook from "@/utils/types/IBook";
 
-const HorizontalMovieTvList: React.FC<{
-  mediaList: IMovieTvSeries[];
+const HorizontalCardList: React.FC<{
+  mediaList: (IMovieTvSeries | IBook)[];
   type: MediaType;
 }> = ({ mediaList, type }) => {
-  const [scrollPosition, setScrollPosition] = useState(0);
   const { ref: gridRef, scrollableBox } = useScrollableBox("horizontal", [
     mediaList,
   ]);
@@ -28,13 +28,10 @@ const HorizontalMovieTvList: React.FC<{
           scrollbarWidth: "thin",
         }}
         wrap="nowrap"
-        onScroll={(e) =>
-          setScrollPosition((e.target as HTMLDivElement).scrollLeft)
-        }
       >
         {mediaList.map((media, idx) => (
           <Grid key={idx} item>
-            <MovieTvSeriesCard media={media} type={type} showLabel={false} />
+            <MediaCard mediaType={type} media={media} showLabel={false} />
           </Grid>
         ))}
       </Grid>
@@ -44,4 +41,4 @@ const HorizontalMovieTvList: React.FC<{
   );
 };
 
-export default HorizontalMovieTvList;
+export default HorizontalCardList;

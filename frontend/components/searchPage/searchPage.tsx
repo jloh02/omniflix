@@ -10,51 +10,58 @@ import {
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import Search from "@mui/icons-material/Search";
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import useDebounce from "@/utils/hooks/useDebounce";
 import {
   DEBOUNCE_DURATION_IN_MS,
   MINIMUM_SEARCH_LENGTH,
   MediaType,
-  MediaTypeToParam,
-  OMDB_FULL_RESPONSE_LENGTH,
 } from "@/utils/constants";
 import { Clear } from "@mui/icons-material";
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
-import searchOmdb from "@/utils/database/omdb/searchOmdb";
-import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
-import MovieTvSeriesCard from "../cards/MovieTvSeriesCard";
 import { useInView } from "react-intersection-observer";
 import getTopLists from "@/utils/database/recommendations/getTopLists";
-import HorizontalMovieTvList from "./horizontalMovieTvList";
-import getLatestMovieTv from "@/utils/database/latest/getLatestMovieTv";
+import IBook from "@/utils/types/IBook";
+import HorizontalCardList from "../cards/HorizontalCardList";
+import MediaCard from "../cards/MediaCard";
 
-interface OmdbPageProps {
+interface SearchPageProps<T extends IMovieTvSeries | IBook> {
   title: string;
   type: MediaType;
+  getLatestMedia?: (mediaType: MediaType) => Promise<boolean | undefined>;
+  searchCallback: (
+    mediaType: MediaType,
+    searchInput: string,
+    page: number | undefined,
+    errorCallback: (error: string) => void,
+  ) => Promise<[T[], pageNumber: number]>;
 }
 
-const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
-  const [topLists, setTopLists] = useState<Record<string, IMovieTvSeries[]>>(
-    {},
-  ); // Top lists as a placeholder
+const SearchPage = <T extends IMovieTvSeries | IBook>({
+  title,
+  type,
+  getLatestMedia,
+  searchCallback,
+}: SearchPageProps<T>) => {
+  const [topLists, setTopLists] = useState<Record<string, T[]>>({}); // Top lists as a placeholder
   const [searchInput, setSearchInput] = useState("");
-  const [searchResult, setSearchResult] = useState<IMovieTvSeries[]>([]);
+  const [searchResult, setSearchResult] = useState<T[]>([]);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState<number | undefined>();
   const [reachedEnd, setReachedEnd] = useState(false);
-
-  const { omdbType } = useMemo(() => MediaTypeToParam[type], [type]);
 
   //Fetch top lists
   useEffect(() => {
-    const updateTopLists = () => getTopLists(type).then(setTopLists);
+    if (!getLatestMedia) return;
+
+    const updateTopLists = () => getTopLists<T>(type).then(setTopLists);
     updateTopLists();
-    getLatestMovieTv(omdbType).then((success) => {
+
+    getLatestMedia(type).then((success) => {
       if (success) updateTopLists();
     });
-  }, [omdbType, type]);
+  }, [type]);
 
   // Handle debounced search event
   const searchInputDebounced = useDebounce(
@@ -62,6 +69,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
     DEBOUNCE_DURATION_IN_MS,
   );
   useEffect(() => {
+    setPage(undefined);
     setSearchResult([]);
     setError("");
     setReachedEnd(false);
@@ -75,40 +83,46 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
   }, [searchInput]);
 
   // Handle search
-  const searchOmdbCallback = useCallback(async () => {
-    const response = await searchOmdb(searchInput, omdbType, page);
-    if (response["Error"]) {
-      setError(response["Error"]);
-      setIsLoading(false);
-      return;
-    }
-
-    if (!response["Search"]) {
-      setError("No results found");
-      return;
-    }
-
-    const processedRes = (response["Search"] as object[]).map(
-      (mediaObj: object) =>
-        objectKeysSnakeCaseToCamelCase(mediaObj) as IMovieTvSeries,
+  const searchApiCallback = useCallback(async () => {
+    let hasErrored = false;
+    const [results, pageNumber] = await searchCallback(
+      type,
+      searchInput,
+      page,
+      (error) => {
+        if (page == 1) setError(error);
+        setIsLoading(false);
+        hasErrored = true;
+      },
     );
 
-    if (processedRes.length < OMDB_FULL_RESPONSE_LENGTH) setReachedEnd(true);
-
-    setSearchResult((res) => res.concat(processedRes));
-    setPage((page) => page + 1);
+    if (hasErrored) return;
+    setError("");
     setIsLoading(false);
-  }, [page, searchInput, omdbType]);
+
+    if (!results.length) {
+      if (page == 1) {
+        setError("No results found");
+        return;
+      }
+
+      setReachedEnd(true);
+      return;
+    }
+
+    setSearchResult((res) => res.concat(results));
+    setPage(pageNumber);
+  }, [page, searchInput, type]);
 
   useEffect(() => {
     if (searchInputDebounced.length < MINIMUM_SEARCH_LENGTH) return;
-    searchOmdbCallback();
+    searchApiCallback();
   }, [searchInputDebounced]);
 
   // Load more on scroll to last item
   const { ref, inView } = useInView({ threshold: 0 });
   useEffect(() => {
-    if (inView && !reachedEnd) searchOmdbCallback();
+    if (inView && !reachedEnd) searchApiCallback();
   }, [inView, reachedEnd]);
 
   let content;
@@ -134,7 +148,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
               item
               ref={idx === searchResult.length - 1 ? ref : null} //Attach inView ref to last item
             >
-              <MovieTvSeriesCard media={media} type={type} showLabel={false} />
+              <MediaCard mediaType={type} media={media} showLabel={false} />
             </Grid>
           ))}
         </Grid>
@@ -146,7 +160,7 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
               <Typography variant="h5" className="my-4">
                 {listName}
               </Typography>
-              <HorizontalMovieTvList mediaList={mediaList} type={type} />
+              <HorizontalCardList mediaList={mediaList} type={type} />
             </Box>
           ))}
         </Box>
@@ -187,4 +201,4 @@ const OmdbPage: React.FC<OmdbPageProps> = ({ title, type }) => {
   );
 };
 
-export default OmdbPage;
+export default SearchPage;

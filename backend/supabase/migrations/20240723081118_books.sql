@@ -18,7 +18,7 @@ create table "public"."books" (
   "google_book_id" text not null,
   "created_at" timestamp with time zone,
   "title" text,
-  "published_date" date,
+  "published_date" text,
   "image_link" text,
   "data" json,
   "media_type" media_type not null generated always as ('book' :: media_type) stored

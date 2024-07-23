@@ -4,7 +4,7 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import {
   ALLOWED_OMDB_TYPES,
-  CACHE_DURATION_MS,
+  OMDB_CACHE_DURATION_MS,
   OMDB_TYPE_TO_TMDB_TYPE,
   OMDBType,
 } from "../_shared/constants.ts";
@@ -52,7 +52,7 @@ Deno.serve(async (req: Request) => {
     lastUpdate &&
     lastUpdate.data &&
     new Date(lastUpdate.data.created_at).getTime() >
-      Date.now() - CACHE_DURATION_MS
+      Date.now() - OMDB_CACHE_DURATION_MS
   ) {
     return new Response(JSON.stringify({ success: true, cacheUsed: "true" }), {
       status: 200,

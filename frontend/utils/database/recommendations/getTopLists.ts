@@ -3,10 +3,11 @@
 import { createClient } from "@/utils/supabase/server";
 import { DatabaseViews, MediaType, MediaTypeToParam } from "../../constants";
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
+import IBook from "@/utils/types/IBook";
 
-async function getTopLists(
+async function getTopLists<T extends IMovieTvSeries | IBook>(
   mediaType: MediaType,
-): Promise<Record<string, IMovieTvSeries[]>> {
+): Promise<Record<string, T[]>> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -18,10 +19,28 @@ async function getTopLists(
   }
 
   const { tableName } = MediaTypeToParam[mediaType];
+  let mapper: (d: any) => IMovieTvSeries | IBook;
+  if (mediaType === MediaType.BOOK) {
+    mapper = (d: any) =>
+      ({
+        mediaId: d.media_id,
+        title: d[tableName][0].title,
+        publishedDate: d[tableName][0].publishedDate,
+        imageLink: d[tableName][0].imageLink,
+      }) as IBook;
+  } else {
+    mapper = (d: any) =>
+      ({
+        mediaId: d.media_id,
+        title: d[tableName][0].title,
+        year: d[tableName][0].year,
+        posterUrl: d[tableName][0].poster_url,
+      }) as IMovieTvSeries;
+  }
 
   const processTopList = async (
     view: DatabaseViews,
-  ): Promise<IMovieTvSeries[] | null> => {
+  ): Promise<(IMovieTvSeries | IBook)[] | null> => {
     const { data, error } = await supabase
       .from(view)
       .select(`media_id, ${tableName}(*)`)
@@ -30,13 +49,7 @@ async function getTopLists(
 
     if (!data || !data.length || error) return null;
 
-    // TODO handle different media types
-    return data.map((d: any) => ({
-      mediaId: d.media_id,
-      title: d[tableName][0].title,
-      year: d[tableName][0].year,
-      posterUrl: d[tableName][0].poster_url,
-    }));
+    return data.map(mapper);
   };
 
   // Process all 3 views
@@ -60,9 +73,7 @@ async function getTopLists(
       "Top Reviews": topReviews,
     })
       // Only include lists that have data
-      .filter(([_, value]) => value !== null) as Array<
-      [string, IMovieTvSeries[]]
-    >,
+      .filter(([_, value]) => value !== null) as Array<[string, T[]]>,
   );
 
   return resolvedData;
