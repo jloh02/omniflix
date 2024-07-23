@@ -1,9 +1,11 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { MediaTypeToParam, TableNames } from "@/utils/constants";
+import { MediaType, MediaTypeToParam, TableNames } from "@/utils/constants";
 import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
+import { QueryData } from "@supabase/supabase-js";
+import { supabaseFixOneToOne } from "@/utils/supabaseFixOneToOne";
 
 async function getCollectionItems(
   collectionId: number,
@@ -22,9 +24,7 @@ async function getCollectionItems(
   // Fetch collection items
   const { data, error } = await supabase
     .from(TableNames.COLLECTION_ENTRIES)
-    .select(
-      `media_id, media_type:${TableNames.MEDIA}!${TableNames.COLLECTION_ENTRIES}_media_id_fkey(media_type)`,
-    )
+    .select(`media_id, ${TableNames.MEDIA}(media_type)`)
     .eq("collection_id", collectionId);
 
   if (error) {
@@ -38,12 +38,14 @@ async function getCollectionItems(
     data.map(async (item) => {
       const mediaDetails = await getOmdbDetails(
         item.media_id,
-        MediaTypeToParam[item.media_type.media_type].omdbType,
-      ); //TODO: Fix type error
+        MediaTypeToParam[
+          supabaseFixOneToOne(item.media)?.media_type as MediaType
+        ].omdbType,
+      );
       if (!mediaDetails) {
         return;
       }
-      mediaDetails.mediaType = item.media_type.media_type;
+      mediaDetails.mediaType = supabaseFixOneToOne(item.media)?.media_type;
       return mediaDetails;
     }),
   );

@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import { TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { PostgrestError } from "@supabase/supabase-js";
+import { supabaseFixOneToOne } from "@/utils/supabaseFixOneToOne";
 
 async function getCollectionCollaborators(collectionId: number): Promise<
   | {
@@ -26,9 +27,7 @@ async function getCollectionCollaborators(collectionId: number): Promise<
   // Fetch user owned collections
   const { data, error } = await supabase
     .from(TableNames.COLLECTION_COLLABORATORS)
-    .select(
-      `user:${TableNames.USERS_INFO}!${TableNames.COLLECTION_COLLABORATORS}_user_id_fkey(*)`,
-    )
+    .select(`${TableNames.USERS_INFO}(*)`)
     .eq("collection_id", collectionId);
 
   if (error) {
@@ -36,7 +35,8 @@ async function getCollectionCollaborators(collectionId: number): Promise<
   }
 
   const collaboratorsData = data.map(
-    (user) => user.user as Tables<TableNames.USERS_INFO>,
+    (user) =>
+      supabaseFixOneToOne(user.users_info) as Tables<TableNames.USERS_INFO>,
   );
 
   return { data: collaboratorsData, error };
