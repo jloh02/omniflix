@@ -100,7 +100,9 @@ Deno.serve(async (req: Request) => {
 
   if (search_by_imdb_id) {
     const res = await fetch(
-      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${query}&type=${mediaType}`
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${encodeURIComponent(
+        query
+      )}&type=${mediaType}`
     );
     const resBody = await res.json();
     if (resBody.Error) {
@@ -120,7 +122,9 @@ Deno.serve(async (req: Request) => {
     // Search by imdb id flag not shown
     // Handle searches that returns "too many results" (https://github.com/omdbapi/OMDb-API/issues/190)
     const res = await fetch(
-      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${query}&page=${page}&type=${mediaType}`
+      `http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${encodeURIComponent(
+        query
+      )}&page=${page}&type=${mediaType}`
     );
     const resBody = await res.json();
     if (!resBody.Error) {

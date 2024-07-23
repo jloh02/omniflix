@@ -4,7 +4,7 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import {
   ALLOWED_OMDB_TYPES,
-  CACHE_DURATION_MS,
+  OMDB_CACHE_DURATION_MS,
   OMDB_TYPE_TO_TABLE,
   OMDBType,
   TableNames,
@@ -67,7 +67,7 @@ Deno.serve(async (req: Request) => {
   }
 
   // Check cache for existing data
-  const cacheLimit = Date.now() - CACHE_DURATION_MS;
+  const cacheLimit = Date.now() - OMDB_CACHE_DURATION_MS;
   const { data, error } = await adminSupabaseClient
     .from(CACHE_TABLE)
     .select(`*, ${TableNames.MEDIA}!inner(media_id)`)
