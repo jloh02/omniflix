@@ -78,6 +78,7 @@ export enum DatabaseViews {
   TOP_FAVORITES = "top_favorites",
   TOP_REVIEWS = "top_reviews",
   DISCOVER_LATEST = "discover_latest",
+  COLLECTION_COLLABORATORS_ITEMS = "collection_users_items",
 }
 
 // Datable Constants and Types

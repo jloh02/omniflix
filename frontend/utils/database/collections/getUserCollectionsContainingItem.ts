@@ -1,7 +1,7 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { TableNames } from "../../constants";
+import { DatabaseViews, TableNames } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { PostgrestError } from "@supabase/supabase-js";
 
@@ -26,30 +26,15 @@ async function getUserCollectionsContainingItem(
     throw new Error("Please login again.");
   }
 
-  // Fetch user collections
-  const { data, error } = await supabase
-    .from(TableNames.COLLECTION_COLLABORATORS)
+  const { data: filteredData, error } = await supabase
+    .from(DatabaseViews.COLLECTION_COLLABORATORS_ITEMS)
     .select("collection_id")
+    .eq("media_id", mediaId)
     .eq("user_id", targetUserId ?? user.id)
-    .returns<Tables<TableNames.COLLECTION_COLLABORATORS>[]>();
+    .returns<Tables<DatabaseViews.COLLECTION_COLLABORATORS_ITEMS>[]>();
 
   if (error) {
     return { data: null, error };
-  }
-
-  // Filter user collections containing media id
-  const { data: filteredData, error: filteredError } = await supabase
-    .from(TableNames.COLLECTION_ENTRIES)
-    .select("collection_id")
-    .eq("media_id", mediaId)
-    .in(
-      "collection_id",
-      data?.map((collection) => collection.collection_id) ?? [],
-    )
-    .returns<Tables<TableNames.COLLECTION_ENTRIES>[]>();
-
-  if (filteredError) {
-    return { data: null, error: filteredError };
   }
 
   // Get collection details

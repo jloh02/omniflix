@@ -915,6 +915,78 @@ export type Database = {
       }
     }
     Views: {
+      collection_users_items: {
+        Row: {
+          collection_id: number | null
+          media_id: number | null
+          user_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "top_favorites"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "top_likes"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "top_reviews"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_entries_media_id_fkey"
+            columns: ["media_id"]
+            isOneToOne: false
+            referencedRelation: "user_recommendations"
+            referencedColumns: ["media_id"]
+          },
+          {
+            foreignKeyName: "collection_users_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "collections"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "collection_users_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users_info"
+            referencedColumns: ["user_id"]
+          },
+          {
+            foreignKeyName: "collection_users_user_id_fkey1"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       discover_latest: {
         Row: {
           media_id: number | null
