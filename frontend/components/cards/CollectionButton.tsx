@@ -32,7 +32,7 @@ const CollectionButton: React.FC<CollectionButtonProps> = ({ mediaId }) => {
 
   return (
     <Box>
-      <Tooltip title="Add to collection">
+      <Tooltip title={isLoading ? "Loading..." : "Add to collection"}>
         <Box
           sx={{
             display: "flex",
