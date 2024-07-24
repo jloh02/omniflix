@@ -18,8 +18,6 @@ import { Tables } from "@/utils/supabase/types.gen";
 import { TableNames } from "@/utils/constants";
 import removeCollectionItem from "@/utils/database/collections/removeCollectionItem";
 import addCollectionItem from "@/utils/database/collections/addCollectionItem";
-import { error } from "console";
-import { useRouter } from "next/navigation";
 import { AddCircleOutline, CheckCircle } from "@mui/icons-material";
 
 interface CollectionListItemProps {

@@ -26,7 +26,7 @@ async function getUserCollectionsContainingItem(
     throw new Error("Please login again.");
   }
 
-  const { data: filteredData, error } = await supabase
+  const { data, error } = await supabase
     .from(DatabaseViews.COLLECTION_COLLABORATORS_ITEMS)
     .select("collection_id")
     .eq("media_id", mediaId)
@@ -41,7 +41,7 @@ async function getUserCollectionsContainingItem(
   const { data: collections, error: collectionsError } = await supabase
     .from(TableNames.COLLECTIONS)
     .select("*")
-    .in("id", filteredData?.map((collection) => collection.collection_id) ?? [])
+    .in("id", data?.map((collection) => collection.collection_id) ?? [])
     .returns<Tables<TableNames.COLLECTIONS>[]>();
 
   if (collectionsError) {
