@@ -1537,7 +1537,7 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000001' :: uuid,
     5,
-    0,
+    1,
     'Review Title',
     'Review Description'
   ),
@@ -1565,7 +1565,7 @@ VALUES
   (
     '00000000-0000-0000-0000-000000000004' :: uuid,
     5,
-    0,
+    1,
     'Review Title',
     'Review Description'
   );
