@@ -140,6 +140,7 @@ export enum WatchlistFunctionAction {
 export const CategoryToMediaType: Record<string, MediaType> = {
   Movies: MediaType.MOVIE,
   "TV Series": MediaType.TV_SERIES,
+  Books: MediaType.BOOK,
 };
 
 // Utility for converting media type to various parameters

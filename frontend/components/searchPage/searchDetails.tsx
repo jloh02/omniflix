@@ -1,15 +1,10 @@
 "use client";
 import InfoSummaryHeader from "@/components/moviePage/InfoSummaryHeader";
-import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";
-import {
-  HOME_PAGE_ROUTE,
-  MediaType,
-  MediaTypeToParam,
-} from "@/utils/constants";
+import { HOME_PAGE_ROUTE, MediaType } from "@/utils/constants";
 import IBook from "@/utils/types/IBook";
 
 interface SearchDetailsProps {
