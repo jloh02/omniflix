@@ -53,11 +53,10 @@ const SearchPage = <T extends IMovieTvSeries | IBook>({
 
   //Fetch top lists
   useEffect(() => {
-    if (!getLatestMedia) return;
-
     const updateTopLists = () => getTopLists<T>(type).then(setTopLists);
     updateTopLists();
 
+    if (!getLatestMedia) return;
     getLatestMedia(type).then((success) => {
       if (success) updateTopLists();
     });
