@@ -102,6 +102,10 @@ grant
 update
   on table "public"."books" to "service_role";
 
+create policy "Enable select for authenticated users only" on "public"."books" as permissive for
+select
+  to authenticated using (true);
+
 create
 or replace view top_likes as
 select
