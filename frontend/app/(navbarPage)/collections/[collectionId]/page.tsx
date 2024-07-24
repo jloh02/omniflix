@@ -4,8 +4,8 @@ import getCollectionItems from "@/utils/database/collections/getCollectionItems"
 import { Box, Grid, Typography } from "@mui/material";
 import OptionsButton from "./optionsButton";
 import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
-import ShareButton from "@/components/socialShare/ShareButton";
 import { createClient } from "@/utils/supabase/server";
+import ShareIconButton from "@/components/socialShare/ShareIconButton";
 
 interface CollectionPageProps {
   params: {
@@ -42,7 +42,7 @@ const CollectionPage: React.FC<CollectionPageProps> = async ({ params }) => {
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Box display="flex" gap={2}>
           <Typography variant="h6">{collectionDetails.name}</Typography>
-          <ShareButton
+          <ShareIconButton
             text={`Check out this collection (${collectionDetails.name}) on Omniflix!`}
           />
         </Box>

@@ -1,15 +1,15 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Tooltip, Button } from "@mui/material";
+import { Tooltip, Button, IconButton } from "@mui/material";
 import { Reply } from "@mui/icons-material";
 import ShareDialog from "./ShareDialog";
 
-interface ShareButtonProps {
+interface ShareIconButtonProps {
   text: string;
   link?: string;
 }
 
-const ShareButton: React.FC<ShareButtonProps> = ({ text, link }) => {
+const ShareIconButton: React.FC<ShareIconButtonProps> = ({ text, link }) => {
   const [open, setOpen] = useState(false);
   const [shareLink, setComputedLink] = useState("");
 
@@ -25,26 +25,9 @@ const ShareButton: React.FC<ShareButtonProps> = ({ text, link }) => {
   return (
     <>
       <Tooltip title="Share link">
-        <Button
-          variant="contained"
-          size="small"
-          onClick={toggleDialog}
-          startIcon={
-            <Reply
-              sx={{
-                transform: "scaleX(-1)",
-              }}
-            />
-          }
-          sx={{
-            backgroundColor: "grey !important",
-            "&:hover": {
-              backgroundColor: "dimgrey !important",
-            },
-          }}
-        >
-          Share
-        </Button>
+        <IconButton size="small" onClick={toggleDialog}>
+          <Reply sx={{ transform: "scaleX(-1)" }} />
+        </IconButton>
       </Tooltip>
       <ShareDialog
         open={open}
@@ -56,4 +39,4 @@ const ShareButton: React.FC<ShareButtonProps> = ({ text, link }) => {
   );
 };
 
-export default ShareButton;
+export default ShareIconButton;
