@@ -10,11 +10,7 @@ function objectKeysSnakeCaseToCamelCase(
       const camelCaseKey = key.replace(/_([a-z])/g, (_, letter) =>
         letter.toUpperCase(),
       );
-      const value = obj[key];
-      newObj[camelCaseKey] =
-        typeof value === "object"
-          ? objectKeysSnakeCaseToCamelCase(value)
-          : value;
+      newObj[camelCaseKey] = obj[key];
     }
   }
 

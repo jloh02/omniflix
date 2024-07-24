@@ -24,18 +24,18 @@ async function getTopLists<T extends IMovieTvSeries | IBook>(
   if (mediaType === MediaType.BOOK) {
     mapper = (d: any) =>
       ({
-        mediaId: d.mediaId,
+        mediaId: d.media_id,
         title: d[tableName][0].title,
-        publishedDate: d[tableName][0].publishedDate,
-        imageLink: d[tableName][0].imageLink,
+        publishedDate: d[tableName][0].published_date,
+        imageLink: d[tableName][0].image_link,
       }) as IBook;
   } else {
     mapper = (d: any) =>
       ({
-        mediaId: d.mediaId,
+        mediaId: d.media_id,
         title: d[tableName][0].title,
         year: d[tableName][0].year,
-        posterUrl: d[tableName][0].posterUrl,
+        posterUrl: d[tableName][0].poster_url,
       }) as IMovieTvSeries;
   }
 
@@ -50,7 +50,7 @@ async function getTopLists<T extends IMovieTvSeries | IBook>(
 
     if (!data || !data.length || error) return null;
 
-    return data.map(objectKeysSnakeCaseToCamelCase).map(mapper);
+    return data.map(mapper);
   };
 
   // Process all 3 views
@@ -76,8 +76,6 @@ async function getTopLists<T extends IMovieTvSeries | IBook>(
       // Only include lists that have data
       .filter(([_, value]) => value !== null) as Array<[string, T[]]>,
   );
-
-  console.log(resolvedData);
 
   return resolvedData;
 }
