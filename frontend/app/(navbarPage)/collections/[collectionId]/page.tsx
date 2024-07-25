@@ -3,7 +3,7 @@ import getCollectionDetails from "@/utils/database/collections/getCollectionDeta
 import getCollectionItems from "@/utils/database/collections/getCollectionItems";
 import { Box, Grid, Typography } from "@mui/material";
 import OptionsButton from "./optionsButton";
-import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
+import MediaCard from "@/components/cards/MediaCard";
 import { createClient } from "@/utils/supabase/server";
 import ShareIconButton from "@/components/socialShare/ShareIconButton";
 
@@ -54,7 +54,7 @@ const CollectionPage: React.FC<CollectionPageProps> = async ({ params }) => {
         <Grid container spacing={3} className="mt-0 items-stretch">
           {collectionItems.map((media, index) => (
             <Grid key={index} item>
-              <MovieTvSeriesCard media={media} type={media.mediaType} />
+              <MediaCard media={media} mediaType={media.mediaType} />
             </Grid>
           ))}
         </Grid>
