@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from "react";
 import {
   Card,
@@ -14,6 +15,7 @@ import LikeDislikeButtons from "./LikeDislikeButtons";
 import Link from "next/link";
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
 import IBook, { isBook } from "@/utils/types/IBook";
+import CollectionButton from "./CollectionButton";
 
 type MediaCardProps = {
   mediaType: MediaType;
@@ -52,6 +54,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
           <Box display="flex" gap={1}>
             <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
             <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
+            <CollectionButton mediaId={mediaId} />
           </Box>
           {showLabel ? (
             <Chip

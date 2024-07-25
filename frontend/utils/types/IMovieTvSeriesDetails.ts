@@ -1,6 +1,8 @@
 import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
+import { MediaType } from "../constants";
 
 interface IMovieTvSeriesDetails extends IMovieTvSeries {
+  mediaType: MediaType;
   rated: string;
   released: string;
   runtime: string;
