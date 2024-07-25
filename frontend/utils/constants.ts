@@ -14,6 +14,7 @@ export const USER_REVIEWS_ROUTE = "/profile/reviews";
 export const DASHBOARD_PAGE_ROUTE = "/dashboard";
 export const FRIENDS_ROUTE = "/friends";
 export const FOLLOWING_ROUTE = "/following";
+export const COLLECTIONS_ROUTE = "/collections";
 export const MOVIES_PAGE_ROUTE = "/movies";
 export const TV_SERIES_PAGE_ROUTE = "/tv-series";
 export const BOOKS_PAGE_ROUTE = "/books";
@@ -65,6 +66,9 @@ export enum TableNames {
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
   MEDIA = "media",
+  COLLECTIONS = "collections",
+  COLLECTION_COLLABORATORS = "collection_users",
+  COLLECTION_ENTRIES = "collection_entries",
 }
 
 // Database aggregated views
@@ -74,6 +78,7 @@ export enum DatabaseViews {
   TOP_FAVORITES = "top_favorites",
   TOP_REVIEWS = "top_reviews",
   DISCOVER_LATEST = "discover_latest",
+  COLLECTION_COLLABORATORS_ITEMS = "collection_users_items",
 }
 
 // Datable Constants and Types

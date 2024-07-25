@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { MediaType } from "@/utils/constants";
