@@ -1,7 +1,12 @@
 "use server";
 
 import { createClient } from "@/utils/supabase/server";
-import { MediaType, MediaTypeToParam, TableNames } from "@/utils/constants";
+import {
+  MediaType,
+  MediaTypeToParam,
+  OMDBType,
+  TableNames,
+} from "@/utils/constants";
 import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { QueryData } from "@supabase/supabase-js";
@@ -40,7 +45,7 @@ async function getCollectionItems(
         item.media_id,
         MediaTypeToParam[
           supabaseFixOneToOne(item.media)?.media_type as MediaType
-        ].omdbType,
+        ].omdbType as OMDBType,
       );
       if (!mediaDetails) {
         return;
