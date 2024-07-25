@@ -34,6 +34,79 @@ export type Database = {
   }
   public: {
     Tables: {
+      books: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          google_book_id: string
+          image_link: string | null
+          media_type: Database["public"]["Enums"]["media_type"]
+          published_date: string | null
+          title: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          google_book_id: string
+          image_link?: string | null
+          media_type?: Database["public"]["Enums"]["media_type"]
+          published_date?: string | null
+          title?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          google_book_id?: string
+          image_link?: string | null
+          media_type?: Database["public"]["Enums"]["media_type"]
+          published_date?: string | null
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "discover_latest"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "media"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "top_favorites"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "top_likes"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "top_reviews"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+          {
+            foreignKeyName: "public_books_media_type_imdb_id_fkey"
+            columns: ["media_type", "google_book_id"]
+            isOneToOne: false
+            referencedRelation: "user_recommendations"
+            referencedColumns: ["media_type", "media_specific_id"]
+          },
+        ]
+      }
       collection_entries: {
         Row: {
           collection_id: number
@@ -1035,7 +1108,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      media_type: "movie" | "tv_series"
+      media_type: "movie" | "tv_series" | "book"
     }
     CompositeTypes: {
       [_ in never]: never
