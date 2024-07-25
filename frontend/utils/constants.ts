@@ -1,4 +1,4 @@
-export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
+export const CATEGORIES = ["Movies", "TV Series", "Books"];
 
 // Web URL paths
 export const HOME_PAGE_ROUTE = "/";
