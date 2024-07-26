@@ -1,4 +1,7 @@
+import { MediaType } from "../constants";
+
 interface IBook {
+  mediaType: MediaType.BOOK;
   mediaId: number;
   title: string;
   publishedDate: string;

@@ -9,12 +9,13 @@ import {
 } from "@/utils/constants";
 import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
-import { QueryData } from "@supabase/supabase-js";
 import { supabaseFixOneToOne } from "@/utils/supabaseFixOneToOne";
+import IBook, { isBook } from "@/utils/types/IBook";
+import getBookDetails from "../books/getBookDetails";
 
 async function getCollectionItems(
   collectionId: number,
-): Promise<IMovieTvSeriesDetails[] | undefined> {
+): Promise<IMovieTvSeriesDetails[] | IBook[]> {
   // Fetch current user
   const supabase = createClient();
   const {
@@ -41,16 +42,28 @@ async function getCollectionItems(
   // Fetch media details
   const mediaDetails = await Promise.all(
     data.map(async (item) => {
-      const mediaDetails = await getOmdbDetails(
-        item.media_id,
-        MediaTypeToParam[
-          supabaseFixOneToOne(item.media)?.media_type as MediaType
-        ].omdbType as OMDBType,
-      );
+      const mediaType = supabaseFixOneToOne(item.media)
+        ?.media_type as MediaType;
+
+      let mediaDetails;
+
+      if (mediaType === MediaType.BOOK) {
+        mediaDetails = await getBookDetails(item.media_id);
+      } else {
+        mediaDetails = await getOmdbDetails(
+          item.media_id,
+          MediaTypeToParam[mediaType].omdbType as OMDBType,
+        );
+      }
+
       if (!mediaDetails) {
         return;
       }
-      mediaDetails.mediaType = supabaseFixOneToOne(item.media)?.media_type;
+
+      if (!isBook(mediaDetails)) {
+        mediaDetails.mediaType = mediaType;
+      }
+
       return mediaDetails;
     }),
   );
