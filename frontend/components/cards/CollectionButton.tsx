@@ -6,6 +6,7 @@ import getUserCollectionsContainingItem from "@/utils/database/collections/getUs
 import { Tables } from "@/utils/supabase/types.gen";
 import { TableNames } from "@/utils/constants";
 import AddToCollectionDialog from "../collections/AddToCollectionDialog";
+import isInUserCollections from "@/utils/database/collections/isInUserCollections";
 
 interface CollectionButtonProps {
   mediaId: number;
@@ -14,21 +15,17 @@ interface CollectionButtonProps {
 const CollectionButton: React.FC<CollectionButtonProps> = ({ mediaId }) => {
   const [isEnabled, setIsEnabled] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [savedToCollections, setSavedToCollections] = useState<
-    Tables<TableNames.COLLECTIONS>[]
-  >([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const checkEnabled = useCallback(async () => {
-    const collections = await getUserCollectionsContainingItem(mediaId);
-    setIsEnabled(collections?.data?.length !== 0);
-    setSavedToCollections(collections?.data ?? []);
+    const isInUserCollection = await isInUserCollections(mediaId);
+    setIsEnabled(isInUserCollection);
     setIsLoading(false);
-  }, [isEnabled, isLoading, mediaId]);
+  }, [setIsEnabled, setIsLoading, mediaId]);
 
   useEffect(() => {
     checkEnabled();
-  }, [mediaId]);
+  }, [checkEnabled]);
 
   return (
     <Box>
@@ -72,7 +69,6 @@ const CollectionButton: React.FC<CollectionButtonProps> = ({ mediaId }) => {
           </IconButton>
           <AddToCollectionDialog
             mediaId={mediaId}
-            savedToCollections={savedToCollections}
             isDialogOpen={isDialogOpen}
             handleCloseDialog={() => {
               setIsDialogOpen(false);

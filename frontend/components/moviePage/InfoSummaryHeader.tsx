@@ -7,6 +7,7 @@ import LikeDislikeButtons from "../cards/LikeDislikeButtons";
 import { OpenInNew, StarOutlined } from "@mui/icons-material";
 import ShareButton from "../socialShare/ShareButton";
 import IBook, { isBook } from "@/utils/types/IBook";
+import CollectionButton from "../cards/CollectionButton";
 
 interface ButtonsRowProps {
   mediaType: MediaType;
@@ -23,6 +24,7 @@ const ButtonsRow: React.FC<ButtonsRowProps> = ({
     <Box display="flex" alignItems="center" gap={1}>
       <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
       <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
+      <CollectionButton mediaId={mediaId} />
       <LikeDislikeButtons mediaType={mediaType} mediaId={mediaId} />
       <ShareButton text={`Check out ${mediaTitle} on Omniflix!`} />
     </Box>

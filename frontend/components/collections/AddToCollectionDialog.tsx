@@ -19,6 +19,7 @@ import { TableNames } from "@/utils/constants";
 import removeCollectionItem from "@/utils/database/collections/removeCollectionItem";
 import addCollectionItem from "@/utils/database/collections/addCollectionItem";
 import { AddCircleOutline, CheckCircle } from "@mui/icons-material";
+import getUserCollectionsContainingItem from "@/utils/database/collections/getUserCollectionsContainingItem";
 
 interface CollectionListItemProps {
   collection: Tables<TableNames.COLLECTIONS>;
@@ -69,29 +70,38 @@ const CollectionListItem: React.FC<CollectionListItemProps> = ({
 
 interface AddToCollectionDialogProps {
   mediaId: number;
-  savedToCollections: Tables<TableNames.COLLECTIONS>[];
   isDialogOpen: boolean;
   handleCloseDialog: () => void;
 }
 
 const AddToCollectionDialog: React.FC<AddToCollectionDialogProps> = ({
   mediaId,
-  savedToCollections,
   isDialogOpen,
   handleCloseDialog,
 }) => {
   const [collections, setCollections] = useState<
     Tables<TableNames.COLLECTIONS>[]
   >([]);
+  const [savedToCollections, setSavedToCollections] = useState<
+    Tables<TableNames.COLLECTIONS>[]
+  >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const fetchUserCollections = useCallback(async () => {
     const userCollections = await getUserCollections();
     setCollections(userCollections?.data ?? []); // TODO: handle error
   }, []);
 
+  const fetchSavedToCollection = useCallback(async () => {
+    const collections = await getUserCollectionsContainingItem(mediaId);
+    setSavedToCollections(collections?.data ?? []); // TODO: handle error
+  }, []);
+
   useEffect(() => {
     if (isDialogOpen) {
-      fetchUserCollections();
+      Promise.all([fetchUserCollections(), fetchSavedToCollection()]).then(() =>
+        setIsLoading(false),
+      );
     }
   }, [isDialogOpen]);
 
@@ -108,18 +118,20 @@ const AddToCollectionDialog: React.FC<AddToCollectionDialogProps> = ({
         <CreateCollectionButton onCollectionCreated={fetchUserCollections} />
       </DialogTitle>
       <DialogContent>
-        <List>
-          {collections.map((collection) => (
-            <CollectionListItem
-              key={collection.id}
-              collection={collection}
-              mediaId={mediaId}
-              isItemInCollection={savedToCollections.some(
-                (savedToCollection) => savedToCollection.id === collection.id,
-              )}
-            />
-          ))}
-        </List>
+        {!isLoading && (
+          <List>
+            {collections.map((collection) => (
+              <CollectionListItem
+                key={collection.id}
+                collection={collection}
+                mediaId={mediaId}
+                isItemInCollection={savedToCollections.some(
+                  (savedToCollection) => savedToCollection.id === collection.id,
+                )}
+              />
+            ))}
+          </List>
+        )}
       </DialogContent>
     </Dialog>
   );
