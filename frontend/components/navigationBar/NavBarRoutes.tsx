@@ -21,7 +21,7 @@ export const NAVBAR_PAGES = [
   { route: MOVIES_PAGE_ROUTE, label: "Movies" },
   { route: TV_SERIES_PAGE_ROUTE, label: "TV Series" },
   { route: BOOKS_PAGE_ROUTE, label: "Books" },
-  { route: GAMES_PAGE_ROUTE, label: "Games" },
+  // { route: GAMES_PAGE_ROUTE, label: "Games" },
 ];
 
 const NavBarRoutes: React.FC = () => {

@@ -1,4 +1,4 @@
-export const CATEGORIES = ["Movies", "TV Series", "Books", "Games"];
+export const CATEGORIES = ["Movies", "TV Series", "Books"];
 
 // Web URL paths
 export const HOME_PAGE_ROUTE = "/";
@@ -41,7 +41,6 @@ export const DEBOUNCE_DURATION_IN_MS = 500;
 export const MINIMUM_SEARCH_LENGTH = 2;
 export const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 export type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
-export const OMDB_FULL_RESPONSE_LENGTH = 10;
 
 // Time to delay before sending a batch request to database query
 // Only for functions using DebouncedSupabaseQuery
@@ -65,6 +64,7 @@ export enum TableNames {
   FRIENDSHIPS = "friendships",
   MOVIES_CACHE = "movies",
   TV_SERIES_CACHE = "tv_series",
+  BOOKS_CACHE_TABLE = "books",
   MEDIA = "media",
   COLLECTIONS = "collections",
   COLLECTION_COLLABORATORS = "collection_users",
@@ -86,6 +86,7 @@ export const COMPLETED_STATUS_COLUMN_INDEX = 2;
 export enum MediaType {
   MOVIE = "movie",
   TV_SERIES = "tv_series",
+  BOOK = "book",
 }
 export enum LikeStatus {
   LIKE = 1,
@@ -127,8 +128,10 @@ export enum FriendshipStatus {
 // Supabase edge function names
 export enum FunctionNames {
   SEARCH_OMDB = "search-omdb",
+  SEARCH_BOOKS = "search-books",
   WATCHLIST = "watchlist",
   OMDB_DETAILS = "omdb-details",
+  BOOK_DETAILS = "book-details",
   DELETE_ACCOUNT = "delete-account",
   UPCOMING_MOVIE_TV = "latest",
 }
@@ -142,12 +145,13 @@ export enum WatchlistFunctionAction {
 export const CategoryToMediaType: Record<string, MediaType> = {
   Movies: MediaType.MOVIE,
   "TV Series": MediaType.TV_SERIES,
+  Books: MediaType.BOOK,
 };
 
 // Utility for converting media type to various parameters
 export type MediaTypeParam = {
   tableName: TableNames;
-  omdbType: OMDBType;
+  omdbType: OMDBType | null;
   label: string;
   urlPath: string;
 };
@@ -163,6 +167,12 @@ export const MediaTypeToParam: Record<MediaType, MediaTypeParam> = {
     omdbType: "series",
     label: "TV Series",
     urlPath: TV_SERIES_PAGE_ROUTE,
+  },
+  [MediaType.BOOK]: {
+    tableName: TableNames.BOOKS_CACHE_TABLE,
+    omdbType: null,
+    label: "Book",
+    urlPath: BOOKS_PAGE_ROUTE,
   },
 };
 

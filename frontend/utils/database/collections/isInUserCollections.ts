@@ -1,6 +1,5 @@
 "use client";
 
-import { MediaType } from "../../constants";
 import DebouncedSupabaseQuery from "../DebouncedSupabaseQuery";
 import isInUserCollectionsBatch from "./isInUserCollectionsBatch";
 

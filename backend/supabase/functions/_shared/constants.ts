@@ -1,4 +1,5 @@
-const CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
+const OMDB_CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
+const GOOGLE_BOOK_CACHE_DURATION_MS = 30 * 1000 * 60 * 60 * 24; // 30 days
 
 const ALLOWED_OMDB_TYPES = ["movie", "series", "episode"] as const;
 type OMDBType = (typeof ALLOWED_OMDB_TYPES)[number];
@@ -9,6 +10,7 @@ type TMDBType = (typeof ALLOWED_TMDB_TYPES)[number];
 enum MediaType {
   MOVIE = "movie",
   TV_SERIES = "tv_series",
+  BOOK = "book",
 }
 
 enum WatchlistAction {
@@ -21,6 +23,7 @@ enum TableNames {
   WATCHLIST = "watchlist_entries",
   MOVIES_CACHE_TABLE = "movies",
   TV_SERIES_CACHE_TABLE = "tv_series",
+  BOOKS_CACHE_TABLE = "books",
   MEDIA = "media",
   UPCOMING = "upcoming",
 }
@@ -45,12 +48,14 @@ const OMDB_TYPE_TO_TMDB_TYPE: Record<OMDBType, TMDBType> = {
 
 export type { OMDBType, TMDBType };
 export {
-  CACHE_DURATION_MS,
+  OMDB_CACHE_DURATION_MS,
+  GOOGLE_BOOK_CACHE_DURATION_MS,
   ALLOWED_OMDB_TYPES,
   ALLOWED_TMDB_TYPES,
   OMDB_TYPE_TO_TABLE,
   OMDB_TYPE_TO_MEDIA_TYPE,
   OMDB_TYPE_TO_TMDB_TYPE,
+  MediaType,
   TableNames,
   WatchlistAction,
 };

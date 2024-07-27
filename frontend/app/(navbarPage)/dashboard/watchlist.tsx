@@ -27,6 +27,14 @@ const AccordionContent = (category: string) => {
       />
     );
 
+  if (category === "Books")
+    return (
+      <WatchlistKanban
+        mediaType={MediaType.BOOK}
+        columns={["To Read", "Reading", "Completed"]}
+      />
+    );
+
   return <Typography>WIP</Typography>;
 };
 

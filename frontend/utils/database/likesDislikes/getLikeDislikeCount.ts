@@ -28,6 +28,7 @@ async function getLikeDislikeCount(
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
   if (likeError) {
+    console.error(likeError);
     throw new Error(
       "Error encountered when getting like count. Please try again later.",
     );
@@ -42,6 +43,7 @@ async function getLikeDislikeCount(
     .returns<Tables<TableNames.LIKES_DISLIKES>[]>();
 
   if (dislikeError) {
+    console.error(dislikeError);
     throw new Error(
       "Error encountered when getting dislike count. Please try again later.",
     );

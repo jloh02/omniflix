@@ -1,21 +1,21 @@
 "use client";
 import InfoSummaryHeader from "@/components/moviePage/InfoSummaryHeader";
-import getOmdbDetails from "@/utils/database/omdb/omdbDetails";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
 import { Box, Button, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import ReviewsSection from "./reviewsSection";
-import {
-  HOME_PAGE_ROUTE,
-  MediaType,
-  MediaTypeToParam,
-} from "@/utils/constants";
+import { HOME_PAGE_ROUTE, MediaType } from "@/utils/constants";
+import IBook from "@/utils/types/IBook";
 
-interface MoviePageProps {
+interface SearchDetailsProps {
   mediaId: number;
   mediaType: MediaType;
   errorHeader: string;
   errorBody: string;
+  getDetails: (
+    mediaId: number,
+    mediaType: MediaType,
+  ) => Promise<IMovieTvSeriesDetails | IBook | null>;
 }
 
 const ErrorPage: React.FC<{ header: string; body: string }> = ({
@@ -48,22 +48,22 @@ const ErrorPage: React.FC<{ header: string; body: string }> = ({
   </Box>
 );
 
-const OmdbPageDetails: React.FC<MoviePageProps> = ({
+const SearchDetails: React.FC<SearchDetailsProps> = ({
   mediaId,
   mediaType,
   errorHeader,
   errorBody,
+  getDetails,
 }) => {
-  const [mediaDetails, setMediaDetails] =
-    useState<IMovieTvSeriesDetails | null>(null);
+  const [mediaDetails, setMediaDetails] = useState<
+    IMovieTvSeriesDetails | IBook | null
+  >(null);
   const [error, setError] = useState<Error | null>(null);
-
-  const { omdbType } = MediaTypeToParam[mediaType];
 
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const details = await getOmdbDetails(mediaId, omdbType);
+        const details = await getDetails(mediaId, mediaType);
         setMediaDetails(details || null);
       } catch (err) {
         setError(err as Error);
@@ -71,7 +71,7 @@ const OmdbPageDetails: React.FC<MoviePageProps> = ({
     };
 
     fetchDetails();
-  }, [mediaId]);
+  }, [mediaId, getDetails]);
 
   if (error) {
     return <ErrorPage header={errorHeader} body={errorBody} />;
@@ -94,4 +94,4 @@ const OmdbPageDetails: React.FC<MoviePageProps> = ({
   );
 };
 
-export default OmdbPageDetails;
+export default SearchDetails;

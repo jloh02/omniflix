@@ -9,6 +9,8 @@ import {
 } from "../../constants";
 import { Tables } from "@/utils/supabase/types.gen";
 import { KanbanItem } from "@/components/kanban/kanbanTypes";
+import { isBook } from "@/utils/types/IBook";
+import { objectKeysSnakeCaseToCamelCase } from "@/utils/objectKeysSnakeCaseToCamelCase";
 
 async function getWatchlist(mediaType: MediaType, columnNames: string[]) {
   const supabase = createClient();
@@ -58,7 +60,7 @@ async function getWatchlist(mediaType: MediaType, columnNames: string[]) {
   const data = cacheData.reduce((acc, item) => {
     acc.set(item.media.media_id, item);
     return acc;
-  }, new Map<number, Tables<TableNames.MOVIES_CACHE>>());
+  }, new Map<number, any>());
 
   // Group by columnNames
   let result = columnNames.reduce(
@@ -75,13 +77,24 @@ async function getWatchlist(mediaType: MediaType, columnNames: string[]) {
     if (item.status_column > columnNames.length) {
       throw new Error("Invalid status column returned by database");
     }
-    const itemData = data.get(item.media_id);
+
+    const itemData = objectKeysSnakeCaseToCamelCase(data.get(item.media_id));
+
+    let year, image;
+    if (isBook(itemData)) {
+      year = itemData?.publishedDate ?? "";
+      image = itemData?.imageLink ?? "";
+    } else {
+      year = itemData?.year ?? "";
+      image = itemData?.posterUrl ?? "";
+    }
+
     acc[columnNames[item.status_column]].push({
       id: item.media_id,
       columnOrder: item.column_order,
       title: itemData?.title ?? "",
-      year: itemData?.year ?? "",
-      image: itemData?.poster_url ?? "",
+      year,
+      image,
     });
     return acc;
   }, result);

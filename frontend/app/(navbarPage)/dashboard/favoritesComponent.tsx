@@ -5,7 +5,7 @@ import { Grid, Typography } from "@mui/material";
 import getFavorites from "@/utils/database/favorites/getFavorites";
 import { MediaType } from "@/utils/constants";
 import IMovieTvSeriesDetails from "@/utils/types/IMovieTvSeriesDetails";
-import MovieTvSeriesCard from "@/components/cards/MovieTvSeriesCard";
+import MediaCard from "@/components/cards/MediaCard";
 
 interface FavoritesComponentProps {
   mediaType: MediaType;
@@ -17,15 +17,6 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
   const [favorites, setFavorites] = useState<IMovieTvSeriesDetails[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
-  // TODO: Handle other media_type states
-  if (mediaType !== MediaType.MOVIE && mediaType !== MediaType.TV_SERIES) {
-    return (
-      <Typography variant="body1" className="mt-4">
-        WIP
-      </Typography>
-    );
-  }
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -62,7 +53,7 @@ const FavoritesComponent: React.FC<FavoritesComponentProps> = ({
     <Grid container spacing={3} className="mt-0 items-stretch">
       {favorites.map((media: IMovieTvSeriesDetails, index) => (
         <Grid key={index} item>
-          <MovieTvSeriesCard media={media} type={mediaType} />
+          <MediaCard media={media} mediaType={mediaType} showLabel={false} />
         </Grid>
       ))}
     </Grid>
