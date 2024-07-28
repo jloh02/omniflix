@@ -1,3 +1,4 @@
+"use client";
 import React, { useMemo } from "react";
 import {
   Card,
@@ -12,22 +13,19 @@ import FavoriteButton from "./FavoriteButton";
 import AddToWatchlistButton from "./AddToWatchlistButton";
 import LikeDislikeButtons from "./LikeDislikeButtons";
 import Link from "next/link";
+import IMovieTvSeries from "@/utils/types/IMovieTvSeries";
+import IBook, { isBook } from "@/utils/types/IBook";
+import CollectionButton from "./CollectionButton";
 
 type MediaCardProps = {
   mediaType: MediaType;
-  mediaId: number;
-  posterUrl: string;
-  title: string;
-  subtitle: string;
+  media: IMovieTvSeries | IBook;
   showLabel?: boolean;
 };
 
 const MediaCard: React.FC<MediaCardProps> = ({
   mediaType,
-  mediaId,
-  posterUrl,
-  title,
-  subtitle,
+  media,
   showLabel = true,
 }) => {
   const { label, urlPath }: MediaTypeParam = useMemo(
@@ -35,16 +33,28 @@ const MediaCard: React.FC<MediaCardProps> = ({
     [mediaType],
   );
 
+  const { title, mediaId } = media;
+
+  let subtitle, imageUrl;
+  if (isBook(media)) {
+    subtitle = media.publishedDate;
+    imageUrl = media.imageLink;
+  } else {
+    subtitle = media.year;
+    imageUrl = media.posterUrl;
+  }
+
   return (
     <Card className="relative w-52 h-full">
       <Link href={`${urlPath}/${mediaId}`}>
-        <CardMedia component="img" src={posterUrl} className="h-72" />
+        <CardMedia component="img" src={imageUrl} className="h-72" />
       </Link>
       <CardContent className="p-2.5 last:pb-8">
         <Box display="flex" justifyContent="space-between" className="mb-2">
           <Box display="flex" gap={1}>
             <FavoriteButton mediaType={mediaType} mediaId={mediaId} />
             <AddToWatchlistButton mediaType={mediaType} mediaId={mediaId} />
+            <CollectionButton mediaId={mediaId} />
           </Box>
           {showLabel ? (
             <Chip

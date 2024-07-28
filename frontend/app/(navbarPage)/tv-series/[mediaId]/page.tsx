@@ -1,5 +1,5 @@
 import { MediaType } from "@/utils/constants";
-import OmdbPageDetails from "@/components/omdbPage/omdbPageDetails";
+import OmdbPageDetails from "@/components/searchPage/omdbPageDetails";
 
 interface MoviePageProps {
   params: {

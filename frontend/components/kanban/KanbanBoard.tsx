@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import KanbanColumn from "./KanbanColumn";
-import { Box } from "@mui/material";
+import { Box, useMediaQuery, useTheme } from "@mui/material";
 import { monitorForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import {
   KanbanDropType,
@@ -32,6 +32,11 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   mediaType,
 }) => {
   const [instanceId] = useState(() => Symbol("instanceId"));
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"));
+  const [mobileSelectedColumn, setMobileSelectedColumn] = useState<string>(
+    columnNames[0],
+  );
 
   if (columnNames.length > COMPLETED_STATUS_COLUMN_INDEX + 1) {
     throw new Error(
@@ -130,6 +135,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
           case "column":
             sourceColumn = sourceItem.columnTitle;
             desColumn = desData.title as string;
+
+            // On mobile, only allow insertion at end of column
+            if (isMobile) break;
+
             if (edge === "top") insertIdx = 0;
             break;
           case "card":
@@ -190,18 +199,68 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
     });
   }, [dataWithKeyAndIdx]);
 
+  // Extra single column for mobile view
+  let mobileView = null;
+  if (isMobile && mobileSelectedColumn) {
+    // Still render all to maintain state
+    mobileView = Object.entries(dataWithKeyAndIdx).map(
+      ([title, items], colIdx) => (
+        <Box
+          key={colIdx + "mobile"}
+          display={
+            mobileSelectedColumn && mobileSelectedColumn === title
+              ? "flex"
+              : "none"
+          }
+          width="100%"
+          height="65vh"
+          gap={3}
+          mb={2}
+        >
+          <KanbanColumn
+            title={mobileSelectedColumn}
+            instanceId={instanceId}
+            items={items}
+            renderKanbanCard={renderKanbanCard}
+            removeItem={removeItem}
+          />
+        </Box>
+      ),
+    );
+  }
+
   return (
-    <Box display="flex" flexDirection="row" width="100%" gap={3} mb={2}>
-      {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
-        <KanbanColumn
-          key={colIdx}
-          title={title}
-          instanceId={instanceId}
-          items={items}
-          renderKanbanCard={renderKanbanCard}
-          removeItem={removeItem}
-        />
-      ))}
+    <Box display="flex" flexDirection="column">
+      {mobileView}
+
+      {/* Handles both mobile and non-mobile multi-column view */}
+      <Box
+        display="flex"
+        flexDirection="row"
+        width="100%"
+        maxHeight="80vh"
+        gap={3}
+        mb={2}
+      >
+        {Object.entries(dataWithKeyAndIdx).map(([title, items], colIdx) => (
+          <KanbanColumn
+            key={colIdx}
+            title={title}
+            instanceId={instanceId}
+            items={items}
+            renderKanbanCard={renderKanbanCard}
+            removeItem={removeItem}
+            mobileConfig={
+              isMobile
+                ? {
+                    setMobileSelectedColumn,
+                    isColumnSelected: title === mobileSelectedColumn,
+                  }
+                : undefined
+            }
+          />
+        ))}
+      </Box>
     </Box>
   );
 };

@@ -26,14 +26,14 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { KanbanDropType, KanbanItemWithKeyIndex } from "./kanbanTypes";
 import { Close } from "@mui/icons-material";
 
+const IMAGE_SIZE = 100;
+
 interface KanbanCardProps {
   item: KanbanItemWithKeyIndex;
   instanceId: symbol;
   children?: React.ReactNode;
   removeItem: (id: number) => void;
 }
-
-const IMAGE_SIZE = 100;
 
 const KanbanCard: React.FC<KanbanCardProps> = ({
   item,
@@ -80,7 +80,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
     );
   }, [ref, item]);
 
-  const Indicator = (
+  const Indicator: React.FC = () => (
     <Divider
       key="indicator"
       color={theme.palette.secondary.light}
@@ -90,22 +90,24 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
 
   return (
     <>
-      {dragEdge === "top" && Indicator}
+      {dragEdge === "top" && <Indicator />}
       <Card
         ref={ref}
         sx={{
           cursor: "pointer",
           opacity: isDragging ? "50%" : "100%",
-          display: "absolute",
+          display: "flex",
+          height: "max-content",
+          width: "100%",
           "&:hover": { backgroundColor: theme.palette.primary.main },
         }}
       >
-        <Box display="flex" flexDirection="row">
-          <Box flexShrink={0} width={IMAGE_SIZE} height={IMAGE_SIZE}>
+        <Box display="flex" width="100%" height="max-content">
+          <Box flexShrink={0} width={IMAGE_SIZE} maxWidth="25%">
             <Box
               component="img"
               src={item.image}
-              sx={{ pointerEvents: "none" }}
+              sx={{ pointerEvents: "none", height: "100%", objectFit: "cover" }}
             ></Box>
           </Box>
           <Box
@@ -128,7 +130,7 @@ const KanbanCard: React.FC<KanbanCardProps> = ({
           </Box>
         </Box>
       </Card>
-      {dragEdge === "bottom" && Indicator}
+      {dragEdge === "bottom" && <Indicator />}
       <Dialog
         open={isConfirmationDialogOpen}
         onClose={() => setIsConfirmationDialogOpen(false)}

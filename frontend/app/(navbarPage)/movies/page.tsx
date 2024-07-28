@@ -1,9 +1,9 @@
 import React from "react";
 import { MediaType } from "@/utils/constants";
-import OmdbPage from "@/components/omdbPage/omdbPage";
+import OmdbSearchPage from "@/components/searchPage/omdbSearchPage";
 
 const Movies: React.FC = () => {
-  return <OmdbPage title="Movies" type={MediaType.MOVIE} />;
+  return <OmdbSearchPage title="Movies" type={MediaType.MOVIE} />;
 };
 
 export default Movies;

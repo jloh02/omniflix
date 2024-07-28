@@ -23,6 +23,7 @@ export interface ReviewWithDetails extends TablesInsert<TableNames.REVIEWS> {
     media_type: MediaType;
     [TableNames.MOVIES_CACHE]: { title: string; poster_url: string }[];
     [TableNames.TV_SERIES_CACHE]: { title: string; poster_url: string }[];
+    [TableNames.BOOKS_CACHE_TABLE]: { title: string; image_link: string }[];
   };
 }
 
@@ -47,10 +48,16 @@ const reviewWithDetailsToUnifiedCache = (
     "media_type"
   >;
 
+  const imageKeyName = (
+    cacheTableName === TableNames.BOOKS_CACHE_TABLE
+      ? "image_link"
+      : "poster_url"
+  ) as keyof (typeof review.media)[typeof cacheTableNameKey][0];
+
   return {
     ...review,
     mediaTitle: review.media[cacheTableNameKey][0].title,
-    mediaPoster: review.media[cacheTableNameKey][0].poster_url,
+    mediaPoster: review.media[cacheTableNameKey][0][imageKeyName],
   };
 };
 
@@ -67,7 +74,6 @@ async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
   }
 
   // Fetch reviews
-  //TODO add cache tables for all types (Also update the ReviewWthDetails interface for each type)
   const { data, error } = await supabase
     .from(TableNames.REVIEWS)
     // Query does not use inner join because each cache can be null, but never all
@@ -86,6 +92,10 @@ async function getUserReviews(): Promise<IReviewWithMediaDetails[]> {
         ${TableNames.TV_SERIES_CACHE} (
           title,
           poster_url
+        ),
+        ${TableNames.BOOKS_CACHE_TABLE} (
+          title,
+          image_link
         )
       )
     `,

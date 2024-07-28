@@ -1503,3 +1503,69 @@ VALUES
     'https://m.media-amazon.com/images/M/MV5BNTAxZTQ4MmMtNDU2OS00NGRhLTllMmItZDQwODZlNTdjYzQyL2ltYWdlXkEyXkFqcGdeQXVyMjU3NTI0Mg@@._V1_SX300.jpg',
     null
   );
+
+INSERT INTO
+  reviews(
+    "user_id",
+    "media_id",
+    "rating",
+    "title",
+    "description"
+  )
+VALUES
+  (
+    '00000000-0000-0000-0000-000000000001' :: uuid,
+    1,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000001' :: uuid,
+    2,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000001' :: uuid,
+    3,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000001' :: uuid,
+    5,
+    1,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000002' :: uuid,
+    1,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000002' :: uuid,
+    2,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000003' :: uuid,
+    4,
+    5,
+    'Review Title',
+    'Review Description'
+  ),
+  (
+    '00000000-0000-0000-0000-000000000004' :: uuid,
+    5,
+    1,
+    'Review Title',
+    'Review Description'
+  );

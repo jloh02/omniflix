@@ -1,3 +1,4 @@
+"use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { Box, CircularProgress, IconButton, Tooltip } from "@mui/material";
 import { MediaType } from "@/utils/constants";
@@ -38,9 +39,10 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const checkEnabled = useCallback(async () => {
-    const success = await checkEnabledFn(mediaType, mediaId);
-    setIsEnabled(success ?? false);
-    setIsLoading(false);
+    checkEnabledFn(mediaType, mediaId).then((success) => {
+      setIsEnabled(success ?? false);
+      setIsLoading(false);
+    });
   }, [isEnabled, isLoading, mediaType, mediaId]);
 
   useEffect(() => {
@@ -57,6 +59,7 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            position: "relative",
             height: 30,
             width: 30,
           }}
@@ -72,7 +75,9 @@ const LoadableCardButton: React.FC<LoadableCardButtonProps> = ({
           />
           <IconButton
             disabled={isLoading}
-            onClick={async () => {
+            onClick={async (e) => {
+              e.preventDefault();
+              e.stopPropagation();
               setIsLoading(true);
               if (isEnabled) {
                 const success = await disableFn(mediaType, mediaId);

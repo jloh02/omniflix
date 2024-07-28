@@ -24,7 +24,7 @@ const ShareButton: React.FC<ShareButtonProps> = ({ text, link }) => {
 
   return (
     <>
-      <Tooltip title="Share">
+      <Tooltip title="Share link">
         <Button
           variant="contained"
           size="small"

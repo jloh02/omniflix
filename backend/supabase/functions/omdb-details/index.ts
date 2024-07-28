@@ -4,13 +4,12 @@ import {
 } from "https://esm.sh/@supabase/supabase-js@2.23.0";
 import {
   ALLOWED_OMDB_TYPES,
+  OMDB_CACHE_DURATION_MS,
   OMDB_TYPE_TO_TABLE,
   OMDBType,
   TableNames,
 } from "../_shared/constants.ts";
 import { mapOmdbKeys } from "../_shared/omdbKeys.ts";
-
-const CACHE_DURATION_MS = 1000 * 60 * 60 * 24; // 1 day
 
 Deno.serve(async (req: Request) => {
   const adminSupabaseClient: SupabaseClient = createClient(
@@ -68,7 +67,7 @@ Deno.serve(async (req: Request) => {
   }
 
   // Check cache for existing data
-  const cacheLimit = Date.now() - CACHE_DURATION_MS;
+  const cacheLimit = Date.now() - OMDB_CACHE_DURATION_MS;
   const { data, error } = await adminSupabaseClient
     .from(CACHE_TABLE)
     .select(`*, ${TableNames.MEDIA}!inner(media_id)`)
