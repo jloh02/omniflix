@@ -2,6 +2,8 @@
 
 Omniflix (<https://omniflix.jloh02.dev/>) is an app to help users search, organise and track the immense number of entertainment options available out there, ranging from movies and tv series to watch, books to read and games to play.
 
+[Orbital Artemis README.docx](https://docs.google.com/document/d/1SsAfgC_AJrfTckGyjC6emrTUYVwpDry9/edit?usp=sharing&ouid=114526678462170762489&rtpof=true&sd=true)
+
 ## Features
 
 - Search, browse and track movies
